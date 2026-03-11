@@ -1,54 +1,12 @@
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Git Guide</title>
 <style>
-/* ── TOKENS ─────────────────────────────────────── */
 :root {
-  --bg:       #ffffff;
-  --bg2:      #f5f7fa;
-  --bg3:      #eef1f6;
-  --bg4:      #e4e8f0;
-  --border:   #d0d7e3;
-  --border2:  #b8c2d4;
-  --txt:      #2c3545;
-  --txt2:     #1a2030;
-  --txt3:     #5a6a80;
-  --txt4:     #8a9ab0;
-  --code-bg:  #f0f3f8;
-  --code-txt: #2255aa;
-
-  --green:    #1a8a3c;
-  --green-bg: #f0faf4;
-  --green-bd: #a8dab8;
-
-  --blue:     #1a5fc8;
-  --blue-bg:  #f0f5ff;
-  --blue-bd:  #a8c0ec;
-
-  --yellow:   #8a6000;
-  --yellow-bg:#fffbf0;
-  --yellow-bd:#e8d080;
-
-  --red:      #c02020;
-  --red-bg:   #fff5f5;
-  --red-bd:   #f0b0b0;
-
-  --purple:   #6a30b0;
-  --purple-bg:#faf0ff;
-  --purple-bd:#cca8ec;
-
-  --nav-h: 52px;
-  --r: 8px;
-  --r2: 6px;
-  --mono: 'Courier New', Courier, monospace;
-  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-[data-theme="dark"] {
   --bg:       #0f1318;
   --bg2:      #141920;
   --bg3:      #181e27;
@@ -61,163 +19,82 @@
   --txt4:     #4a5a6e;
   --code-bg:  #1c2330;
   --code-txt: #7ec8f0;
-
   --green:    #3ecf72;
   --green-bg: #0a1c10;
   --green-bd: #1a4d2e;
-
   --blue:     #5ba4f5;
   --blue-bg:  #0a1428;
   --blue-bd:  #1a3560;
-
   --yellow:   #f0c040;
   --yellow-bg:#1a1608;
   --yellow-bd:#5a4a10;
-
   --red:      #e86060;
   --red-bg:   #1c0e0e;
   --red-bd:   #5a1e1e;
-
   --purple:   #a87de8;
   --purple-bg:#140e20;
   --purple-bd:#3e2870;
+  --nav-h: 52px;
+  --r: 8px;
+  --r2: 6px;
+  --mono: 'Courier New', Courier, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ── RESET ──────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--txt);
-  font-family: var(--sans);
-  font-size: 14px;
-  line-height: 1.65;
-  transition: background .2s, color .2s;
-}
+body { background: var(--bg); color: var(--txt); font-family: var(--sans); font-size: 14px; line-height: 1.65; }
 
-/* ── NAV ────────────────────────────────────────── */
 nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 16px;
-  height: var(--nav-h);
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  display: flex; align-items: center; gap: 4px; padding: 0 16px;
+  height: var(--nav-h); background: var(--bg); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
 }
 nav .nav-tabs { display: flex; gap: 4px; flex: 1; }
 .nav-btn {
-  background: none;
-  border: 1px solid transparent;
-  color: var(--txt3);
-  padding: 6px 14px;
-  border-radius: var(--r2);
-  cursor: pointer;
-  font-size: 13px;
-  font-family: var(--sans);
-  transition: all .15s;
-  white-space: nowrap;
+  background: none; border: 1px solid transparent; color: var(--txt3);
+  padding: 6px 14px; border-radius: var(--r2); cursor: pointer;
+  font-size: 13px; font-family: var(--sans); transition: all .15s; white-space: nowrap;
 }
 .nav-btn:hover { color: var(--txt2); background: var(--bg2); }
-.nav-btn.active {
-  background: var(--bg3);
-  border-color: var(--border);
-  color: var(--txt2);
-  font-weight: 600;
-}
-.theme-btn {
-  margin-left: auto;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  color: var(--txt3);
-  padding: 5px 12px;
-  border-radius: var(--r2);
-  cursor: pointer;
-  font-size: 12px;
-  font-family: var(--sans);
-  transition: all .15s;
-  white-space: nowrap;
-}
-.theme-btn:hover { border-color: var(--border2); color: var(--txt2); }
+.nav-btn.active { background: var(--bg3); border-color: var(--border); color: var(--txt2); font-weight: 600; }
 
-/* ── PAGES ──────────────────────────────────────── */
 .page { display: none; max-width: 820px; margin: 0 auto; padding: 28px 16px 80px; }
 .page.on { display: block; }
 
-/* ── TYPOGRAPHY ─────────────────────────────────── */
 h1 { font-size: 20px; color: var(--txt2); font-weight: 700; margin-bottom: 4px; }
 h2 { font-size: 15px; color: var(--txt2); font-weight: 600; margin: 32px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 .page-sub { color: var(--txt3); font-size: 13px; margin-bottom: 24px; }
 p { font-size: 13px; color: var(--txt); line-height: 1.7; }
 
-/* ── INLINE CODE ─────────────────────────────────── */
 code {
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1px 5px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--code-txt);
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px;
+  padding: 1px 5px; font-family: var(--mono); font-size: 12px; color: var(--code-txt);
 }
 
-/* ── CARD ────────────────────────────────────────── */
-.card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px 18px;
-  margin-bottom: 12px;
-}
+.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 12px; }
 .card.green  { background: var(--green-bg);  border-color: var(--green-bd); }
 .card.blue   { background: var(--blue-bg);   border-color: var(--blue-bd); }
 .card.yellow { background: var(--yellow-bg); border-color: var(--yellow-bd); }
 .card.red    { background: var(--red-bg);    border-color: var(--red-bd); }
-.card.purple { background: var(--purple-bg); border-color: var(--purple-bd); }
 .card.grey   { background: var(--bg2);       border-color: var(--border); }
 
-.card-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .7px;
-  margin-bottom: 10px;
-}
+.card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; margin-bottom: 10px; }
 .card-label.green  { color: var(--green); }
 .card-label.blue   { color: var(--blue); }
 .card-label.yellow { color: var(--yellow); }
 .card-label.red    { color: var(--red); }
-.card-label.purple { color: var(--purple); }
 .card-label.grey   { color: var(--txt3); }
 
-/* ── TERMINAL ────────────────────────────────────── */
 .term {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 12px 14px;
-  margin: 8px 0;
-  font-family: var(--mono);
-  font-size: 13px;
-  line-height: 1.9;
-  position: relative;
-  overflow-x: auto;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 12px 14px; margin: 8px 0; font-family: var(--mono); font-size: 13px;
+  line-height: 1.9; position: relative; overflow-x: auto;
 }
 .term .cp {
-  position: absolute;
-  top: 8px; right: 8px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--txt3);
-  border-radius: 4px;
-  padding: 2px 10px;
-  font-size: 11px;
-  cursor: pointer;
-  font-family: var(--sans);
-  transition: all .15s;
+  position: absolute; top: 8px; right: 8px; background: var(--bg3);
+  border: 1px solid var(--border); color: var(--txt3); border-radius: 4px;
+  padding: 2px 10px; font-size: 11px; cursor: pointer; font-family: var(--sans); transition: all .15s;
 }
 .term .cp:hover { background: var(--blue-bg); border-color: var(--blue-bd); color: var(--blue); }
 .t-c { color: var(--txt4); font-style: italic; }
@@ -227,24 +104,17 @@ code {
 .t-r { color: var(--red); }
 .t-w { color: var(--txt2); }
 
-/* ── ROW ─────────────────────────────────────────── */
 .row { display: flex; gap: 12px; flex-wrap: wrap; }
 .row > .card { flex: 1; min-width: 200px; margin-bottom: 0; }
 
-/* ── STEP ────────────────────────────────────────── */
 .steps { display: flex; flex-direction: column; }
 .step { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--border); }
 .step:last-child { border-bottom: none; }
 .step-num {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: var(--blue-bg);
-  border: 2px solid var(--blue-bd);
-  color: var(--blue);
+  width: 28px; height: 28px; border-radius: 50%; background: var(--blue-bg);
+  border: 2px solid var(--blue-bd); color: var(--blue);
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700;
-  flex-shrink: 0;
-  margin-top: 2px;
+  font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
 }
 .step-num.g { background: var(--green-bg); border-color: var(--green-bd); color: var(--green); }
 .step-num.y { background: var(--yellow-bg); border-color: var(--yellow-bd); color: var(--yellow); }
@@ -252,83 +122,38 @@ code {
 .step-body { flex: 1; min-width: 0; }
 .step-title { font-size: 14px; font-weight: 600; color: var(--txt2); margin-bottom: 4px; }
 .step-context {
-  font-size: 13px;
-  color: var(--txt3);
-  background: var(--bg2);
-  border-left: 3px solid var(--blue-bd);
-  padding: 7px 11px;
-  border-radius: 0 var(--r2) var(--r2) 0;
-  margin-bottom: 8px;
-  line-height: 1.6;
+  font-size: 13px; color: var(--txt3); background: var(--bg2);
+  border-left: 3px solid var(--blue-bd); padding: 7px 11px;
+  border-radius: 0 var(--r2) var(--r2) 0; margin-bottom: 8px; line-height: 1.6;
 }
 
-/* ── WHERE BADGE ─────────────────────────────────── */
-.where {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 9px;
-  border-radius: 20px;
-  margin: 0 0 6px 0;
-}
+.where { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; margin: 0 0 6px 0; }
 .where.terminal { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-bd); }
 .where.gui      { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-bd); }
 .where.verify   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
 
-/* ── GUI BLOCK ───────────────────────────────────── */
-.gui-block {
-  background: var(--purple-bg);
-  border: 1px solid var(--purple-bd);
-  border-radius: var(--r);
-  padding: 12px 14px;
-  margin: 8px 0;
-}
-.gui-block-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  color: var(--purple);
-  margin-bottom: 10px;
-}
+.gui-block { background: var(--purple-bg); border: 1px solid var(--purple-bd); border-radius: var(--r); padding: 12px 14px; margin: 8px 0; }
+.gui-block-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--purple); margin-bottom: 10px; }
 .gui-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .gui-col-title { font-size: 11px; font-weight: 700; color: var(--txt3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
 .gui-item { display: flex; gap: 7px; font-size: 13px; color: var(--txt); margin-bottom: 5px; line-height: 1.5; }
 .gui-item-n {
-  flex-shrink: 0;
-  width: 18px; height: 18px;
-  background: var(--purple-bg);
-  border: 1px solid var(--purple-bd);
-  border-radius: 50%;
+  flex-shrink: 0; width: 18px; height: 18px; background: var(--purple-bg);
+  border: 1px solid var(--purple-bd); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; color: var(--purple);
-  margin-top: 1px;
+  font-size: 10px; font-weight: 700; color: var(--purple); margin-top: 1px;
 }
 
-/* ── NOTE BOX ────────────────────────────────────── */
-.note {
-  border-radius: var(--r2);
-  padding: 8px 12px;
-  font-size: 12px;
-  line-height: 1.6;
-  margin: 8px 0;
-}
+.note { border-radius: var(--r2); padding: 8px 12px; font-size: 12px; line-height: 1.6; margin: 8px 0; }
 .note.green  { background: var(--green-bg);  border: 1px solid var(--green-bd);  color: var(--green); }
 .note.blue   { background: var(--blue-bg);   border: 1px solid var(--blue-bd);   color: var(--blue); }
 .note.yellow { background: var(--yellow-bg); border: 1px solid var(--yellow-bd); color: var(--yellow); }
 .note.red    { background: var(--red-bg);    border: 1px solid var(--red-bd);    color: var(--red); }
 
-/* ── OPTIONAL TOGGLE ─────────────────────────────── */
 .opt-toggle {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 13px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r2);
-  cursor: pointer;
-  margin-top: 8px;
-  user-select: none;
-  transition: all .15s;
+  display: flex; align-items: center; gap: 8px; padding: 9px 13px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2);
+  cursor: pointer; margin-top: 8px; user-select: none; transition: all .15s;
 }
 .opt-toggle:hover { border-color: var(--border2); background: var(--bg3); }
 .opt-toggle.open { border-radius: var(--r2) var(--r2) 0 0; border-bottom-color: transparent; }
@@ -339,85 +164,50 @@ code {
 .opt-body { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r2) var(--r2); padding: 14px; background: var(--bg); }
 .opt-body.open { display: block; }
 
-/* ── GUIDE PILLS ─────────────────────────────────── */
 .pill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-bottom: 18px; }
 .pill {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r2);
-  padding: 10px 13px;
-  cursor: pointer;
-  font-size: 13px;
-  color: var(--txt);
-  transition: all .15s;
-  text-align: left;
-  font-family: var(--sans);
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2);
+  padding: 10px 13px; cursor: pointer; font-size: 13px; color: var(--txt);
+  transition: all .15s; text-align: left; font-family: var(--sans);
 }
 .pill:hover { border-color: var(--blue-bd); background: var(--blue-bg); color: var(--txt2); }
 .pill.on    { border-color: var(--blue); background: var(--blue-bg); color: var(--blue); font-weight: 600; }
+.pill.gold  { border-color: var(--yellow-bd); background: var(--yellow-bg); color: var(--yellow); font-weight: 600; }
+.pill.gold:hover { border-color: var(--yellow); }
 
-/* ── INPUTS ──────────────────────────────────────── */
 .input-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
 .input-group { flex: 1; min-width: 180px; }
 .input-label { font-size: 11px; color: var(--txt3); display: block; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
 .inp {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--r2);
-  padding: 8px 11px;
-  color: var(--txt2);
-  font-size: 13px;
-  font-family: var(--mono);
-  width: 100%;
-  outline: none;
-  transition: border-color .15s;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--r2);
+  padding: 8px 11px; color: var(--txt2); font-size: 13px; font-family: var(--mono);
+  width: 100%; outline: none; transition: border-color .15s;
 }
 .inp:focus { border-color: var(--blue); }
 .inp::placeholder { color: var(--txt4); }
 .run-btn {
-  background: var(--green);
-  border: none;
-  color: #fff;
-  border-radius: var(--r2);
-  padding: 9px 22px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: var(--sans);
-  transition: opacity .15s;
+  background: var(--green); border: none; color: #fff; border-radius: var(--r2);
+  padding: 9px 22px; font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: var(--sans); transition: opacity .15s;
 }
 .run-btn:hover { opacity: .85; }
 .back-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--txt3);
-  border-radius: var(--r2);
-  padding: 6px 14px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: var(--sans);
-  margin-bottom: 20px;
-  transition: all .15s;
+  background: none; border: 1px solid var(--border); color: var(--txt3);
+  border-radius: var(--r2); padding: 6px 14px; font-size: 12px; cursor: pointer;
+  font-family: var(--sans); margin-bottom: 20px; transition: all .15s;
 }
 .back-btn:hover { border-color: var(--red-bd); color: var(--red); }
 
-/* ── ORDER BAR ───────────────────────────────────── */
 .order-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  padding: 14px 16px;
-  background: var(--green-bg);
-  border: 1px solid var(--green-bd);
-  border-radius: var(--r);
-  margin: 10px 0;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 14px 16px; background: var(--green-bg); border: 1px solid var(--green-bd);
+  border-radius: var(--r); margin: 10px 0;
 }
 .op { background: var(--green); color: #fff; border-radius: var(--r2); padding: 4px 12px; font-size: 12px; font-weight: 700; }
 .op.danger { background: var(--red); }
+.op.gold   { background: var(--yellow); color: #1a1608; }
 .oa { color: var(--txt4); font-size: 12px; }
 
-/* ── BANNED LIST ─────────────────────────────────── */
 .ban-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
 .ban-item:last-child { border-bottom: none; }
 .ban-cmd { display: inline-block; font-family: var(--mono); font-size: 13px; padding: 4px 10px; border-radius: var(--r2); margin-bottom: 4px; }
@@ -426,14 +216,9 @@ code {
 .ban-why { font-size: 12px; color: var(--txt3); line-height: 1.55; margin: 3px 0 8px; }
 .ban-arrow { font-size: 11px; font-weight: 700; color: var(--txt4); margin: 4px 0; }
 
-/* ── FLOW DIAGRAM ────────────────────────────────── */
 .flow-wrap {
-  display: grid;
-  grid-template-columns: 1fr 88px 1fr;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-  margin: 14px 0;
+  display: grid; grid-template-columns: 1fr 88px 1fr;
+  border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin: 14px 0;
 }
 .flow-local  { background: var(--green-bg); border-right: 2px dashed var(--border); padding: 18px 14px; }
 .flow-mid    { background: var(--bg2); border-right: 1px solid var(--border); padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
@@ -441,27 +226,27 @@ code {
 .flow-head   { text-align: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .flow-head-title { font-size: 13px; font-weight: 700; }
 .flow-head-sub   { font-size: 11px; color: var(--txt3); margin-top: 2px; }
-.flow-zone {
-  border-radius: var(--r2);
-  padding: 9px 12px;
-  text-align: center;
-  margin-bottom: 2px;
-}
+.flow-zone { border-radius: var(--r2); padding: 9px 12px; text-align: center; margin-bottom: 2px; }
 .flow-zone-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
 .flow-zone-desc  { font-size: 11px; color: var(--txt3); line-height: 1.5; }
 .flow-down { text-align: center; padding: 3px 0; }
 .flow-down-label { font-size: 10px; color: var(--txt4); }
-.flow-transfer {
-  width: 100%;
-  text-align: center;
-  border-radius: var(--r2);
-  padding: 8px 5px;
-}
+.flow-transfer { width: 100%; text-align: center; border-radius: var(--r2); padding: 8px 5px; }
 .flow-transfer-label { font-size: 11px; font-weight: 700; line-height: 1.3; }
 .flow-transfer-sub   { font-size: 9px; color: var(--txt3); line-height: 1.3; margin-top: 2px; }
 .flow-branch { display: flex; align-items: center; gap: 7px; padding: 6px 10px; border-radius: var(--r2); font-family: var(--mono); font-size: 12px; margin-bottom: 5px; }
 
-/* ── RESPONSIVE ──────────────────────────────────── */
+.edge-box { background: var(--yellow-bg); border: 1px solid var(--yellow-bd); border-radius: var(--r); padding: 14px 16px; margin: 10px 0; }
+.edge-box-title { font-size: 12px; font-weight: 700; color: var(--yellow); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+.edge-box p { font-size: 13px; color: var(--txt3); margin-bottom: 6px; }
+
+.elixir-box { background: var(--yellow-bg); border: 2px solid var(--yellow); border-radius: var(--r); padding: 16px 18px; margin: 10px 0; }
+.elixir-box-title { font-size: 13px; font-weight: 700; color: var(--yellow); margin-bottom: 12px; letter-spacing: .3px; }
+.elixir-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+.elixir-badge { flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 1px; }
+.elixir-badge.dev  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-bd); }
+.elixir-badge.pr   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+
 @media (max-width: 640px) {
   .flow-wrap { grid-template-columns: 1fr; }
   .flow-local { border-right: none; border-bottom: 2px dashed var(--border); }
@@ -473,9 +258,7 @@ code {
   .order-bar { gap: 5px; }
   .op { font-size: 11px; padding: 3px 9px; }
 }
-@media (max-width: 400px) {
-  .pill-grid { grid-template-columns: 1fr; }
-}
+@media (max-width: 400px) { .pill-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -486,202 +269,192 @@ code {
     <button class="nav-btn" onclick="go('flow')">How Git Works</button>
     <button class="nav-btn" onclick="go('guide')">Step Guide</button>
   </div>
-  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">Dark mode</button>
 </nav>
 
-<!-- ════════════════════════════════════════════════
+<!-- ══════════════════════════════════════
      TAB 1 — PIPELINE & RULES
-════════════════════════════════════════════════ -->
+══════════════════════════════════════ -->
 <div class="page on" id="page-home">
   <h1>Git Guide</h1>
-  <p class="page-sub">The exact process for clean PRs — and what never to do</p>
+  <p class="page-sub">The correct process for clean PRs — and what never to do</p>
 
-  <!-- PIPELINE -->
-  <h2>The correct order — every single time</h2>
+  <h2>The complete flow — cracked</h2>
+
+  <div class="elixir-box">
+    <div class="elixir-box-title">⚡ The Elixir — Two phases, zero edge cases</div>
+    <div class="elixir-row">
+      <span class="elixir-badge dev">DAILY DEV</span>
+      <span style="color:var(--txt3);">Commit freely as you work. When you have multiple WIP commits piling up, run <code>git rebase -i HEAD~N</code> to squash them into 1 clean commit locally. No develop involved. No mixed files. Completely safe anytime.</span>
+    </div>
+    <div class="elixir-row">
+      <span class="elixir-badge pr">PR TIME</span>
+      <span style="color:var(--txt3);">You already have 1 clean commit from daily squashing. Just stash → fetch → rebase onto develop → push. The rebase is trivial — 1 commit replaying onto develop, one conflict at most.</span>
+    </div>
+  </div>
+
+  <h2>Daily dev order — squash your own WIP anytime</h2>
+  <div class="card yellow">
+    <div class="order-bar" style="background:var(--blue-bg);border-color:var(--blue-bd);">
+      <div class="op" style="background:var(--blue);">Commit WIP freely</div><div class="oa">→</div>
+      <div class="op gold">git rebase -i HEAD~N</div><div class="oa">→</div>
+      <div class="op" style="background:var(--blue);">1 clean local commit</div>
+    </div>
+    <div class="note blue" style="margin-top:10px;margin-bottom:0;">
+      <strong>N = how many of your commits to squash.</strong> Run <code>git log --oneline</code> and count the commits at the top that are yours. That number is N. This never touches develop, never touches other people's files, works anytime.
+    </div>
+  </div>
+
+  <h2>PR time order — one final move onto develop</h2>
   <div class="card green">
     <div class="order-bar">
       <div class="op">1. Stash</div><div class="oa">→</div>
       <div class="op">2. Fetch</div><div class="oa">→</div>
-      <div class="op danger">3. Squash</div><div class="oa">→</div>
-      <div class="op danger">4. Rebase</div><div class="oa">→</div>
-      <div class="op">5. Push</div><div class="oa">→</div>
-      <div class="op">6. Stash pop</div>
+      <div class="op danger">3. Rebase onto develop</div><div class="oa">→</div>
+      <div class="op">4. Push</div><div class="oa">→</div>
+      <div class="op">5. Stash pop</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px;">
-      <div class="note blue" style="margin:0;">
-        <strong>Why Squash before Rebase?</strong> — If you have 5 commits and rebase without squashing first, Git replays each commit one by one. Each one can cause a separate conflict. Squash into 1 commit first, then rebase — maximum 1 conflict, done in minutes.
-      </div>
-      <div class="note yellow" style="margin:0;">
-        <strong>Why Rebase at all?</strong> — Squashing without rebasing means your commit sits on old develop. Rebase moves it to the very tip of the latest develop so your PR applies cleanly.
-      </div>
+    <div class="note green" style="margin-top:10px;margin-bottom:0;">
+      Because you already have 1 clean commit from <code>rebase -i</code>, there is no squash step needed here. Just rebase onto develop and push.
     </div>
   </div>
 
-  <!-- SAFETY -->
-  <div class="card blue" style="margin-top:4px;">
-    <div class="card-label blue">Your base branch is never touched</div>
-    <p style="margin-bottom:10px;">Every command in this guide operates only on your feature branch. <code>origin/develop</code> is always used as a read-only reference — never written to.</p>
-    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
-      <div style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);"><code>git reset --soft origin/develop</code> — moves only YOUR branch pointer back. develop is untouched.</div>
-      <div style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);"><code>git rebase origin/develop</code> — replays YOUR commits on top of develop. Only your branch moves.</div>
-      <div style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);"><code>git push origin feature/your-branch --force-with-lease</code> — pushes only the branch you name. develop is completely unaffected.</div>
-    </div>
+  <div class="edge-box">
+    <div class="edge-box-title">⚠ Why rebase -i is the safe squash — not soft reset</div>
+    <p>Soft reset squash (the old way) un-commits everything including other people's work into your working directory at once. If any file was touched by both you and a teammate, their changes appear mixed in with yours. You have to hand-separate lines — error-prone and risky.</p>
+    <p><code>git rebase -i HEAD~N</code> only operates on YOUR commits. It never touches develop, never touches other people's files, and nothing lands in your working directory. It is completely safe to run anytime during development.</p>
+    <p style="color:var(--yellow);font-weight:600;">rebase -i to squash → rebase onto develop to sync. That's the complete answer.</p>
   </div>
 
-  <!-- BANNED -->
   <h2>Never use these — and what to do instead</h2>
   <div class="card">
     <div class="ban-item">
       <div class="ban-cmd bad">git pull</div>
-      <div class="ban-why">Secretly runs <code>git fetch</code> + <code>git merge</code> behind the scenes. Creates a hidden merge commit you never asked for. Completely skips Squash and Rebase. Your PR history becomes unreadable with all your WIP commits exposed.</div>
+      <div class="ban-why">Runs fetch + merge silently. Creates a hidden merge commit. Skips rebase and squash entirely.</div>
       <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">stash → fetch → squash → rebase → push → stash pop</div>
+      <div class="ban-cmd good">stash → fetch → rebase onto develop → push → stash pop</div>
     </div>
-
     <div class="ban-item">
       <div class="ban-cmd bad">VS Code "Sync Changes" button</div>
-      <div class="ban-why">Does pull + push in a single click silently. It skips Squash entirely, skips Rebase entirely, and pushes all your messy work-in-progress commits raw to origin.</div>
+      <div class="ban-why">Does pull + push in one click silently. Skips everything.</div>
       <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">Open the terminal (Ctrl+`) and run every step manually</div>
+      <div class="ban-cmd good">Open terminal (Ctrl+`) and run every step manually</div>
     </div>
-
     <div class="ban-item">
-      <div class="ban-cmd bad">VS Code Pull button (the down arrow)</div>
-      <div class="ban-why">Identical to <code>git pull</code>. Same hidden merge commit. Same skipped Squash and Rebase.</div>
+      <div class="ban-cmd bad">VS Code Pull button (down arrow)</div>
+      <div class="ban-why">Identical to git pull. Hidden merge commit.</div>
       <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">stash → fetch → squash → rebase → push</div>
+      <div class="ban-cmd good">stash → fetch → rebase → push</div>
     </div>
-
+    <div class="ban-item">
+      <div class="ban-cmd bad">Soft reset squash (git reset --soft) on a shared file</div>
+      <div class="ban-why">Un-commits everything including teammates' work into your working directory. Mixed files appear. One wrong git add . and you commit someone else's code as your own.</div>
+      <div class="ban-arrow">Use this instead:</div>
+      <div class="ban-cmd good">git rebase -i HEAD~N — only touches your own commits, zero mixed files</div>
+    </div>
     <div class="ban-item">
       <div class="ban-cmd bad">git add . after soft reset</div>
-      <div class="ban-why">After a soft reset, your branch may contain other people's commits that got mixed in. Running <code>git add .</code> blindly stages ALL of those files — not just yours. You will commit other people's work as your own.</div>
+      <div class="ban-why">Stages everyone's un-committed files. You commit their work as your own.</div>
       <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git reset HEAD . → stage ONLY your files in VS Code or IntelliJ → git checkout -- .</div>
+      <div class="ban-cmd good">rebase -i to squash — no staging needed at all</div>
     </div>
-
     <div class="ban-item">
       <div class="ban-cmd bad">git push --force</div>
-      <div class="ban-why">Overwrites the remote branch without checking anything first. Can silently delete teammates' commits with no warning and no recovery.</div>
+      <div class="ban-why">Overwrites remote with no safety check. Can silently delete teammates' commits.</div>
       <div class="ban-arrow">Use this instead:</div>
       <div class="ban-cmd good">git push --force-with-lease</div>
-      <div class="ban-why" style="margin-top:4px;">This checks the remote first. If something has changed that you didn't expect, it fails safely instead of deleting it.</div>
     </div>
-
     <div class="ban-item">
       <div class="ban-cmd bad">git reset --hard</div>
-      <div class="ban-why">Permanently deletes all uncommitted file changes. There is no undo. Hours of work gone instantly.</div>
+      <div class="ban-why">Permanently deletes all uncommitted file changes. No undo.</div>
       <div class="ban-arrow">Use this instead:</div>
       <div class="ban-cmd good">git stash</div>
-      <div class="ban-why" style="margin-top:4px;">Stash saves everything safely. You can always restore it with <code>git stash pop</code>.</div>
     </div>
-
     <div class="ban-item">
       <div class="ban-cmd bad">VS Code "Discard All Changes"</div>
-      <div class="ban-why">Same as <code>git reset --hard</code>. Permanently wipes all uncommitted work with no recovery.</div>
+      <div class="ban-why">Same as git reset --hard. Permanently wipes all uncommitted work.</div>
       <div class="ban-arrow">Use this instead:</div>
       <div class="ban-cmd good">git stash — or discard individual files only, never all</div>
     </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">Rebase without squashing first</div>
-      <div class="ban-why">If you have 5 commits, Git replays each one separately. You can hit a conflict at each commit — 5 commits means up to 5 separate conflict stops.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">Always squash into 1 commit first, then rebase — maximum 1 conflict</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">Rebase with leftover unstaged files still present</div>
-      <div class="ban-why">After squashing selectively, leftover unstaged files from other people's work will still be sitting in your working directory. Running <code>git rebase</code> immediately fails with: "error: cannot rebase: You have unstaged changes."</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git stash push -m "unwanted-files-temp" before rebasing, then drop it after</div>
-    </div>
   </div>
 
-  <!-- VS CODE / INTELLIJ -->
   <h2>VS Code and IntelliJ — what's safe and what's not</h2>
   <div class="row">
     <div class="card green">
       <div class="card-label green">Safe to use in the IDE</div>
       <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;">
-        <div><strong>Stage file (+)</strong> — same as <code>git add yourfile</code>. Click + next to individual files only, never "Stage All"</div>
-        <div><strong>Commit button (checkmark)</strong> — same as <code>git commit</code>. Always verify afterwards with <code>git log --oneline</code> in terminal</div>
-        <div><strong>Merge conflict editor</strong> — the 3-way conflict resolver. Always use this for conflicts, never resolve by hand in terminal</div>
-        <div><strong>Discard single file</strong> — right-click one file and discard. Never use "Discard All"</div>
-        <div><strong>Branch switcher</strong> — bottom-left in VS Code, Git panel in IntelliJ. Same as <code>git checkout</code></div>
+        <div><strong>Stage file (+)</strong> — click + next to individual files only, never "Stage All"</div>
+        <div><strong>Commit button</strong> — same as git commit. Verify with <code>git log --oneline</code> after.</div>
+        <div><strong>Merge conflict editor</strong> — 3-way conflict resolver. Always use this for conflicts.</div>
+        <div><strong>Discard single file</strong> — right-click one file. Never "Discard All".</div>
+        <div><strong>Branch switcher</strong> — bottom-left VS Code, Git panel IntelliJ.</div>
+        <div><strong>Partial hunk staging</strong> — stage only specific lines when a file has mixed changes.</div>
       </div>
     </div>
     <div class="card red">
       <div class="card-label red">Never click</div>
       <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;">
-        <div><strong>Sync Changes</strong> — does pull + push silently. Skips everything.</div>
-        <div><strong>Pull button (down arrow)</strong> — identical to <code>git pull</code>. Hidden merge commit.</div>
-        <div><strong>Push button (up arrow) after rebase</strong> — use terminal with <code>--force-with-lease</code> instead</div>
-        <div><strong>Discard All Changes</strong> — permanent. Use <code>git stash</code> instead.</div>
-        <div><strong>Stage All after soft reset</strong> — stages everyone's files. Stage only your specific files.</div>
+        <div><strong>Sync Changes</strong> — pull + push silently. Skips everything.</div>
+        <div><strong>Pull button (down arrow)</strong> — hidden merge commit.</div>
+        <div><strong>Push button after rebase</strong> — use terminal with --force-with-lease instead.</div>
+        <div><strong>Discard All Changes</strong> — permanent. Use git stash.</div>
+        <div><strong>Stage All after soft reset</strong> — stages everyone's files.</div>
       </div>
     </div>
   </div>
   <div class="note blue">
-    The golden pattern for syncing IDE and terminal: <strong>Terminal first (prepare) → IDE (stage your files + commit) → Terminal (continue, push, verify).</strong> Never do staging in IDE and terminal at the same time.
+    Golden pattern: <strong>Terminal (prepare) → IDE (stage your files + commit) → Terminal (continue, push, verify).</strong>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
+<!-- ══════════════════════════════════════
      TAB 2 — HOW GIT WORKS
-════════════════════════════════════════════════ -->
+══════════════════════════════════════ -->
 <div class="page" id="page-flow">
   <h1>How Git Works</h1>
-  <p class="page-sub">Your code lives in two places. Here is what every command actually does.</p>
+  <p class="page-sub">Your code lives in two places. Here is what moves where.</p>
 
   <div class="flow-wrap">
-    <!-- LOCAL -->
     <div class="flow-local">
       <div class="flow-head">
         <div class="flow-head-title" style="color:var(--green);">Your Computer</div>
         <div class="flow-head-sub">Private until you push</div>
       </div>
-
       <div class="flow-zone" style="background:var(--yellow-bg);border:1px dashed var(--yellow-bd);">
         <div class="flow-zone-title" style="color:var(--yellow);">Stash</div>
-        <div class="flow-zone-desc">Temporary pocket for saving files.<br><code style="font-size:10px;">git stash</code> saves &nbsp;·&nbsp; <code style="font-size:10px;">git stash pop</code> restores</div>
+        <div class="flow-zone-desc">Temporary pocket.<br><code style="font-size:10px;">git stash</code> saves · <code style="font-size:10px;">git stash pop</code> restores</div>
       </div>
       <div class="flow-down"><div style="font-size:14px;color:var(--txt4);">↕</div></div>
-
       <div class="flow-zone" style="background:var(--yellow-bg);border:2px solid var(--yellow-bd);">
         <div class="flow-zone-title" style="color:var(--yellow);">Working Directory</div>
-        <div class="flow-zone-desc">The files you see and edit in VS Code or IntelliJ every day</div>
+        <div class="flow-zone-desc">Files you see and edit every day</div>
       </div>
       <div class="flow-down">
         <div style="color:var(--yellow);">↓</div>
-        <div class="flow-down-label"><code style="font-size:10px;">git add yourfile</code> — never <code style="font-size:10px;">git add .</code> after soft reset</div>
+        <div class="flow-down-label"><code style="font-size:10px;">git add yourfile</code></div>
       </div>
-
       <div class="flow-zone" style="background:var(--blue-bg);border:2px solid var(--blue-bd);">
         <div class="flow-zone-title" style="color:var(--blue);">Staging Area</div>
-        <div class="flow-zone-desc">Files marked "ready to commit". Only YOUR files should ever be here.</div>
+        <div class="flow-zone-desc">Files marked ready to commit. Only YOUR files should be here.</div>
       </div>
       <div class="flow-down">
         <div style="color:var(--blue);">↓</div>
         <div class="flow-down-label"><code style="font-size:10px;">git commit -m "message"</code></div>
       </div>
-
       <div class="flow-zone" style="background:var(--green-bg);border:2px solid var(--green-bd);">
         <div class="flow-zone-title" style="color:var(--green);">Local Repository</div>
-        <div class="flow-zone-desc">Saved commits on your machine only. Nobody sees these until you push.</div>
+        <div class="flow-zone-desc">Saved commits on your machine. Nobody sees these until you push.</div>
       </div>
-
       <div style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);">
-        <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Operations that run locally only</div>
-        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--txt);">
-          <div style="padding:5px 8px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--r2);"><strong style="color:var(--red);">Squash</strong> — reset --soft → unstage all → add only your files → discard the rest → commit</div>
-          <div style="padding:5px 8px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--r2);"><strong style="color:var(--red);">Rebase</strong> — replays your commit on top of latest develop. Only your branch moves.</div>
+        <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Local-only operations</div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="padding:5px 8px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);border-radius:var(--r2);"><strong style="color:var(--yellow);">rebase -i HEAD~N</strong> — squashes only YOUR commits. Safe anytime. Zero mixed files. Do this during dev.</div>
+          <div style="padding:5px 8px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--r2);"><strong style="color:var(--red);">rebase onto develop</strong> — moves your 1 clean commit to tip of latest develop. Do this at PR time.</div>
           <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);"><strong style="color:var(--blue);">checkout</strong> — switch branches locally. Nothing goes to origin.</div>
-          <div style="padding:5px 8px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:var(--r2);"><strong style="color:var(--green);">reset --soft</strong> — removes the commit but keeps your files safe. Develop untouched.</div>
+          <div style="padding:5px 8px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:var(--r2);"><strong style="color:var(--green);">reset --soft</strong> — un-commits but keeps files safe. Use only when you need the old squash path.</div>
         </div>
       </div>
     </div>
 
-    <!-- MIDDLE -->
     <div class="flow-mid">
       <div style="font-size:9px;color:var(--txt4);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px;">Sync</div>
       <div class="flow-transfer" style="background:var(--green-bg);border:1px solid var(--green-bd);">
@@ -697,7 +470,7 @@ code {
       <div class="flow-transfer" style="background:var(--red-bg);border:1px solid var(--red-bd);">
         <div style="font-size:13px;color:var(--red);font-weight:700;">BANNED</div>
         <div class="flow-transfer-label" style="color:var(--red);">git pull</div>
-        <div class="flow-transfer-sub" style="color:var(--red);">fetch + hidden<br>merge — skips<br>squash & rebase</div>
+        <div class="flow-transfer-sub" style="color:var(--red);">fetch + hidden<br>merge</div>
       </div>
       <div class="flow-transfer" style="background:var(--red-bg);border:1px solid var(--red-bd);">
         <div style="font-size:13px;color:var(--red);font-weight:700;">BANNED</div>
@@ -706,18 +479,15 @@ code {
       </div>
     </div>
 
-    <!-- REMOTE -->
     <div class="flow-remote">
       <div class="flow-head">
         <div class="flow-head-title" style="color:var(--blue);">GitHub / GitLab (origin)</div>
-        <div class="flow-head-sub">Shared server — whole team reads and writes here</div>
+        <div class="flow-head-sub">Shared — whole team reads and writes here</div>
       </div>
-
       <div class="flow-zone" style="background:var(--blue-bg);border:2px solid var(--blue-bd);margin-bottom:12px;">
         <div class="flow-zone-title" style="color:var(--blue);">Remote Repository</div>
         <div class="flow-zone-desc">All branches and commits online. PRs and code reviews happen here.</div>
       </div>
-
       <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Branches on origin</div>
       <div class="flow-branch" style="background:var(--green-bg);border:2px solid var(--green-bd);">
         <span style="color:var(--green);font-weight:700;">origin/mvp/develop</span>
@@ -731,77 +501,24 @@ code {
         <span style="color:var(--txt3);">origin/feature/teammate</span>
         <span style="color:var(--txt4);font-size:10px;margin-left:auto;">their branch</span>
       </div>
-
       <div style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);">
         <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">What happens here</div>
-        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--txt);">
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
           <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Pull Requests — code reviews, approvals</div>
-          <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Merge to develop — done via PR button in browser, not terminal</div>
+          <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Merge to develop — via PR button in browser only</div>
           <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Team visibility — everyone sees all branches and commits</div>
         </div>
       </div>
-
       <div class="note green" style="margin-top:10px;">
-        You only ever push to YOUR feature branch. Develop is a read-only reference. To accidentally push to develop you'd have to explicitly type <code>git push origin mvp/develop</code> — which we never do.
-      </div>
-    </div>
-  </div>
-
-  <!-- WHAT EACH COMMAND DOES -->
-  <h2>What each command actually does</h2>
-  <div class="card grey">
-    <div style="display:flex;flex-direction:column;gap:0;">
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--yellow);">git stash</code>
-        <span style="color:var(--txt3);">Saves ALL your current uncommitted file changes into a temporary pocket. Nothing is pushed anywhere. You can restore everything later with <code>git stash pop</code>.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--blue);">git fetch origin</code>
-        <span style="color:var(--txt3);">Downloads information about what has changed on origin. Does NOT change any of your files. Does NOT change any branch. Purely informational download.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--red);">git reset --soft</code>
-        <span style="color:var(--txt3);">Removes one or more commits from your branch history but keeps all the file changes in your working directory. Used as the first step of squashing.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--blue);">git add yourfile</code>
-        <span style="color:var(--txt3);">Moves a specific file into the staging area, marking it as "ready to be committed". Only use this with specific file paths, never <code>git add .</code> after a soft reset.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--blue);">git commit</code>
-        <span style="color:var(--txt3);">Takes everything in the staging area and saves it as a permanent snapshot (commit) in your local repository. Nothing is sent to origin yet.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--red);">git rebase origin/develop</code>
-        <span style="color:var(--txt3);">Takes your commit(s) off your branch, moves the branch pointer to match the latest develop, then re-applies your commit(s) on top. Only YOUR branch moves. Develop is untouched.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--green);">git push --force-with-lease</code>
-        <span style="color:var(--txt3);">Sends your local branch commits to origin. The <code>--force-with-lease</code> flag first checks that nobody else has pushed to your branch since you last fetched. If something changed unexpectedly, it fails safely.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--blue);">git checkout branchname</code>
-        <span style="color:var(--txt3);">Switches your working directory to a different branch. Purely local — nothing is sent to origin. Always stash uncommitted work before switching.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--yellow);">git stash pop</code>
-        <span style="color:var(--txt3);">Restores the most recently stashed files back into your working directory, and removes that stash entry from the list.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <code style="color:var(--blue);">git log --oneline</code>
-        <span style="color:var(--txt3);">Shows your commit history in a compact list. Use this after every important step to verify your commit is there and looks correct. This is always the source of truth.</span>
-      </div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;font-size:13px;padding:8px 0;">
-        <code style="color:var(--green);">git push -u origin branchname</code>
-        <span style="color:var(--txt3);">Pushes a brand new branch to origin for the first time and sets up tracking. After this, future <code>git push</code> commands on this branch automatically know where to push.</span>
+        You only ever push to YOUR feature branch. Develop is read-only reference. To accidentally push to develop you'd have to explicitly type <code>git push origin mvp/develop</code> — which we never do.
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
+<!-- ══════════════════════════════════════
      TAB 3 — STEP GUIDE
-════════════════════════════════════════════════ -->
+══════════════════════════════════════ -->
 <div class="page" id="page-guide">
   <h1>Step Guide</h1>
   <p class="page-sub">Pick what you want to do, fill in your branch names, and follow the steps</p>
@@ -810,8 +527,8 @@ code {
     <div style="font-size:13px;font-weight:600;color:var(--txt2);margin-bottom:12px;">What do you want to do?</div>
     <div class="pill-grid">
       <button class="pill" onclick="pickA('newbranch',this)">Create new branch</button>
-      <button class="pill" onclick="pickA('pr',this)">Full PR flow (Squash + Rebase + Push)</button>
-      <button class="pill" onclick="pickA('squash',this)">Just Squash commits</button>
+      <button class="pill gold" onclick="pickA('interactivesquash',this)">⚡ Squash WIP commits (rebase -i)</button>
+      <button class="pill" onclick="pickA('pr',this)">Full PR flow (Rebase + Push)</button>
       <button class="pill" onclick="pickA('rebase',this)">Sync with latest develop (Rebase)</button>
       <button class="pill" onclick="pickA('switch',this)">Switch branch safely</button>
       <button class="pill" onclick="pickA('approved',this)">PR got approved — cleanup</button>
@@ -833,45 +550,31 @@ code {
   </div>
 
   <div id="gout" style="display:none;">
-    <button class="back-btn" onclick="resetG()">Back to menu</button>
+    <button class="back-btn" onclick="resetG()">← Back to menu</button>
     <div id="gbody"></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════════════ -->
 <script>
 (function () {
 
-  // ── THEME ─────────────────────────────────────────
-  var dark = false;
-  window.toggleTheme = function () {
-    dark = !dark;
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    document.getElementById('themeBtn').textContent = dark ? 'Light mode' : 'Dark mode';
-  };
-
-  // ── NAV ───────────────────────────────────────────
   window.go = function (id) {
-    document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('on'); });
-    document.querySelectorAll('.nav-btn').forEach(function (b) { b.classList.remove('active'); });
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
     document.getElementById('page-' + id).classList.add('on');
-    var idx = ['home', 'flow', 'guide'].indexOf(id);
+    var idx = ['home','flow','guide'].indexOf(id);
     if (idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   };
 
-  // ── COPY ──────────────────────────────────────────
   window.cp = function (btn) {
-    var raw = btn.closest('.term').innerText.replace(/^Copy$|^Copied!$/mg, '').trim();
-    navigator.clipboard.writeText(raw).then(function () {
+    var raw = btn.closest('.term').innerText.replace(/^Copy$|^Copied!$/mg,'').trim();
+    navigator.clipboard.writeText(raw).then(function(){
       btn.textContent = 'Copied!';
-      setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
+      setTimeout(function(){ btn.textContent = 'Copy'; }, 2000);
     });
   };
 
-  // ── OPTIONAL SECTIONS ─────────────────────────────
   var optCount = 0;
   window.toggleOpt = function (id) {
     var tog  = document.getElementById('ot-' + id);
@@ -880,42 +583,41 @@ code {
   };
   function optSection(label, tag, content) {
     var id = ++optCount;
-    return '<div class="opt-toggle" id="ot-' + id + '" onclick="toggleOpt(' + id + ')">' +
+    return '<div class="opt-toggle" id="ot-'+id+'" onclick="toggleOpt('+id+')">' +
       '<span class="opt-arrow">&#9654;</span>' +
-      '<span class="opt-label">' + label + '</span>' +
-      '<span class="opt-tag">' + tag + '</span>' +
+      '<span class="opt-label">'+label+'</span>' +
+      '<span class="opt-tag">'+tag+'</span>' +
       '</div>' +
-      '<div class="opt-body" id="ob-' + id + '">' + content + '</div>';
+      '<div class="opt-body" id="ob-'+id+'">'+content+'</div>';
   }
 
-  // ── FIELD CONFIG ──────────────────────────────────
   var curA = null;
   var aconf = {
-    newbranch:   { fields: [{id:'db',lbl:'Base branch to start from',ph:'mvp/develop'},{id:'mb',lbl:'New branch name',ph:'feature/login-page'}] },
-    pr:          { fields: [{id:'mb',lbl:'Your feature branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'msg',lbl:'Commit message',ph:'feat: add login page'},{id:'f1',lbl:'Your file 1',ph:'src/components/Login.tsx'},{id:'f2',lbl:'Your file 2',ph:'src/styles/Login.scss'},{id:'f3',lbl:'Your file 3 (optional)',ph:'src/constants.ts'}] },
-    squash:      { fields: [{id:'mb',lbl:'Your branch',ph:'feature/add-user'},{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'msg',lbl:'Commit message',ph:'feat: add user modal'},{id:'f1',lbl:'Your file 1',ph:'src/components/UserModal.tsx'},{id:'f2',lbl:'Your file 2',ph:'src/components/UserModal.scss'},{id:'f3',lbl:'Your file 3 (optional)',ph:'src/app.ts'}] },
-    rebase:      { fields: [{id:'mb',lbl:'Your feature branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'msg',lbl:'Commit message (if squashing first)',ph:'feat: your feature'},{id:'f1',lbl:'Your file 1 (if squashing)',ph:'src/components/Login.tsx'},{id:'f2',lbl:'Your file 2 (if squashing)',ph:'src/styles/Login.scss'}] },
-    switch:      { fields: [{id:'mb',lbl:'Your current branch',ph:'feature/login-page'},{id:'tb',lbl:'Branch to switch to',ph:'feature/other-task'}] },
-    approved:    { fields: [{id:'mb',lbl:'Your merged branch',ph:'feature/login-page'},{id:'db',lbl:'Branch it merged into',ph:'mvp/develop'}] },
-    undo:        { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
-    cherry:      { fields: [{id:'sb',lbl:'Source branch (has the commit)',ph:'feature/dashboard'},{id:'mb',lbl:'Your branch (apply it here)',ph:'feature/login-page'},{id:'ch',lbl:'Commit hash',ph:'d4e5f6a'}] },
-    rescue:      { fields: [{id:'mb',lbl:'Branch that broke',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
-    stash:       { fields: [{id:'mb',lbl:'Current branch',ph:'feature/login-page'},{id:'tb',lbl:'Branch to switch to',ph:'feature/other-task'}] },
-    conflict:    { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'fl',lbl:'Conflicting file',ph:'src/components/Login.tsx'}] },
-    delete:      { fields: [{id:'mb',lbl:'Branch to delete',ph:'feature/old-feature'},{id:'db',lbl:'Branch to switch to first',ph:'mvp/develop'}] },
-    rename:      { fields: [{id:'mb',lbl:'Current name',ph:'feature/old-name'},{id:'nb',lbl:'New name',ph:'feature/new-name'}] },
-    amend:       { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'msg',lbl:'New commit message',ph:'feat: add login page with validation'}] },
-    wrongbranch: { fields: [{id:'mb',lbl:'Wrong branch (committed here)',ph:'mvp/develop'},{id:'tb',lbl:'Correct branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
-    addmore:     { fields: [{id:'mb',lbl:'Your PR branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'msg',lbl:'Updated commit message',ph:'feat: add login page with validation'},{id:'f1',lbl:'Your file 1',ph:'src/components/Login.tsx'},{id:'f2',lbl:'Your file 2',ph:'src/styles/Login.scss'}] }
+    newbranch:        { fields: [{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'mb',lbl:'New branch name',ph:'feature/login-page'}] },
+    interactivesquash:{ fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'}] },
+    pr:               { fields: [{id:'mb',lbl:'Your feature branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
+    rebase:           { fields: [{id:'mb',lbl:'Your feature branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
+    switch:           { fields: [{id:'mb',lbl:'Your current branch',ph:'feature/login-page'},{id:'tb',lbl:'Branch to switch to',ph:'feature/other-task'}] },
+    approved:         { fields: [{id:'mb',lbl:'Your merged branch',ph:'feature/login-page'},{id:'db',lbl:'Branch it merged into',ph:'mvp/develop'}] },
+    undo:             { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
+    cherry:           { fields: [{id:'sb',lbl:'Source branch (has the commit)',ph:'feature/dashboard'},{id:'mb',lbl:'Your branch (apply it here)',ph:'feature/login-page'},{id:'ch',lbl:'Commit hash',ph:'d4e5f6a'}] },
+    rescue:           { fields: [{id:'mb',lbl:'Branch that broke',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
+    stash:            { fields: [{id:'mb',lbl:'Current branch',ph:'feature/login-page'},{id:'tb',lbl:'Branch to switch to',ph:'feature/other-task'}] },
+    conflict:         { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'fl',lbl:'Conflicting file',ph:'src/components/Login.tsx'}] },
+    delete:           { fields: [{id:'mb',lbl:'Branch to delete',ph:'feature/old-feature'},{id:'db',lbl:'Branch to switch to first',ph:'mvp/develop'}] },
+    rename:           { fields: [{id:'mb',lbl:'Current name',ph:'feature/old-name'},{id:'nb',lbl:'New name',ph:'feature/new-name'}] },
+    amend:            { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'msg',lbl:'New commit message',ph:'feat: add login page with validation'}] },
+    wrongbranch:      { fields: [{id:'mb',lbl:'Wrong branch (committed here)',ph:'mvp/develop'},{id:'tb',lbl:'Correct branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
+    addmore:          { fields: [{id:'mb',lbl:'Your PR branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'msg',lbl:'Updated commit message',ph:'feat: add login page with validation'},{id:'f1',lbl:'Your file 1',ph:'src/components/Login.tsx'},{id:'f2',lbl:'Your file 2',ph:'src/styles/Login.scss'}] }
   };
 
   window.pickA = function (a, el) {
     curA = a;
-    document.querySelectorAll('.pill').forEach(function (p) { p.classList.remove('on'); });
+    document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
     el.classList.add('on');
     var h = '';
-    aconf[a].fields.forEach(function (f) {
-      h += '<div class="input-group"><label class="input-label">' + f.lbl + '</label><input class="inp" id="gf-' + f.id + '" placeholder="' + f.ph + '"/></div>';
+    aconf[a].fields.forEach(function(f){
+      h += '<div class="input-group"><label class="input-label">'+f.lbl+'</label><input class="inp" id="gf-'+f.id+'" placeholder="'+f.ph+'"/></div>';
     });
     document.getElementById('ginputs').innerHTML = h;
     document.getElementById('gfields').style.display = 'block';
@@ -927,109 +629,156 @@ code {
     return e ? (e.value.trim() || e.placeholder) : '';
   }
 
-  // ── RENDER HELPERS ────────────────────────────────
-
-  // Terminal block
+  // ── RENDER HELPERS ──────────────────────────────
   function T(lines) {
-    var rows = lines.map(function (l) {
-      if (l === '')           return '<div style="height:5px"></div>';
-      if (l.charAt(0) === '#') return '<div class="t-c">' + l + '</div>';
-      if (l.slice(0,3)==='OK ') return '<div class="t-g">' + l.slice(3) + '</div>';
-      if (l.slice(0,3)==='WN ') return '<div class="t-y">' + l.slice(3) + '</div>';
-      if (l.slice(0,3)==='ER ') return '<div class="t-r">' + l.slice(3) + '</div>';
-      return '<div><span class="t-b">$ </span><span class="t-w">' + l + '</span></div>';
+    var rows = lines.map(function(l){
+      if (l === '')             return '<div style="height:5px"></div>';
+      if (l.charAt(0) === '#') return '<div class="t-c">'+l+'</div>';
+      if (l.slice(0,3)==='OK ') return '<div class="t-g">'+l.slice(3)+'</div>';
+      if (l.slice(0,3)==='WN ') return '<div class="t-y">'+l.slice(3)+'</div>';
+      if (l.slice(0,3)==='ER ') return '<div class="t-r">'+l.slice(3)+'</div>';
+      return '<div><span class="t-b">$ </span><span class="t-w">'+l+'</span></div>';
     }).join('');
-    return '<div class="term"><button class="cp" onclick="cp(this)">Copy</button>' + rows + '</div>';
+    return '<div class="term"><button class="cp" onclick="cp(this)">Copy</button>'+rows+'</div>';
   }
 
-  // Context banner (explains what we are doing)
-  function CTX(html) {
-    return '<div class="step-context">' + html + '</div>';
-  }
+  function CTX(html) { return '<div class="step-context">'+html+'</div>'; }
+  function WHERE(type, label) { return '<span class="where '+type+'">'+label+'</span> '; }
+  function NOTE(color, html) { return '<div class="note '+color+'">'+html+'</div>'; }
 
-  // Where badge
-  function WHERE(type, label) {
-    return '<span class="where ' + type + '">' + label + '</span> ';
-  }
-
-  // Note box
-  function NOTE(color, html) {
-    return '<div class="note ' + color + '">' + html + '</div>';
-  }
-
-  // GUI block — VS Code + IntelliJ side by side
   function GUI(vsc, ij) {
-    var vs = vsc.map(function(s,i){ return '<div class="gui-item"><span class="gui-item-n">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
-    var irow = ij.map(function(s,i){ return '<div class="gui-item"><span class="gui-item-n" style="background:var(--green-bg);border-color:var(--green-bd);color:var(--green);">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
+    var vs   = vsc.map(function(s,i){ return '<div class="gui-item"><span class="gui-item-n">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
+    var irow = ij.map(function(s,i){  return '<div class="gui-item"><span class="gui-item-n" style="background:var(--green-bg);border-color:var(--green-bd);color:var(--green);">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
     return '<div class="gui-block"><div class="gui-block-title">Do this in your IDE — VS Code or IntelliJ</div><div class="gui-cols"><div><div class="gui-col-title">VS Code</div>'+vs+'</div><div><div class="gui-col-title">IntelliJ</div>'+irow+'</div></div></div>';
   }
 
-  // Step
   var colMap = { b:'', g:'g', y:'y', r:'r' };
   function S(n, col, title, ctx, body) {
     return '<div class="step">' +
-      '<div class="step-num ' + (colMap[col]||'') + '">' + n + '</div>' +
+      '<div class="step-num '+(colMap[col]||'')+'">'+n+'</div>' +
       '<div class="step-body">' +
-        '<div class="step-title">' + title + '</div>' +
+        '<div class="step-title">'+title+'</div>' +
         (ctx ? CTX(ctx) : '') +
         body +
-      '</div>' +
-    '</div>';
+      '</div></div>';
   }
 
-  // Reusable: the full squash block (terminal + GUI + verify)
+  // ── REBASE ONTO DEVELOP BLOCK ────────────────────
+  function REBASE_BLOCK(db) {
+    return WHERE('terminal','Terminal') +
+    T([
+      'git rebase origin/' + db,
+      '',
+      '# ---- If a conflict appears: ----',
+      '# Open each conflicting file in VS Code or IntelliJ.',
+      '# Use Accept Current / Accept Incoming / Accept Both buttons.',
+      '# Save the file, then:',
+      'git add .',
+      'git rebase --continue',
+      '',
+      '# ---- Too messy? Cancel: ----',
+      '# git rebase --abort',
+      '',
+      'OK Rebased successfully',
+    ]) +
+    NOTE('yellow', 'Conflicts here are surgical — only the exact lines that clash between your commit and develop. Resolve file by file in the IDE merge editor.');
+  }
+
+  // ── INTERACTIVE SQUASH BLOCK (the elixir) ────────
+  function INTERACTIVE_SQUASH_BLOCK(mb) {
+    return CTX(
+      'Count how many commits at the top of the log are yours — that number is N. ' +
+      'Then run <code>git rebase -i HEAD~N</code>. This only touches YOUR commits. ' +
+      'It never touches develop, never touches other people\'s files, and nothing lands in your working directory. Safe to run anytime.'
+    ) +
+    WHERE('terminal','Terminal') +
+    T([
+      '# Step 1: Count your commits',
+      'git log --oneline',
+      '# The top N lines are yours. Count them. That is your N.',
+      '',
+      '# Step 2: Start interactive rebase',
+      '# Replace N with your actual count:',
+      'git rebase -i HEAD~N',
+      '',
+      '# An editor opens showing your N commits like this:',
+      '# pick a1b2c3 wip: started feature',
+      '# pick d4e5f6 wip: added logic',
+      '# pick g7h8i9 wip: fixed styling',
+      '# pick j0k1l2 wip: cleanup',
+    ]) +
+    NOTE('blue',
+      '<strong>In the editor that opens:</strong> Leave the very first line as <code>pick</code>. ' +
+      'Change every other line from <code>pick</code> to <code>s</code> (squash). ' +
+      'Save and close the file. Git opens a second editor — write your final clean commit message, save and close.'
+    ) +
+    GUI(
+      [
+        'The editor opens automatically in VS Code',
+        'Leave the <strong>first line</strong> as <code>pick</code>',
+        'Change every other line from <code>pick</code> to <code>s</code>',
+        'Save the file and close the tab (Ctrl+S, then close)',
+        'A second editor opens for your commit message — write it, save and close',
+      ],
+      [
+        'The editor opens automatically in IntelliJ',
+        'Leave the <strong>first line</strong> as <code>pick</code>',
+        'Change every other line from <code>pick</code> to <code>s</code>',
+        'Save the file and close it',
+        'A second editor opens for your commit message — write it, save and close',
+      ]
+    ) +
+    WHERE('terminal','Back to Terminal — verify') +
+    T([
+      '# Verify: you should now see exactly 1 commit at the top',
+      'git log --oneline',
+      'OK 1 clean commit — all your WIP collapsed',
+    ]) +
+    NOTE('green', 'Done. You now have 1 clean local commit. No develop involved. No other files touched. Run this anytime you want to tidy up during development.');
+  }
+
+  // ── SQUASH BLOCK (soft reset — only for addmore edge case) ──
   function SQUASH_BLOCK(db, myFiles, msg) {
     var fileList = myFiles.split(' ').filter(Boolean).map(function(f){ return '<code>'+f+'</code>'; }).join(', ');
     return CTX(
-      '<strong>What we are doing:</strong> We are collapsing all our messy work-in-progress commits into exactly one clean commit that contains only our files. ' +
-      'We first "un-commit" everything back to where develop is (soft reset), then selectively stage only our files in the IDE, then commit once with a clean message. ' +
-      'This is called Squashing.'
+      'Rebase is done and clean. Now collapse all commits into one clean commit with only your files. ' +
+      'Soft reset un-commits everything back to develop, then stage ONLY your files in the IDE.'
     ) +
     WHERE('terminal','Terminal — run these first') +
     T([
-      '# Soft reset: move our branch pointer back to where develop is.',
-      '# This "un-commits" everything. All your file changes are still safe in your working directory.',
       'git reset --soft origin/' + db,
-      '',
-      '# Unstage everything so we have a blank slate to stage from.',
       'git reset HEAD .',
-      '',
-      '# Now switch to your IDE below to stage ONLY your files.',
-      '# Do NOT run git add anything in terminal yet.',
+      '# Switch to your IDE now — do NOT run git add in terminal yet.',
     ]) +
     GUI(
       [
-        'Open the <strong>Source Control</strong> panel — left sidebar icon or press Ctrl+Shift+G',
-        'You will see a long list of changed files. Most of these are NOT yours — they belonged to other commits that got un-committed',
-        'Find your files: ' + fileList + ' — click the <strong>+</strong> icon next to each one to stage it',
-        'Do NOT click "Stage All Changes" — only your specific files',
-        'Type your commit message in the box at the top: <code>' + msg + '</code>',
+        'Open <strong>Source Control</strong> panel — Ctrl+Shift+G',
+        'You will see a long list of files. Most are NOT yours.',
+        'Find your files: '+fileList+' — click <strong>+</strong> next to each one only',
+        'Do NOT click "Stage All Changes"',
+        'Type your commit message: <code>'+msg+'</code>',
         'Click the <strong>Commit</strong> button (checkmark)',
       ],
       [
-        'Open the <strong>Commit</strong> tool window — press Ctrl+K or find it in the Git menu',
-        'You will see all changed files listed under "Changes"',
-        'Check the box next to ONLY your files: ' + fileList,
-        'Do NOT click "Select All" or check any other files',
-        'Type your commit message: <code>' + msg + '</code>',
+        'Open <strong>Commit</strong> tool window — Ctrl+K',
+        'Check the box next to ONLY your files: '+fileList,
+        'Do NOT click "Select All"',
+        'Type your commit message: <code>'+msg+'</code>',
         'Click the <strong>Commit</strong> button',
       ]
     ) +
-    WHERE('terminal','Back to Terminal — discard leftover files and verify') +
+    WHERE('terminal','Back to Terminal') +
     T([
-      '# Discard any files that are still sitting unstaged in your working directory.',
-      '# These are other people\'s files that got un-committed during the soft reset.',
-      '# Your files are already safely committed so this only removes theirs.',
+      '# Discard leftover files from other people.',
       'git checkout -- .',
-      '',
-      '# Verify: your new commit should be the very top line in the list.',
       'git log --oneline -5',
+      '# Verify your single clean commit is at the top.',
     ]) +
-    NOTE('red', '<strong>Never run <code>git add .</code> after soft reset.</strong> After un-committing, many files that belonged to other people\'s commits will appear in your working directory. Running <code>git add .</code> would stage all of them and commit other people\'s work as your own. Always stage file by file in the IDE.') +
-    NOTE('blue', '<strong>Safety:</strong> <code>origin/' + db + '</code> is only used as a reference point here. It is never modified. Only your feature branch moves.');
+    NOTE('red', '<strong>Never run <code>git add .</code> after soft reset.</strong> Other people\'s files appear in your working directory. Stage only your files in the IDE.') +
+    NOTE('blue', '<code>origin/'+db+'</code> is only a reference point — never modified. Only your branch moves.');
   }
 
-  // ── GUIDE GENERATOR ───────────────────────────────
+  // ── GUIDE GENERATOR ─────────────────────────────
   window.genGuide = function () {
     var mb  = gv('mb'), db  = gv('db'), tb  = gv('tb');
     var ch  = gv('ch'), nb  = gv('nb'), sb  = gv('sb');
@@ -1037,752 +786,519 @@ code {
     var f1  = gv('f1'), f2  = gv('f2');
     var f3e = document.getElementById('gf-f3');
     var f3  = f3e ? (f3e.value.trim() || '') : '';
-    var myFiles = [f1, f2, f3].filter(Boolean).join(' ');
+    var myFiles = [f1,f2,f3].filter(Boolean).join(' ');
 
     var h = '<div class="steps">';
 
-    // ───── CREATE NEW BRANCH ──────────────────────
+    // ── CREATE NEW BRANCH ────────────────────────
     if (curA === 'newbranch') {
 
-      h += S(1,'b','First, fetch the latest from origin',
-        'Before creating any branch, we always fetch first. Fetch downloads the latest information about all branches from the server — it does NOT change any of your files. We do this so our new branch starts from the most up-to-date version of develop, not a stale version from days ago.',
+      h += S(1,'b','Fetch the latest from origin','',
         WHERE('terminal','Terminal') +
-        T(['git fetch origin',
-           'git branch -a',
-           '# git branch -a shows you all branches including remote ones.',
-           '# Confirm the exact name of your base branch in the list.',
-           'OK Fetched latest from origin']));
+        T(['git fetch origin','git branch -a','# Confirm the exact name of your base branch.','OK Fetched']));
 
-      h += S(2,'b','Switch to the base branch: ' + db,
-        'We need to be standing on the base branch before we create a new branch from it. If we create a branch from the wrong place, we might accidentally include commits we don\'t want.',
+      h += S(2,'b','Switch to the base branch: '+db,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + db,
-           'OK Switched to ' + db]));
+        T(['git checkout '+db,'OK Switched to '+db]));
 
-      h += S(3,'b','Make sure your local ' + db + ' matches origin',
-        'Your local copy of ' + db + ' might be behind the server version — maybe someone pushed new commits since you last fetched. This step brings your local copy fully up to date. We use rebase here instead of pull because it avoids creating a merge commit.',
+      h += S(3,'b','Bring your local '+db+' up to date','',
         WHERE('terminal','Terminal') +
-        T(['git rebase origin/' + db,
-           'OK Local ' + db + ' is now up to date with origin']));
+        T(['git rebase origin/'+db,'OK Matches origin']));
 
-      h += S(4,'g','Create the new branch: ' + mb,
-        'This creates a brand new branch that starts from exactly where ' + db + ' is right now, and immediately switches you to it. The <code>-b</code> flag means "create and switch".',
+      h += S(4,'g','Create and switch to the new branch: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout -b ' + mb,
-           'OK Switched to new branch \'' + mb + '\'']));
+        T(['git checkout -b '+mb,'OK On new branch '+mb]));
 
-      h += S(5,'g','Publish the branch to origin immediately',
-        'Right now the branch only exists on your computer. Publishing it to origin backs it up instantly and makes it visible to your team. The <code>-u</code> flag sets up tracking — this means future <code>git push</code> commands on this branch automatically know where to push without you needing to type the full remote and branch name every time.',
+      h += S(5,'g','Publish to origin',
+        'The -u flag sets up tracking so future git push commands know where to go automatically.',
         WHERE('terminal','Terminal') +
-        T(['git push -u origin ' + mb,
-           'OK Branch \'' + mb + '\' is now on origin and tracking is set up']) +
-        NOTE('green', 'Your branch is now visible on GitHub/GitLab. You can start coding. When you are ready to raise a PR, come back to the Step Guide and choose "Full PR flow".'));
+        T(['git push -u origin '+mb,'OK Branch is live on origin']) +
+        NOTE('green','Branch is visible on GitHub/GitLab. When ready to raise a PR, come back and choose "Full PR flow".'));
     }
 
-    // ───── FULL PR FLOW ───────────────────────────
+    // ── INTERACTIVE SQUASH (THE ELIXIR) ──────────
+    else if (curA === 'interactivesquash') {
+
+      h += S(1,'b','Make sure you are on: '+mb,'',
+        WHERE('terminal','Terminal') +
+        T(['git checkout '+mb,'OK On branch '+mb]));
+
+      h += S(2,'g','⚡ Squash your WIP commits with interactive rebase',
+        'Count how many commits at the top of the log are yours. That number is N.',
+        INTERACTIVE_SQUASH_BLOCK(mb));
+
+      h += S(3,'g','That\'s it — you now have 1 clean local commit','',
+        NOTE('green','Run this anytime during development to keep your branch clean. At PR time all you need is a fetch → rebase onto develop → push. No squash step needed at PR time at all.'));
+    }
+
+    // ── FULL PR FLOW ─────────────────────────────
     else if (curA === 'pr') {
 
-      h += S(1,'b','Make sure you are on your branch: ' + mb,
-        'Always confirm which branch you are on before starting. It is easy to accidentally be on the wrong branch and run commands there.',
+      h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb,
-           'OK On branch ' + mb]));
+        T(['git checkout '+mb,'OK On branch '+mb]));
 
-      h += S(2,'y','Stash your uncommitted work',
-        'If you have any files you have edited but not committed yet, we need to save them safely before we do anything else. Stash is like a temporary pocket — it takes everything uncommitted off your working directory and saves it. This prevents Git from blocking us or getting confused during the next steps. Your work is completely safe and you will restore it at the end.',
-        WHERE('terminal','Terminal') +
-        T(['# First, check what is uncommitted:',
-           'git status',
-           '',
-           '# If you see any modified or untracked files, stash them:',
-           'git stash push -m "my-wip"',
-           'OK Stash saved',
-           '',
-           '# If git status showed nothing, skip the stash command above.']) +
-        NOTE('yellow', 'The name "my-wip" is just a label so you can find this stash later. You can use any name you like.'));
-
-      h += S(3,'b','Fetch the latest from origin',
-        'We download the latest information about all branches from the server. This does NOT change any files. We need to do this before squashing so that when we run <code>git reset --soft origin/' + db + '</code> in the next step, Git knows exactly where the latest ' + db + ' is.',
-        WHERE('terminal','Terminal') +
-        T(['git fetch origin',
-           '# Also check the exact branch name while you are here:',
-           'git branch -a',
-           'OK Fetched latest']));
-
-      h += S(4,'y','<strong style="color:var(--red);">Squash</strong> — combine all commits into one clean commit',
-        '',
-        SQUASH_BLOCK(db, myFiles, msg));
-
-      h += S(5,'y','Stash any leftover files before rebasing',
-        'After squashing, there may still be files sitting in your working directory that are "unstaged". These are other people\'s files that were on your branch before the soft reset. If we try to rebase now, Git will immediately fail with the error: "error: cannot rebase: You have unstaged changes." We need to stash these leftover files first to give Git a clean working directory.',
-        WHERE('terminal','Terminal') +
-        T(['# Check what is left in your working directory:',
-           'git status',
-           '',
-           '# If you see any unstaged/modified files, stash them:',
-           'git stash push -m "unwanted-files-temp"',
-           'OK Stashed',
-           '',
-           '# If git status showed nothing, skip the stash command above.']));
-
-      h += S(6,'b','<strong style="color:var(--red);">Rebase</strong> onto the latest ' + db,
-        'Rebase takes our single squashed commit, temporarily removes it, moves our branch pointer to match the latest tip of ' + db + ', then re-applies our commit on top. The result: our one clean commit now sits on top of the most recent develop. Our PR will apply cleanly with no outdated code underneath it. If a conflict appears, Git will pause and ask you to resolve it — instructions are in the step below.',
-        WHERE('terminal','Terminal') +
-        T(['git rebase origin/' + db,
-           '',
-           '# ---- If a conflict appears: ----',
-           '# Git will pause and show you which files have conflicts.',
-           '# Open each conflicting file in VS Code or IntelliJ.',
-           '# The IDE shows Accept Current / Accept Incoming / Accept Both buttons.',
-           '# Choose the right option, save the file, then:',
-           'git add .',
-           'git rebase --continue',
-           '',
-           '# ---- If it gets too messy: ----',
-           '# This cancels the rebase and puts everything back to how it was before.',
-           '# git rebase --abort',
-           '',
-           'OK Rebased successfully']));
-
-      h += S(7,'b','Push to origin',
-        'We push our rebased branch to origin. Because we rewrote the history (squash + rebase), a normal push would be rejected. We use <code>--force-with-lease</code> which is a safe force push — it checks first that nobody else has pushed to your branch since you last fetched. If they have, it fails safely instead of overwriting their work.',
-        WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease',
-           'OK Branch pushed successfully']) +
-        NOTE('red', 'Always <code>--force-with-lease</code>, never <code>--force</code>. The plain <code>--force</code> flag has no safety check and can silently overwrite teammates\' commits.'));
-
-      h += S(8,'y','Drop the leftover stash',
-        'We created a stash called "unwanted-files-temp" in step 5. Those files are already in develop (they came from there in the first place) so we do not need them. We drop that stash to clean up.',
-        WHERE('terminal','Terminal') +
-        T(['# See all your stashes:',
-           'git stash list',
-           '',
-           '# Find the one named "unwanted-files-temp" and note its number.',
-           '# For example if it shows stash@{0}: ... unwanted-files-temp:',
-           'git stash drop stash@{0}',
-           '# Replace 0 with the actual number you see in the list.',
-           'OK Dropped']));
-
-      h += S(9,'g','Restore your original work-in-progress',
-        'We saved our WIP at the very start. Now we restore it so we can keep working.',
-        WHERE('terminal','Terminal') +
-        T(['git stash pop',
-           'OK Your work is restored']));
-
-      h += S(10,'g','Open the Pull Request on GitHub/GitLab',
-        'Everything is ready. Go to the browser and open the PR.',
-        T(['# On GitHub or GitLab:',
-           '# Go to your repository',
-           '# Click "New Pull Request" or "Create Merge Request"',
-           '# From: ' + mb + '  →  Into: ' + db,
-           '# Write a clear title and description',
-           '# Add reviewers']) +
-        NOTE('green', 'Your PR now has exactly 1 clean commit with only your files. It sits on top of the latest ' + db + '. Reviewers can read it clearly.'));
-    }
-
-    // ───── JUST SQUASH ────────────────────────────
-    else if (curA === 'squash') {
-
-      h += S(1,'b','Make sure you are on: ' + mb, '',
-        WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb, 'OK On branch ' + mb]));
-
-      h += S(2,'y','Stash uncommitted work',
-        'Save anything you have not committed yet before we start. We will restore it at the end.',
-        WHERE('terminal','Terminal') +
-        T(['git status',
-           '# If you see uncommitted files:',
-           'git stash push -m "my-wip"',
-           'OK Saved — skip if git status showed nothing']));
-
-      h += S(3,'b','Fetch and check your commits',
-        'Fetch so Git knows where the latest ' + db + ' is. Then look at your commit history to see how many commits you have.',
-        WHERE('terminal','Terminal') +
-        T(['git fetch origin',
-           'git log --oneline',
-           '# The top entries are your commits. Note how many there are.',
-           'git branch -a',
-           '# Confirm the exact name of ' + db + ' in the list.']));
-
-      h += S(4,'g','<strong style="color:var(--red);">Squash</strong> — stage only your files', '',
-        SQUASH_BLOCK(db, myFiles, msg));
-
-      h += S(5,'y','Stash leftover files',
-        'Check if there are any leftover unstaged files still sitting in your working directory. If there are, stash them so they are out of the way.',
-        WHERE('terminal','Terminal') +
-        T(['git status',
-           '# If you see unstaged files:',
-           'git stash push -m "unwanted-files-temp"',
-           'OK Stashed — skip if git status showed nothing']) +
-        optSection('Also Rebase onto latest ' + db + '? Recommended before raising a PR', 'Optional',
-          CTX('If develop has received new commits since you branched, your squashed commit currently sits on top of old develop. Rebasing moves it to the very latest tip. This means your PR will apply cleanly. If you are about to raise a PR, do this.') +
-          WHERE('terminal','Terminal') +
-          T(['git rebase origin/' + db,
-             '# conflict? open IDE → resolve → git add . → git rebase --continue',
-             '# too messy? git rebase --abort',
-             'OK Rebased',
-             '',
-             'git push origin ' + mb + ' --force-with-lease',
-             'OK Pushed'])
+      h += S(2,'y','Squash your WIP commits first if you haven\'t already',
+        'If you have multiple WIP commits, squash them into 1 now using interactive rebase before doing anything else. This is the safe squash — it never touches develop or other people\'s files.',
+        optSection('Squash WIP commits with rebase -i — do this if you have more than 1 commit', 'Do this first',
+          INTERACTIVE_SQUASH_BLOCK(mb)
         ));
 
-      h += S(6,'b','Push', '',
+      h += S(3,'y','Stash uncommitted work',
+        'Save anything uncommitted before we start. Will be restored at the end.',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease',
-           'OK Updated']) +
-        NOTE('green', '1 clean commit. Only your files.'));
+        T(['git status','','# If you see any modified or untracked files:',
+           'git stash push -m "my-wip"','OK Saved','','# If git status showed nothing, skip this.']));
 
-      h += S(7,'y','Drop the unwanted stash', '',
+      h += S(4,'b','Fetch the latest from origin','',
         WHERE('terminal','Terminal') +
-        T(['git stash list',
-           '# Find "unwanted-files-temp" and note its number:',
-           'git stash drop stash@{0}',
-           '# Replace 0 with the actual number']));
+        T(['git fetch origin','git branch -a','OK Fetched']));
 
-      h += S(8,'g','Restore your stash', '',
+      h += S(5,'r','<strong style="color:var(--red);">Rebase</strong> onto the latest '+db,
+        'You already have 1 clean commit. This just moves it to the tip of the latest develop. One commit = at most one conflict, done quickly.',
+        REBASE_BLOCK(db));
+
+      h += S(6,'g','Push',
+        'History was rewritten (rebase) so use --force-with-lease. It checks nobody pushed to your branch since you last fetched.',
         WHERE('terminal','Terminal') +
-        T(['git stash pop', 'OK Restored']));
+        T(['git push origin '+mb+' --force-with-lease','OK Pushed']) +
+        NOTE('red','Always <code>--force-with-lease</code>, never <code>--force</code>. Plain --force can silently overwrite teammates\' commits.'));
 
-      h += '<div class="step" style="border-bottom:none;">' +
-        '<div class="step-num g">✓</div>' +
-        '<div class="step-body"><div class="step-title">Result</div>' +
-        '<div class="row" style="margin-top:10px;">' +
-        '<div class="card red" style="margin-bottom:0;"><div class="card-label red">Before</div><div style="font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--red);">a1b2c3 fix: typo<br>e4f5g6 wip: saving progress<br>i7j8k9 another wip commit</div><div style="font-size:12px;color:var(--txt3);margin-top:6px;">Messy — reviewers can see all your WIP commits</div></div>' +
-        '<div class="card green" style="margin-bottom:0;"><div class="card-label green">After</div><div style="font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--green);">abc1234 ' + msg + '</div><div style="font-size:12px;color:var(--txt3);margin-top:6px;">1 clean commit. Only your files. Reviewers see exactly what changed.</div></div>' +
-        '</div></div></div>';
+      h += S(7,'g','Restore your WIP','',
+        WHERE('terminal','Terminal') +
+        T(['git stash pop','OK Work restored']));
+
+      h += S(8,'g','Open the Pull Request on GitHub/GitLab','',
+        T(['# Go to your repository on GitHub or GitLab',
+           '# Click "New Pull Request" or "Create Merge Request"',
+           '# From: '+mb+'  →  Into: '+db,
+           '# Write a clear title and description, add reviewers']) +
+        NOTE('green','Your PR now has exactly 1 clean commit with only your files, sitting on top of the latest '+db+'.'));
     }
 
-    // ───── REBASE ─────────────────────────────────
+    // ── REBASE ONLY ──────────────────────────────
     else if (curA === 'rebase') {
 
-      h += S(1,'b','Switch to: ' + mb, '',
+      h += S(1,'b','Switch to: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb]));
+        T(['git checkout '+mb]));
 
-      h += S(2,'y','Stash uncommitted work', '',
-        WHERE('terminal','Terminal') +
-        T(['git stash push -m "my-wip"',
-           '# Skip if git status shows nothing']));
-
-      h += S(3,'b','Fetch latest', '',
-        WHERE('terminal','Terminal') +
-        T(['git fetch origin', 'git branch -a']));
-
-      h += S(4,'b','Check how many commits you have',
-        'If you have more than 1 commit, you should squash first. Rebasing with multiple commits means Git replays each one separately and you can get a conflict at each one.',
-        WHERE('terminal','Terminal') +
-        T(['git log --oneline',
-           '# Count the commits at the top that are yours.',
-           '# 1 commit = go straight to step 5',
-           '# Multiple commits = expand the option below first']) +
-        optSection('Squash first — combine into 1 commit before rebasing. Do this if you have multiple commits.', 'Recommended',
-          SQUASH_BLOCK(db, myFiles, msg) +
-          WHERE('terminal','Terminal') +
-          T(['git status',
-             '# If unstaged files remain:',
-             'git stash push -m "unwanted-files-temp"',
-             'OK Stashed'])
+      h += S(2,'y','Squash your WIP commits first if you have more than 1',
+        'If you have multiple commits, squash them with rebase -i before syncing. This makes the rebase onto develop trivial — 1 commit, at most 1 conflict.',
+        optSection('Squash WIP commits with rebase -i — recommended before syncing', 'Recommended',
+          INTERACTIVE_SQUASH_BLOCK(mb)
         ));
 
-      h += S(5,'b','<strong style="color:var(--red);">Rebase</strong> onto the latest ' + db,
-        'This moves your commit to sit on top of the most recent ' + db + '. Your branch will be fully up to date.',
+      h += S(3,'y','Stash uncommitted work','',
         WHERE('terminal','Terminal') +
-        T(['git rebase origin/' + db,
-           '# conflict? open IDE → resolve → git add . → git rebase --continue',
-           '# too messy? git rebase --abort',
-           'OK Rebased successfully']));
+        T(['git stash push -m "my-wip"','# Skip if git status shows nothing']));
 
-      h += S(6,'g','Push', '',
+      h += S(4,'b','Fetch latest','',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease',
-           'OK Done']));
+        T(['git fetch origin','git branch -a']));
 
-      h += S(7,'y','Drop unwanted stash if you created one', '',
-        WHERE('terminal','Terminal') +
-        T(['git stash list',
-           '# If "unwanted-files-temp" is there:',
-           'git stash drop stash@{0}',
-           '# Replace 0 with the actual number']));
+      h += S(5,'r','<strong style="color:var(--red);">Rebase</strong> onto the latest '+db,'',
+        REBASE_BLOCK(db));
 
-      h += S(8,'g','Restore your stash', '',
+      h += S(6,'g','Push','',
         WHERE('terminal','Terminal') +
-        T(['git stash pop', 'OK Restored']));
+        T(['git push origin '+mb+' --force-with-lease','OK Done']) +
+        NOTE('blue','Use <code>--force-with-lease</code> any time you have rebased — history was rewritten so a normal push will be rejected.'));
+
+      h += S(7,'g','Restore your stash','',
+        WHERE('terminal','Terminal') +
+        T(['git stash pop','OK Restored']));
     }
 
-    // ───── SWITCH BRANCH ──────────────────────────
+    // ── SWITCH BRANCH ────────────────────────────
     else if (curA === 'switch') {
 
-      h += S(1,'b','Fetch latest first',
-        'Always fetch before doing anything with branches so your local branch list is up to date.',
+      h += S(1,'b','Fetch latest first','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin']));
 
-      h += S(2,'y','Check what you currently have uncommitted',
-        'If you have unsaved work and just switch branches without dealing with it, Git will either block you or — worse — carry those changes over to the other branch accidentally.',
+      h += S(2,'y','Check what you have uncommitted','',
         WHERE('terminal','Terminal') +
-        T(['git status',
-           '# If you see any files listed, deal with them using Option A or B below.']));
+        T(['git status','# If you see any files listed, use Option A or B below.']));
 
-      h += S(3,'g','Option A: Save your work and switch (recommended)',
-        'Stash saves your current work safely. Switch to the other branch. When you are done there and want to come back, you restore your stash.',
+      h += S(3,'g','Option A: Stash and switch (recommended)','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "my-wip"',
-           'git checkout ' + tb,
-           'OK Switched to ' + tb,
-           '',
-           '# ---- When you want to come back: ----',
-           'git checkout ' + mb,
-           'git stash pop',
-           'OK Back on ' + mb + ' with your work restored']));
+           'git checkout '+tb,'OK Switched to '+tb,'',
+           '# When you want to come back:',
+           'git checkout '+mb,'git stash pop','OK Back on '+mb+' with work restored']));
 
-      h += S(4,'r','Option B: Throw away uncommitted changes (only if you are sure)',
-        'This permanently deletes all your uncommitted changes. There is no undo. Only use this if you are absolutely certain you do not need any of those changes.',
+      h += S(4,'r','Option B: Discard and switch (only if 100% sure)',
+        'Permanently deletes all uncommitted changes. No undo.',
         WHERE('terminal','Terminal') +
-        T(['git checkout -- .',
-           'git checkout ' + tb,
-           'OK Switched']) +
-        NOTE('red', 'This permanently deletes uncommitted work. Use Option A (stash) unless you are 100% certain you do not need any of those changes.'));
+        T(['git checkout -- .','git checkout '+tb,'OK Switched']) +
+        NOTE('red','Use Option A unless you are absolutely certain you do not need any of those changes.'));
     }
 
-    // ───── PR APPROVED CLEANUP ────────────────────
+    // ── PR APPROVED CLEANUP ──────────────────────
     else if (curA === 'approved') {
 
-      h += S(1,'g','Confirm who merges the PR',
-        'In some teams the PR author merges. In others the tech lead does. Ask your team if you are not sure before clicking anything.',
-        NOTE('yellow', 'Ask your team who should click the merge button before proceeding.'));
-
-      h += S(2,'g','Merge on GitHub or GitLab in the browser',
-        'Go to the PR page and click the merge button. This is done in the browser, not the terminal.',
+      h += S(1,'g','Merge on GitHub or GitLab in the browser','',
         T(['# Go to your PR on GitHub or GitLab',
-           '# Click "Merge Pull Request" (GitHub) or "Merge" (GitLab)',
-           '# Click Confirm']));
+           '# Click "Merge Pull Request" or "Merge" → Confirm']) +
+        NOTE('yellow','Ask your team who should click the merge button before proceeding.'));
 
-      h += S(3,'b','Update your local ' + db + ' to reflect the merge',
-        'Now that your code is in develop on the server, we want to bring our local develop up to date so it matches.',
+      h += S(2,'b','Update your local '+db,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + db,
-           'git fetch origin',
-           'git rebase origin/' + db,
-           'OK Local ' + db + ' is now up to date']));
+        T(['git checkout '+db,'git fetch origin',
+           'git rebase origin/'+db,'OK Local '+db+' is up to date']));
 
-      h += S(4,'b','Delete the merged branch',
-        'Clean up the branch both locally and on origin. It has been merged so it is no longer needed.',
+      h += S(3,'b','Delete the merged branch','',
         WHERE('terminal','Terminal') +
-        T(['# Delete it locally:',
-           'git branch -d ' + mb,
-           '# If Git says the branch is not fully merged (sometimes happens), force delete:',
-           '# git branch -D ' + mb,
-           '',
-           '# Delete it on origin:',
-           'git push origin --delete ' + mb,
-           'OK Branch deleted']));
+        T(['git branch -d '+mb,
+           '# If "not fully merged" warning:','# git branch -D '+mb,'',
+           'git push origin --delete '+mb,'OK Branch deleted']));
 
-      h += S(5,'g','Start your next task',
-        'Create a new branch from the freshly updated ' + db + ' and publish it.',
+      h += S(4,'g','Start your next task','',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + db,
-           'git fetch origin',
-           'git rebase origin/' + db,
+        T(['git checkout '+db,'git fetch origin','git rebase origin/'+db,
            'git checkout -b feature/next-task',
-           'git push -u origin feature/next-task',
-           'OK Ready to start']));
+           'git push -u origin feature/next-task','OK Ready']));
     }
 
-    // ───── UNDO COMMITS ───────────────────────────
+    // ── UNDO COMMITS ─────────────────────────────
     else if (curA === 'undo') {
 
-      h += S(1,'b','Look at your commit history first',
-        'See what commits exist so you know exactly what you are undoing.',
+      h += S(1,'b','Look at your commit history first','',
         WHERE('terminal','Terminal') +
-        T(['git log --oneline',
-           '# The top entries are your most recent commits.',
-           '# Figure out how many you want to undo.']));
+        T(['git log --oneline','# Figure out how many commits you want to undo.']));
 
-      h += S(2,'g','Option A: Soft reset — safest option',
-        'Soft reset removes the commit from the history but keeps all your file changes in your working directory. Your code is still there — you just un-committed it. You can re-commit it differently afterwards.',
+      h += S(2,'g','Option A: Soft reset — safest',
+        'Removes the commit from history but keeps all file changes in your working directory.',
         WHERE('terminal','Terminal') +
-        T(['# Undo just the last 1 commit (files stay in working directory):',
-           'git reset --soft HEAD~1',
-           '',
-           '# Or undo everything all the way back to where develop is:',
-           'git reset --soft origin/' + db,
-           '',
-           'OK Commit removed, all files are still safe in your working directory']) +
-        NOTE('green', 'This is almost always what you want. Your code is not deleted — it is just un-committed.'));
+        T(['# Undo just the last 1 commit:','git reset --soft HEAD~1','',
+           '# Or undo all the way back to develop:',
+           'git reset --soft origin/'+db,'',
+           'OK Commit removed — files still safe']) +
+        NOTE('green','Your code is not deleted — it is just un-committed.'));
 
-      h += S(3,'b','Option B: Revert — safe for branches that are already shared',
-        'Revert does not remove any commits. Instead it creates a brand new commit that does the opposite of the one you want to undo. Use this when other people already have your commits on their machines.',
+      h += S(3,'b','Option B: Revert — safe for branches already shared',
+        'Creates a new commit that undoes the previous one. Does not remove any history.',
         WHERE('terminal','Terminal') +
         T(['git revert HEAD',
-           '# This opens a text editor for a commit message. Save and close it.',
-           'git push origin ' + mb]));
+           '# Opens editor for commit message. Save and close.',
+           'git push origin '+mb]));
 
-      h += S(4,'y','If you already pushed — force push after soft reset',
-        'Because soft reset rewrites history, a normal push will be rejected. Use force-with-lease.',
+      h += S(4,'y','If you already pushed — force push after soft reset','',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease']));
+        T(['git push origin '+mb+' --force-with-lease']));
     }
 
-    // ───── CHERRY PICK ────────────────────────────
+    // ── CHERRY PICK ──────────────────────────────
     else if (curA === 'cherry') {
 
-      h += S(1,'b','Fetch latest',
-        'Fetch so Git knows about all branches including the source branch.',
+      h += S(1,'b','Fetch latest','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin']));
 
-      h += S(2,'b','Find the exact commit hash on the source branch',
-        'We need the commit hash — the short code like <code>d4e5f6a</code> — of the specific commit we want to copy. Look through the log of the source branch and find it.',
+      h += S(2,'b','Find the commit hash on the source branch','',
         WHERE('terminal','Terminal') +
-        T(['git log --oneline origin/' + sb,
-           '# Each line shows: hash  message',
-           '# Find the commit you want and copy its hash.',
-           'WN ' + ch + '  this is the one you want to cherry pick']));
+        T(['git log --oneline origin/'+sb,
+           '# Each line: hash  message. Find the commit and copy its hash.',
+           'WN '+ch+'  this is the one you want']));
 
-      h += S(3,'b','Switch to your branch: ' + mb, '',
+      h += S(3,'b','Switch to your branch: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb]));
+        T(['git checkout '+mb]));
 
       h += S(4,'g','Cherry pick the commit',
-        'Cherry pick copies exactly that one commit from the source branch and applies it to your current branch. It does not bring any other commits along — just that specific one.',
+        'Copies only that specific commit to your branch. Nothing else comes along.',
         WHERE('terminal','Terminal') +
-        T(['git cherry-pick ' + ch,
-           'OK Commit applied to ' + mb]));
+        T(['git cherry-pick '+ch,'OK Commit applied to '+mb]));
 
-      h += S(5,'y','If a conflict appears during cherry pick',
-        'Resolve it in the IDE the same way you would for a rebase conflict, then continue.',
-        WHERE('gui','VS Code or IntelliJ — resolve the conflict in the merge editor') +
+      h += S(5,'y','If a conflict appears',
+        'Resolve it in the IDE merge editor, then continue.',
+        GUI(
+          [
+            'Open the conflicting file in VS Code',
+            'Use <strong>Accept Current</strong> / <strong>Accept Incoming</strong> / <strong>Accept Both</strong> buttons',
+            'Delete any remaining conflict markers (&lt;&lt;&lt;, ===, &gt;&gt;&gt;)',
+            'Save the file',
+          ],
+          [
+            'Open the conflicting file in IntelliJ',
+            'Use the 3-panel merge editor — your code left, result middle, incoming right',
+            'Click arrow buttons to accept chunks, or edit the middle panel directly',
+            'Click Apply, then save',
+          ]
+        ) +
         WHERE('terminal','Then Terminal') +
-        T(['git add .',
-           'git cherry-pick --continue',
-           '',
-           '# To cancel and undo the cherry pick entirely:',
-           '# git cherry-pick --abort']));
+        T(['git add .','git cherry-pick --continue','','# To cancel:','# git cherry-pick --abort']));
 
-      h += S(6,'b','Push', '',
+      h += S(6,'b','Push','',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb]));
+        T(['git push origin '+mb]));
     }
 
-    // ───── RESCUE ─────────────────────────────────
+    // ── RESCUE ───────────────────────────────────
     else if (curA === 'rescue') {
 
       h += S(1,'r','Do not panic — your code is not lost',
-        'Pull or Sync has created a mess by making a hidden merge commit and skipping the squash/rebase process. We will undo all of that now and get back to a clean state.',
-        NOTE('red', 'Do not try to fix this by running more git commands randomly. Follow these steps in order.'));
+        'Pull or Sync created a hidden merge commit. Follow these steps in order.',
+        NOTE('red','Do not run more random git commands. Follow these steps in order.'));
 
-      h += S(2,'y','Abort any operation that is currently in progress',
-        'Sometimes Git gets stuck mid-operation. This step aborts anything that is in progress. Errors here just mean that particular operation was not running — that is fine.',
+      h += S(2,'y','Abort any operation currently in progress','',
         WHERE('terminal','Terminal') +
-        T(['git rebase --abort',
-           'git merge --abort',
-           'git cherry-pick --abort',
-           '# Errors here are fine — they just mean that operation was not in progress']));
+        T(['git rebase --abort','git merge --abort','git cherry-pick --abort',
+           '# Errors here are fine — means that operation was not running']));
 
-      h += S(3,'y','Stash any uncommitted files',
-        'Save any files you have changed but not committed. We will restore them once the branch is clean.',
+      h += S(3,'y','Stash any uncommitted files','',
         WHERE('terminal','Terminal') +
-        T(['git stash push -m "rescue-stash"',
-           'OK Saved']));
+        T(['git stash push -m "rescue-stash"','OK Saved']));
 
-      h += S(4,'b','Reset your branch to match the remote',
-        'This is the key step. We reset our local branch to match the remote version of the same branch — removing the bad merge commit that Pull/Sync created. We use soft reset so your file changes stay safe.',
+      h += S(4,'b','Reset your branch to remove the bad merge commit','',
         WHERE('terminal','Terminal') +
-        T(['git fetch origin',
-           'git reset --soft origin/' + mb,
-           '# If this branch has never been pushed, use this instead:',
-           '# git reset --soft origin/' + db,
-           'OK Branch is now clean']));
+        T(['git fetch origin','git reset --soft origin/'+mb,
+           '# If this branch has never been pushed:',
+           '# git reset --soft origin/'+db,'OK Branch is now clean']));
 
-      h += S(5,'b','Restore your files',
-        'Get your uncommitted work back.',
+      h += S(5,'b','Restore your files','',
         WHERE('terminal','Terminal') +
-        T(['git stash pop',
-           'OK Restored']));
+        T(['git stash pop','OK Restored']));
 
-      h += S(6,'g','Check that everything is clean',
-        'Verify the bad commit is gone and your history looks right.',
+      h += S(6,'g','Verify everything is clean','',
         WHERE('terminal','Terminal') +
-        T(['git status',
-           'git log --oneline -5',
-           'OK Looks clean']) +
-        NOTE('green', 'Now follow the proper flow: stash → fetch → squash → rebase → push → stash pop.'));
+        T(['git status','git log --oneline -5','OK Looks clean']) +
+        NOTE('green','Now follow the correct flow: squash with rebase -i if needed → stash → fetch → rebase onto develop → push → stash pop.'));
     }
 
-    // ───── STASH ──────────────────────────────────
+    // ── STASH ────────────────────────────────────
     else if (curA === 'stash') {
 
-      h += S(1,'b','Save your current work',
-        'Stash saves everything that is uncommitted into a safe pocket. Your working directory becomes clean.',
+      h += S(1,'b','Save your current work','',
         WHERE('terminal','Terminal') +
-        T(['git stash push -m "my-wip"',
-           'OK Saved']));
+        T(['git stash push -m "my-wip"','OK Saved']));
 
-      h += S(2,'b','Switch to the other branch: ' + tb, '',
+      h += S(2,'b','Switch to the other branch: '+tb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + tb]));
+        T(['git checkout '+tb]));
 
-      h += S(3,'b','Do your work on ' + tb + '...', '',
+      h += S(3,'b','Do your work on '+tb+'...','',
         T(['# Make changes, commit, push — whatever you need to do.']));
 
-      h += S(4,'g','Come back and restore your work',
-        'Switch back to your original branch and pop the stash to get your files back.',
+      h += S(4,'g','Come back and restore your work','',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb,
-           'git stash list',
-           '# You should see your "my-wip" stash in the list.',
-           'git stash pop',
-           'OK All your work is restored on ' + mb]));
+        T(['git checkout '+mb,'git stash list',
+           '# You should see your "my-wip" stash.',
+           'git stash pop','OK All your work is restored on '+mb]));
     }
 
-    // ───── CONFLICT ───────────────────────────────
+    // ── CONFLICT ─────────────────────────────────
     else if (curA === 'conflict') {
 
-      h += S(1,'b','See which files have conflicts',
-        'Git marks conflicting files clearly. Run status to see the list.',
+      h += S(1,'b','See which files have conflicts','',
         WHERE('terminal','Terminal') +
-        T(['git status',
-           'ER both modified: ' + fl,
+        T(['git status','ER both modified: '+fl,
            '# Files listed under "both modified" have conflicts.']));
 
-      h += S(2,'y','Open the conflicting file in your IDE and resolve it',
-        'VS Code and IntelliJ both have an excellent 3-way merge editor. This is much easier than resolving by hand. Open the file and you will see the conflict highlighted with buttons to accept one side or both.',
+      h += S(2,'y','Open the conflicting file in your IDE and resolve it','',
         GUI(
           [
-            'Open <code>' + fl + '</code> in VS Code',
-            'At the top of the conflict you will see buttons: <strong>Accept Current Change</strong> / <strong>Accept Incoming Change</strong> / <strong>Accept Both Changes</strong>',
-            'Accept Current = keep your code. Accept Incoming = take their code from develop. Accept Both = keep both.',
-            'Delete any remaining conflict markers if you edited manually: lines starting with &lt;&lt;&lt;, ===, or &gt;&gt;&gt;',
+            'Open <code>'+fl+'</code> in VS Code',
+            'At the top of each conflict: <strong>Accept Current Change</strong> / <strong>Accept Incoming Change</strong> / <strong>Accept Both Changes</strong>',
+            'Accept Current = keep yours. Accept Incoming = take theirs. Accept Both = keep both.',
+            'Delete any remaining markers: &lt;&lt;&lt;, ===, &gt;&gt;&gt;',
             'Save the file',
           ],
           [
-            'Open <code>' + fl + '</code> in IntelliJ',
-            'IntelliJ shows a 3-panel diff: your code on the left, merged result in the middle, their code on the right',
-            'Click the arrow buttons to accept chunks from either side, or edit the middle panel directly',
-            'Click Apply when done',
-            'Save the file',
+            'Open <code>'+fl+'</code> in IntelliJ',
+            '3-panel diff: your code left, merged result middle, incoming right',
+            'Click arrow buttons to accept chunks, or edit the middle panel directly',
+            'Click Apply, then save',
           ]
         ));
 
-      h += S(3,'b','Stage the resolved file and continue the operation',
-        'After resolving, tell Git the conflict is fixed by staging the file. Then continue whichever operation was interrupted.',
+      h += S(3,'b','Stage the resolved file and continue','',
         WHERE('terminal','Terminal') +
-        T(['git add ' + fl,
-           '',
-           '# Then continue whichever operation was running:',
-           '',
-           '# If you were rebasing:',
-           'git rebase --continue',
-           '',
-           '# If you were merging:',
-           'git commit',
-           '',
-           '# If you were cherry-picking:',
-           'git cherry-pick --continue']));
+        T(['git add '+fl,'',
+           '# Continue whichever operation was running:','',
+           '# If rebasing:','git rebase --continue','',
+           '# If merging:','git commit','',
+           '# If cherry-picking:','git cherry-pick --continue']));
 
-      h += S(4,'r','If the conflict is too complex — abort and start over',
-        'Aborting resets everything back to how it was before the operation started. Nothing is lost. You can try again.',
+      h += S(4,'r','If too complex — abort and start over','',
         WHERE('terminal','Terminal') +
         T(['git rebase --abort',
-           '# or: git merge --abort',
-           '# or: git cherry-pick --abort',
+           '# or: git merge --abort  /  git cherry-pick --abort',
            'OK Everything is back to how it was']));
 
-      h += S(5,'b','Push after resolving', '',
+      h += S(5,'b','Push after resolving','',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease']));
+        T(['git push origin '+mb+' --force-with-lease']));
     }
 
-    // ───── DELETE BRANCH ──────────────────────────
+    // ── DELETE BRANCH ────────────────────────────
     else if (curA === 'delete') {
 
-      h += S(1,'b','Switch off the branch first',
-        'You cannot delete a branch you are currently on. Switch to the base branch first.',
+      h += S(1,'b','Switch off the branch first','',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + db,
-           'OK Switched to ' + db]));
+        T(['git checkout '+db,'OK Switched to '+db]));
 
-      h += S(2,'b','Delete the branch locally', '',
+      h += S(2,'b','Delete locally','',
         WHERE('terminal','Terminal') +
-        T(['git branch -d ' + mb,
-           '# If Git complains the branch is not fully merged, force delete:',
-           '# git branch -D ' + mb,
+        T(['git branch -d '+mb,
+           '# If "not fully merged" warning:','# git branch -D '+mb,
            'OK Deleted locally']));
 
-      h += S(3,'b','Delete the branch on origin (optional)',
-        'This removes it from GitHub/GitLab too. Only do this if you are sure it is no longer needed.',
+      h += S(3,'b','Delete on origin','',
         WHERE('terminal','Terminal') +
-        T(['git push origin --delete ' + mb,
-           'OK Deleted from origin']));
+        T(['git push origin --delete '+mb,'OK Deleted from origin']));
     }
 
-    // ───── RENAME BRANCH ──────────────────────────
+    // ── RENAME BRANCH ────────────────────────────
     else if (curA === 'rename') {
 
-      h += S(1,'b','Make sure you are on: ' + mb, '',
+      h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb]));
+        T(['git checkout '+mb]));
 
-      h += S(2,'b','Rename it to: ' + nb,
-        'The <code>-m</code> flag stands for "move" — it renames the branch.',
+      h += S(2,'b','Rename to: '+nb,'',
         WHERE('terminal','Terminal') +
-        T(['git branch -m ' + nb,
-           'OK Renamed locally to ' + nb]));
+        T(['git branch -m '+nb,'OK Renamed locally to '+nb]));
 
-      h += S(3,'y','If the branch is already on origin — update the remote too',
-        'Delete the old name on origin and push with the new name.',
+      h += S(3,'y','If the branch is already on origin — update remote too','',
         WHERE('terminal','Terminal') +
-        T(['git push origin --delete ' + mb,
-           'git push -u origin ' + nb,
-           'OK Remote branch renamed']));
+        T(['git push origin --delete '+mb,
+           'git push -u origin '+nb,'OK Remote branch renamed']));
     }
 
-    // ───── AMEND COMMIT MESSAGE ───────────────────
+    // ── AMEND COMMIT MESSAGE ─────────────────────
     else if (curA === 'amend') {
+      var msg2 = gv('msg');
 
-      h += S(1,'b','Make sure you are on: ' + mb, '',
+      h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb]));
+        T(['git checkout '+mb]));
 
       h += S(2,'g','Change the last commit message',
-        'Amend rewrites only the most recent commit\'s message. It does not touch any files inside the commit at all — just the message text.',
+        'Rewrites only the most recent commit\'s message. No files are touched.',
         WHERE('terminal','Terminal') +
-        T(['git commit --amend -m "' + msg + '"',
-           'OK Message updated']) +
-        NOTE('blue', 'This only works on the very last commit. If you need to change an older commit message you would need an interactive rebase — ask your team lead for help with that.'));
+        T(['git commit --amend -m "'+msg2+'"','OK Message updated']) +
+        NOTE('blue','This only works on the very last commit. For older commits use rebase -i — pick the commit and change pick to reword.'));
 
-      h += S(3,'y','If you already pushed this commit — force push',
-        'Because amend rewrites history, a normal push will be rejected.',
+      h += S(3,'y','If you already pushed — force push','',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease']));
+        T(['git push origin '+mb+' --force-with-lease']));
     }
 
-    // ───── WRONG BRANCH ───────────────────────────
+    // ── WRONG BRANCH ─────────────────────────────
     else if (curA === 'wrongbranch') {
 
       h += S(1,'r','Stop — do not push anything yet',
-        'You committed to the wrong branch but your code is safe. We will move the commit to the correct branch.',
-        NOTE('yellow', 'Your code is not lost. We are just going to move it.'));
+        'Your code is safe. We will move it to the correct branch.',
+        NOTE('yellow','Your code is not lost. We are just going to move it.'));
 
       h += S(2,'b','Soft reset the wrong branch',
-        'This removes the commit from the history of the wrong branch but keeps all your file changes in your working directory. Nothing is deleted.',
+        'Removes the commit from the wrong branch. Your file changes stay in your working directory.',
         WHERE('terminal','Terminal') +
         T(['git reset --soft HEAD~1',
-           'OK Commit removed from this branch, files are still in your working directory']));
+           'OK Commit removed — files still in working directory']));
 
-      h += S(3,'y','Stash the files',
-        'Pick up those files and put them in the stash pocket so we can carry them to the right branch.',
+      h += S(3,'y','Stash the files','',
         WHERE('terminal','Terminal') +
-        T(['git stash push -m "wrong-branch-rescue"',
-           'OK Files saved in stash']));
+        T(['git stash push -m "wrong-branch-rescue"','OK Files saved']));
 
-      h += S(4,'b','Get onto the correct branch: ' + tb,
-        'If the correct branch already exists, just switch to it. If it does not exist yet, create it fresh from the base branch.',
+      h += S(4,'b','Get onto the correct branch: '+tb,'',
         WHERE('terminal','Terminal') +
-        T(['# If the correct branch already exists:',
-           'git checkout ' + tb,
-           '',
-           '# If the correct branch does NOT exist yet:',
-           'git checkout ' + db,
-           'git fetch origin',
-           'git rebase origin/' + db,
-           'git checkout -b ' + tb,
-           'git push -u origin ' + tb]));
+        T(['# If the correct branch already exists:','git checkout '+tb,'',
+           '# If it does NOT exist yet:','git checkout '+db,
+           'git fetch origin','git rebase origin/'+db,
+           'git checkout -b '+tb,'git push -u origin '+tb]));
 
-      h += S(5,'g','Pop the stash and commit on the correct branch',
-        'Restore the files you saved, then stage and commit them on the correct branch.',
+      h += S(5,'g','Pop the stash and commit on the correct branch','',
         WHERE('terminal','Terminal') +
-        T(['git stash pop',
-           '# Your files are now back in your working directory']) +
+        T(['git stash pop','# Your files are back in your working directory.']) +
         GUI(
           [
-            'Open Source Control panel',
-            'Click <strong>+</strong> next to your files to stage them',
+            'Open <strong>Source Control</strong> panel — Ctrl+Shift+G',
+            'Click <strong>+</strong> next to your files only',
+            'Do NOT click "Stage All Changes"',
             'Type your commit message',
-            'Click the Commit button',
+            'Click the <strong>Commit</strong> button',
           ],
           [
-            'Open Commit window (Ctrl+K)',
-            'Check the boxes next to your files',
+            'Open <strong>Commit</strong> tool window — Ctrl+K',
+            'Check the box next to your files only',
+            'Do NOT click "Select All"',
             'Type your commit message',
-            'Click Commit',
+            'Click the <strong>Commit</strong> button',
           ]
         ) +
-        NOTE('green', 'Your code is now committed on the correct branch: ' + tb));
+        NOTE('green','Your code is now committed on the correct branch: '+tb));
 
-      h += S(6,'b','Push', '',
+      h += S(6,'b','Push','',
         WHERE('terminal','Terminal') +
-        T(['git push origin ' + tb]));
+        T(['git push origin '+tb]));
     }
 
-    // ───── ADD MORE TO PR ─────────────────────────
+    // ── ADD MORE TO PR ───────────────────────────
     else if (curA === 'addmore') {
 
-      h += S(1,'b','Switch to your PR branch: ' + mb, '',
+      h += S(1,'b','Switch to your PR branch: '+mb,'',
         WHERE('terminal','Terminal') +
-        T(['git checkout ' + mb]));
+        T(['git checkout '+mb]));
 
-      h += S(2,'b','Make your additional changes and add a temporary commit',
-        'Make your new changes in the IDE. Add a temporary commit to hold them — we will squash this together with everything else in a moment.',
+      h += S(2,'b','Make your additional changes and commit them','',
         WHERE('gui','VS Code or IntelliJ — edit your files') +
-        WHERE('terminal','Then Terminal') +
-        T(['git add yourchangedfile1 yourchangedfile2',
-           'git commit -m "wip: additional changes"',
-           '# This is a temporary commit. We will squash it cleanly in step 5.']));
+        GUI(
+          [
+            'Make your changes in the editor',
+            'Open <strong>Source Control</strong> panel — Ctrl+Shift+G',
+            'Click <strong>+</strong> next to only the files you changed',
+            'Type a temporary message: <code>wip: additional changes</code>',
+            'Click the <strong>Commit</strong> button',
+          ],
+          [
+            'Make your changes in the editor',
+            'Open <strong>Commit</strong> tool window — Ctrl+K',
+            'Check only the files you changed',
+            'Type a temporary message: <code>wip: additional changes</code>',
+            'Click the <strong>Commit</strong> button',
+          ]
+        ) +
+        NOTE('blue','Temporary commit. We will squash it with the original commits in the next step.'));
 
-      h += S(3,'y','Stash anything still uncommitted', '',
+      h += S(3,'g','⚡ Squash everything with rebase -i',
+        'Count ALL your commits on this branch — originals + the new one. That is your N. Squash them all into 1 clean commit.',
+        INTERACTIVE_SQUASH_BLOCK(mb));
+
+      h += S(4,'y','Stash uncommitted work if any','',
         WHERE('terminal','Terminal') +
-        T(['git stash push -m "my-wip"',
-           '# Skip if git status shows nothing']));
+        T(['git stash push -m "my-wip"','# Skip if git status shows nothing']));
 
-      h += S(4,'b','Fetch latest', '',
+      h += S(5,'b','Fetch latest','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin']));
 
-      h += S(5,'y','<strong style="color:var(--red);">Squash</strong> — combine original commits + new changes into one clean commit',
-        'We squash everything — the original PR commits AND the new changes — into one single clean commit.',
-        SQUASH_BLOCK(db, myFiles, msg));
+      h += S(6,'r','<strong style="color:var(--red);">Rebase</strong> onto the latest '+db,
+        'You have 1 clean commit. This just moves it to the tip of develop.',
+        REBASE_BLOCK(db));
 
-      h += S(6,'y','Stash leftover files', '',
+      h += S(7,'g','Force push — PR updates automatically',
+        'No new PR needed. Force pushing to the same branch updates the existing PR.',
         WHERE('terminal','Terminal') +
-        T(['git status',
-           '# If unstaged files:',
-           'git stash push -m "unwanted-files-temp"',
-           'OK Stashed']));
+        T(['git push origin '+mb+' --force-with-lease','OK PR updated']) +
+        NOTE('green','Your PR now shows 1 updated clean commit. Reviewers see the changes automatically.'));
 
-      h += S(7,'b','<strong style="color:var(--red);">Rebase</strong>', '',
+      h += S(8,'g','Restore your stash','',
         WHERE('terminal','Terminal') +
-        T(['git rebase origin/' + db,
-           '# conflict? IDE → resolve → git add . → git rebase --continue',
-           'OK Rebased']));
-
-      h += S(8,'g','Force push — the PR updates automatically on GitHub/GitLab',
-        'You do not need to create a new PR. Force pushing to the same branch automatically updates the existing PR with the new commit.',
-        WHERE('terminal','Terminal') +
-        T(['git push origin ' + mb + ' --force-with-lease',
-           'OK PR updated with your new clean commit']) +
-        NOTE('green', 'Your PR now shows 1 updated clean commit. Reviewers see the updated changes automatically.'));
-
-      h += S(9,'y','Drop the unwanted stash', '',
-        WHERE('terminal','Terminal') +
-        T(['git stash list',
-           'git stash drop stash@{0}',
-           '# Replace 0 with the correct number']));
-
-      h += S(10,'g','Restore your stash', '',
-        WHERE('terminal','Terminal') +
-        T(['git stash pop', 'OK Restored']));
+        T(['git stash pop','OK Restored']));
     }
 
     h += '</div>';
     document.getElementById('gbody').innerHTML = h;
     document.getElementById('gout').style.display = 'block';
-    document.getElementById('gout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('gout').scrollIntoView({ behavior:'smooth', block:'start' });
   };
 
   window.resetG = function () {
     document.getElementById('gout').style.display = 'none';
-    document.querySelectorAll('.pill').forEach(function (p) { p.classList.remove('on'); });
+    document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
     document.getElementById('gfields').style.display = 'none';
     curA = null;
     optCount = 0;
@@ -1792,4 +1308,5 @@ code {
 </script>
 </body>
 </html>
+
 
