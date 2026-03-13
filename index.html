@@ -1,294 +1,483 @@
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Git Guide</title>
 <style>
-:root {
-  --bg:       #0f1318;
-  --bg2:      #141920;
-  --bg3:      #181e27;
-  --bg4:      #1c2330;
-  --border:   #2a3547;
-  --border2:  #3a4a60;
-  --txt:      #c8d4e0;
-  --txt2:     #e4eaf2;
-  --txt3:     #7a8a9e;
-  --txt4:     #4a5a6e;
-  --code-bg:  #1c2330;
-  --code-txt: #7ec8f0;
-  --green:    #3ecf72;
-  --green-bg: #0a1c10;
-  --green-bd: #1a4d2e;
-  --blue:     #5ba4f5;
-  --blue-bg:  #0a1428;
-  --blue-bd:  #1a3560;
-  --yellow:   #f0c040;
-  --yellow-bg:#1a1608;
-  --yellow-bd:#5a4a10;
-  --red:      #e86060;
-  --red-bg:   #1c0e0e;
-  --red-bd:   #5a1e1e;
-  --purple:   #a87de8;
-  --purple-bg:#140e20;
-  --purple-bd:#3e2870;
-  --nav-h: 52px;
-  --r: 8px;
-  --r2: 6px;
-  --mono: 'Courier New', Courier, monospace;
-  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--txt); font-family: var(--sans); font-size: 14px; line-height: 1.65; }
+  body {
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+  }
 
-nav {
-  display: flex; align-items: center; gap: 4px; padding: 0 16px;
-  height: var(--nav-h); background: var(--bg); border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 100;
-}
-nav .nav-tabs { display: flex; gap: 4px; flex: 1; }
-.nav-btn {
-  background: none; border: 1px solid transparent; color: var(--txt3);
-  padding: 6px 14px; border-radius: var(--r2); cursor: pointer;
-  font-size: 13px; font-family: var(--sans); transition: all .15s; white-space: nowrap;
-}
-.nav-btn:hover { color: var(--txt2); background: var(--bg2); }
-.nav-btn.active { background: var(--bg3); border-color: var(--border); color: var(--txt2); font-weight: 600; }
+  a { color: #fff; }
 
-.page { display: none; max-width: 820px; margin: 0 auto; padding: 28px 16px 80px; }
-.page.on { display: block; }
+  /* NAV */
+  nav {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #333;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    background: #000;
+    z-index: 100;
+  }
 
-h1 { font-size: 20px; color: var(--txt2); font-weight: 700; margin-bottom: 4px; }
-h2 { font-size: 15px; color: var(--txt2); font-weight: 600; margin: 32px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-.page-sub { color: var(--txt3); font-size: 13px; margin-bottom: 24px; }
-p { font-size: 13px; color: var(--txt); line-height: 1.7; }
+  .nav-btn {
+    background: none;
+    border: 1px solid #444;
+    color: #aaa;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+  }
 
-code {
-  background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px;
-  padding: 1px 5px; font-family: var(--mono); font-size: 12px; color: var(--code-txt);
-}
+  .nav-btn:hover { color: #fff; border-color: #fff; }
+  .nav-btn.active { color: #fff; border-color: #fff; font-weight: 600; }
 
-.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 12px; }
-.card.green  { background: var(--green-bg);  border-color: var(--green-bd); }
-.card.blue   { background: var(--blue-bg);   border-color: var(--blue-bd); }
-.card.yellow { background: var(--yellow-bg); border-color: var(--yellow-bd); }
-.card.red    { background: var(--red-bg);    border-color: var(--red-bd); }
-.card.grey   { background: var(--bg2);       border-color: var(--border); }
+  /* PAGES */
+  .page { display: none; max-width: 800px; margin: 0 auto; padding: 32px 16px 80px; }
+  .page.on { display: block; }
 
-.card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; margin-bottom: 10px; }
-.card-label.green  { color: var(--green); }
-.card-label.blue   { color: var(--blue); }
-.card-label.yellow { color: var(--yellow); }
-.card-label.red    { color: var(--red); }
-.card-label.grey   { color: var(--txt3); }
+  /* HEADINGS */
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  h2 { font-size: 15px; margin: 36px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #333; }
+  .page-sub { color: #888; font-size: 13px; margin-bottom: 28px; }
+  p { font-size: 13px; color: #ccc; line-height: 1.7; margin-bottom: 8px; }
 
-.term {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 12px 14px; margin: 8px 0; font-family: var(--mono); font-size: 13px;
-  line-height: 1.9; position: relative; overflow-x: auto;
-}
-.term .cp {
-  position: absolute; top: 8px; right: 8px; background: var(--bg3);
-  border: 1px solid var(--border); color: var(--txt3); border-radius: 4px;
-  padding: 2px 10px; font-size: 11px; cursor: pointer; font-family: var(--sans); transition: all .15s;
-}
-.term .cp:hover { background: var(--blue-bg); border-color: var(--blue-bd); color: var(--blue); }
-.t-c { color: var(--txt4); font-style: italic; }
-.t-g { color: var(--green); }
-.t-b { color: var(--blue); }
-.t-y { color: var(--yellow); }
-.t-r { color: var(--red); }
-.t-w { color: var(--txt2); }
+  /* INLINE CODE */
+  code {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #7ec8f0;
+  }
 
-.row { display: flex; gap: 12px; flex-wrap: wrap; }
-.row > .card { flex: 1; min-width: 200px; margin-bottom: 0; }
+  /* TERMINAL BLOCK */
+  .term {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 14px;
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    overflow-x: auto;
+    position: relative;
+  }
 
-.steps { display: flex; flex-direction: column; }
-.step { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--border); }
-.step:last-child { border-bottom: none; }
-.step-num {
-  width: 28px; height: 28px; border-radius: 50%; background: var(--blue-bg);
-  border: 2px solid var(--blue-bd); color: var(--blue);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
-}
-.step-num.g { background: var(--green-bg); border-color: var(--green-bd); color: var(--green); }
-.step-num.y { background: var(--yellow-bg); border-color: var(--yellow-bd); color: var(--yellow); }
-.step-num.r { background: var(--red-bg); border-color: var(--red-bd); color: var(--red); }
-.step-body { flex: 1; min-width: 0; }
-.step-title { font-size: 14px; font-weight: 600; color: var(--txt2); margin-bottom: 4px; }
-.step-context {
-  font-size: 13px; color: var(--txt3); background: var(--bg2);
-  border-left: 3px solid var(--blue-bd); padding: 7px 11px;
-  border-radius: 0 var(--r2) var(--r2) 0; margin-bottom: 8px; line-height: 1.6;
-}
+  .term .cp {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #000;
+    border: 1px solid #444;
+    color: #888;
+    border-radius: 3px;
+    padding: 2px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+  }
 
-.where { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; margin: 0 0 6px 0; }
-.where.terminal { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-bd); }
-.where.gui      { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-bd); }
-.where.verify   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+  .term .cp:hover { color: #fff; border-color: #fff; }
 
-.gui-block { background: var(--purple-bg); border: 1px solid var(--purple-bd); border-radius: var(--r); padding: 12px 14px; margin: 8px 0; }
-.gui-block-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--purple); margin-bottom: 10px; }
-.gui-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.gui-col-title { font-size: 11px; font-weight: 700; color: var(--txt3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
-.gui-item { display: flex; gap: 7px; font-size: 13px; color: var(--txt); margin-bottom: 5px; line-height: 1.5; }
-.gui-item-n {
-  flex-shrink: 0; width: 18px; height: 18px; background: var(--purple-bg);
-  border: 1px solid var(--purple-bd); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; color: var(--purple); margin-top: 1px;
-}
+  .t-c { color: #555; font-style: italic; }
+  .t-g { color: #4caf50; }
+  .t-b { color: #7ec8f0; }
+  .t-y { color: #f0c040; }
+  .t-r { color: #e86060; }
+  .t-w { color: #fff; }
 
-.note { border-radius: var(--r2); padding: 8px 12px; font-size: 12px; line-height: 1.6; margin: 8px 0; }
-.note.green  { background: var(--green-bg);  border: 1px solid var(--green-bd);  color: var(--green); }
-.note.blue   { background: var(--blue-bg);   border: 1px solid var(--blue-bd);   color: var(--blue); }
-.note.yellow { background: var(--yellow-bg); border: 1px solid var(--yellow-bd); color: var(--yellow); }
-.note.red    { background: var(--red-bg);    border: 1px solid var(--red-bd);    color: var(--red); }
+  /* NOTES */
+  .note {
+    border-left: 3px solid #444;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-size: 12px;
+    line-height: 1.6;
+    background: #0a0a0a;
+    color: #ccc;
+    border-radius: 0 4px 4px 0;
+  }
 
-.opt-toggle {
-  display: flex; align-items: center; gap: 8px; padding: 9px 13px;
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2);
-  cursor: pointer; margin-top: 8px; user-select: none; transition: all .15s;
-}
-.opt-toggle:hover { border-color: var(--border2); background: var(--bg3); }
-.opt-toggle.open { border-radius: var(--r2) var(--r2) 0 0; border-bottom-color: transparent; }
-.opt-arrow { font-size: 10px; color: var(--txt4); transition: transform .2s; }
-.opt-toggle.open .opt-arrow { transform: rotate(90deg); }
-.opt-label { font-size: 13px; font-weight: 600; color: var(--txt2); flex: 1; }
-.opt-tag { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 700; background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bd); }
-.opt-tag.green { background: var(--green-bg); color: var(--green); border-color: var(--green-bd); }
-.opt-tag.red   { background: var(--red-bg);   color: var(--red);   border-color: var(--red-bd); }
-.opt-body { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r2) var(--r2); padding: 14px; background: var(--bg); }
-.opt-body.open { display: block; }
+  .note.green  { border-color: #4caf50; color: #4caf50; }
+  .note.blue   { border-color: #7ec8f0; color: #7ec8f0; }
+  .note.yellow { border-color: #f0c040; color: #f0c040; }
+  .note.red    { border-color: #e86060; color: #e86060; }
 
-.pill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-bottom: 18px; }
-.pill {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2);
-  padding: 10px 13px; cursor: pointer; font-size: 13px; color: var(--txt);
-  transition: all .15s; text-align: left; font-family: var(--sans);
-}
-.pill:hover { border-color: var(--blue-bd); background: var(--blue-bg); color: var(--txt2); }
-.pill.on    { border-color: var(--blue); background: var(--blue-bg); color: var(--blue); font-weight: 600; }
-.pill.gold  { border-color: var(--yellow-bd); background: var(--yellow-bg); color: var(--yellow); font-weight: 600; }
-.pill.gold:hover { border-color: var(--yellow); }
+  /* CARDS */
+  .card {
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
 
-.input-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-.input-group { flex: 1; min-width: 180px; }
-.input-label { font-size: 11px; color: var(--txt3); display: block; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
-.inp {
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--r2);
-  padding: 8px 11px; color: var(--txt2); font-size: 13px; font-family: var(--mono);
-  width: 100%; outline: none; transition: border-color .15s;
-}
-.inp:focus { border-color: var(--blue); }
-.inp::placeholder { color: var(--txt4); }
-.run-btn {
-  background: var(--green); border: none; color: #fff; border-radius: var(--r2);
-  padding: 9px 22px; font-size: 13px; font-weight: 600; cursor: pointer;
-  font-family: var(--sans); transition: opacity .15s;
-}
-.run-btn:hover { opacity: .85; }
-.back-btn {
-  background: none; border: 1px solid var(--border); color: var(--txt3);
-  border-radius: var(--r2); padding: 6px 14px; font-size: 12px; cursor: pointer;
-  font-family: var(--sans); margin-bottom: 20px; transition: all .15s;
-}
-.back-btn:hover { border-color: var(--red-bd); color: var(--red); }
+  .card.green  { border-color: #2a5c2a; }
+  .card.blue   { border-color: #1a3560; }
+  .card.yellow { border-color: #5a4a10; }
+  .card.red    { border-color: #5a1e1e; }
+  .card.grey   { border-color: #333; background: #0a0a0a; }
 
-.order-bar {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  padding: 14px 16px; background: var(--green-bg); border: 1px solid var(--green-bd);
-  border-radius: var(--r); margin: 10px 0;
-}
-.op { background: var(--green); color: #fff; border-radius: var(--r2); padding: 4px 12px; font-size: 12px; font-weight: 700; }
-.op.danger { background: var(--red); }
-.op.gold   { background: var(--yellow); color: #1a1608; }
-.oa { color: var(--txt4); font-size: 12px; }
+  .card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px; }
+  .card-label.green  { color: #4caf50; }
+  .card-label.blue   { color: #7ec8f0; }
+  .card-label.yellow { color: #f0c040; }
+  .card-label.red    { color: #e86060; }
+  .card-label.grey   { color: #888; }
 
-.ban-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
-.ban-item:last-child { border-bottom: none; }
-.ban-cmd { display: inline-block; font-family: var(--mono); font-size: 13px; padding: 4px 10px; border-radius: var(--r2); margin-bottom: 4px; }
-.ban-cmd.bad  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
-.ban-cmd.good { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
-.ban-why { font-size: 12px; color: var(--txt3); line-height: 1.55; margin: 3px 0 8px; }
-.ban-arrow { font-size: 11px; font-weight: 700; color: var(--txt4); margin: 4px 0; }
+  /* ORDER BAR */
+  .order-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
 
-/* reflog callout */
-.reflog-box { background: var(--purple-bg); border: 2px solid var(--purple-bd); border-radius: var(--r); padding: 14px 16px; margin: 10px 0; }
-.reflog-box-title { font-size: 12px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+  .op {
+    background: #fff;
+    color: #000;
+    border-radius: 3px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
 
-.flow-wrap {
-  display: grid; grid-template-columns: 1fr 88px 1fr;
-  border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin: 14px 0;
-}
-.flow-local  { background: var(--green-bg); border-right: 2px dashed var(--border); padding: 18px 14px; }
-.flow-mid    { background: var(--bg2); border-right: 1px solid var(--border); padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-.flow-remote { background: var(--blue-bg); padding: 18px 14px; }
-.flow-head   { text-align: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.flow-head-title { font-size: 13px; font-weight: 700; }
-.flow-head-sub   { font-size: 11px; color: var(--txt3); margin-top: 2px; }
-.flow-zone { border-radius: var(--r2); padding: 9px 12px; text-align: center; margin-bottom: 2px; }
-.flow-zone-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
-.flow-zone-desc  { font-size: 11px; color: var(--txt3); line-height: 1.5; }
-.flow-down { text-align: center; padding: 3px 0; }
-.flow-down-label { font-size: 10px; color: var(--txt4); }
-.flow-transfer { width: 100%; text-align: center; border-radius: var(--r2); padding: 8px 5px; }
-.flow-transfer-label { font-size: 11px; font-weight: 700; line-height: 1.3; }
-.flow-transfer-sub   { font-size: 9px; color: var(--txt3); line-height: 1.3; margin-top: 2px; }
-.flow-branch { display: flex; align-items: center; gap: 7px; padding: 6px 10px; border-radius: var(--r2); font-family: var(--mono); font-size: 12px; margin-bottom: 5px; }
+  .op.danger { background: #e86060; color: #fff; }
+  .op.gold   { background: #f0c040; color: #000; }
+  .oa { color: #555; font-size: 12px; }
 
-.edge-box { background: var(--yellow-bg); border: 1px solid var(--yellow-bd); border-radius: var(--r); padding: 14px 16px; margin: 10px 0; }
-.edge-box-title { font-size: 12px; font-weight: 700; color: var(--yellow); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
-.edge-box p { font-size: 13px; color: var(--txt3); margin-bottom: 6px; }
+  /* BAN ITEMS */
+  .ban-item { padding: 14px 0; border-bottom: 1px solid #222; }
+  .ban-item:last-child { border-bottom: none; }
 
-.elixir-box { background: var(--yellow-bg); border: 2px solid var(--yellow); border-radius: var(--r); padding: 16px 18px; margin: 10px 0; }
-.elixir-box-title { font-size: 13px; font-weight: 700; color: var(--yellow); margin-bottom: 12px; letter-spacing: .3px; }
-.elixir-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; }
-.elixir-badge { flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 1px; }
-.elixir-badge.dev  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-bd); }
-.elixir-badge.pr   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+  .ban-cmd {
+    display: inline-block;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+  }
 
-/* pull conditions table */
-.pull-cond { width:100%; border-collapse:collapse; font-size:12px; margin-top:10px; }
-.pull-cond th { background:var(--bg3); color:var(--txt3); font-weight:700; padding:7px 10px; text-align:left; border:1px solid var(--border); font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
-.pull-cond td { padding:7px 10px; border:1px solid var(--border); color:var(--txt); vertical-align:top; line-height:1.5; }
-.pull-cond tr:nth-child(even) td { background:var(--bg2); }
-.ok-cell  { color:var(--green); font-weight:700; }
-.bad-cell { color:var(--red);   font-weight:700; }
+  .ban-cmd.bad  { background: #1c0e0e; color: #e86060; border: 1px solid #5a1e1e; }
+  .ban-cmd.good { background: #0a1c10; color: #4caf50; border: 1px solid #1a4d2e; }
+  .ban-why { font-size: 12px; color: #888; margin: 4px 0 6px; line-height: 1.5; }
+  .ban-arrow { font-size: 11px; font-weight: 700; color: #555; margin: 4px 0; }
 
-@media (max-width: 640px) {
-  .flow-wrap { grid-template-columns: 1fr; }
-  .flow-local { border-right: none; border-bottom: 2px dashed var(--border); }
-  .flow-mid { flex-direction: row; flex-wrap: wrap; justify-content: center; padding: 10px; border-right: none; border-bottom: 1px solid var(--border); }
-  .gui-cols { grid-template-columns: 1fr; }
-  nav .nav-tabs { gap: 2px; }
-  .nav-btn { padding: 6px 9px; font-size: 12px; }
-  .pill-grid { grid-template-columns: 1fr 1fr; }
-  .order-bar { gap: 5px; }
-  .op { font-size: 11px; padding: 3px 9px; }
-}
-@media (max-width: 400px) { .pill-grid { grid-template-columns: 1fr; } }
+  /* ROWS */
+  .row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .row > .card { flex: 1; min-width: 220px; margin-bottom: 0; }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid #222;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #444;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-num.g { border-color: #4caf50; color: #4caf50; }
+  .step-num.y { border-color: #f0c040; color: #f0c040; }
+  .step-num.r { border-color: #e86060; color: #e86060; }
+
+  .step-body { flex: 1; min-width: 0; }
+  .step-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+
+  .step-context {
+    font-size: 13px;
+    color: #888;
+    border-left: 3px solid #333;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* WHERE BADGES */
+  .where {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin: 0 0 6px;
+  }
+
+  .where.terminal { background: #0a1428; color: #7ec8f0; border: 1px solid #1a3560; }
+  .where.gui      { background: #140e20; color: #a87de8; border: 1px solid #3e2870; }
+  .where.verify   { background: #0a1c10; color: #4caf50; border: 1px solid #1a4d2e; }
+
+  /* GUI BLOCK */
+  .gui-block {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin: 8px 0;
+  }
+
+  .gui-block-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a87de8; margin-bottom: 10px; }
+
+  .gui-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 540px) { .gui-cols { grid-template-columns: 1fr; } }
+
+  .gui-col-title { font-size: 11px; font-weight: 700; color: #888; margin-bottom: 6px; text-transform: uppercase; }
+
+  .gui-item { display: flex; gap: 8px; font-size: 13px; color: #ccc; margin-bottom: 5px; line-height: 1.5; }
+
+  .gui-item-n {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    margin-top: 1px;
+  }
+
+  /* EXPANDABLE */
+  .opt-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+    user-select: none;
+  }
+
+  .opt-toggle:hover { border-color: #555; }
+  .opt-toggle.open { border-radius: 4px 4px 0 0; border-bottom-color: transparent; }
+  .opt-arrow { font-size: 10px; color: #555; transition: transform 0.2s; }
+  .opt-toggle.open .opt-arrow { transform: rotate(90deg); }
+  .opt-label { font-size: 13px; font-weight: 600; color: #fff; flex: 1; }
+  .opt-tag { font-size: 10px; padding: 2px 7px; border-radius: 3px; font-weight: 700; background: #111; color: #f0c040; border: 1px solid #5a4a10; }
+  .opt-tag.green { color: #4caf50; border-color: #1a4d2e; }
+  .opt-tag.red   { color: #e86060; border-color: #5a1e1e; }
+  .opt-body { display: none; border: 1px solid #333; border-top: none; border-radius: 0 0 4px 4px; padding: 14px; background: #000; }
+  .opt-body.open { display: block; }
+
+  /* PILLS */
+  .pill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 18px; }
+
+  .pill {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 10px 13px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ccc;
+    text-align: left;
+    font-family: inherit;
+  }
+
+  .pill:hover { border-color: #fff; color: #fff; }
+  .pill.on    { border-color: #fff; color: #fff; font-weight: 600; }
+  .pill.gold  { border-color: #f0c040; color: #f0c040; font-weight: 600; }
+  .pill.gold:hover { border-color: #fff; }
+
+  /* INPUTS */
+  .input-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .input-group { flex: 1; min-width: 180px; }
+  .input-label { font-size: 11px; color: #888; display: block; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .inp {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 8px 11px;
+    color: #fff;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    width: 100%;
+    outline: none;
+  }
+
+  .inp:focus { border-color: #fff; }
+  .inp::placeholder { color: #555; }
+
+  .run-btn {
+    background: #fff;
+    border: none;
+    color: #000;
+    border-radius: 4px;
+    padding: 9px 22px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .run-btn:hover { background: #ccc; }
+
+  .back-btn {
+    background: none;
+    border: 1px solid #333;
+    color: #888;
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 20px;
+  }
+
+  .back-btn:hover { border-color: #e86060; color: #e86060; }
+
+  /* ELIXIR BOX */
+  .elixir-box {
+    border: 1px solid #f0c040;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 10px 0;
+  }
+
+  .elixir-box-title { font-size: 13px; font-weight: 700; color: #f0c040; margin-bottom: 12px; }
+
+  .elixir-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #ccc; }
+
+  .elixir-badge { flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin-top: 2px; }
+  .elixir-badge.dev  { background: #0a1428; color: #7ec8f0; border: 1px solid #1a3560; }
+  .elixir-badge.pr   { background: #0a1c10; color: #4caf50; border: 1px solid #1a4d2e; }
+
+  /* EDGE BOX */
+  .edge-box {
+    border: 1px solid #5a4a10;
+    border-radius: 4px;
+    padding: 14px;
+    margin: 10px 0;
+  }
+
+  .edge-box-title { font-size: 12px; font-weight: 700; color: #f0c040; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+
+  /* REFLOG BOX */
+  .reflog-box {
+    border: 1px solid #3e2870;
+    border-radius: 4px;
+    padding: 14px;
+    margin: 10px 0;
+  }
+
+  .reflog-box-title { font-size: 12px; font-weight: 700; color: #a87de8; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+
+  /* FLOW */
+  .flow-wrap { display: flex; flex-direction: column; gap: 16px; margin: 14px 0; }
+
+  @media (min-width: 640px) {
+    .flow-wrap { flex-direction: row; align-items: flex-start; }
+    .flow-local, .flow-remote { flex: 1; }
+    .flow-mid { width: 100px; flex-shrink: 0; }
+  }
+
+  .flow-local, .flow-remote, .flow-mid {
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  .flow-head { margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #333; text-align: center; }
+  .flow-head-title { font-size: 13px; font-weight: 700; }
+  .flow-head-sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .flow-zone { border: 1px solid #333; border-radius: 4px; padding: 10px; text-align: center; margin-bottom: 8px; }
+  .flow-zone-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .flow-zone-desc { font-size: 11px; color: #888; line-height: 1.5; }
+
+  .flow-down { text-align: center; padding: 4px 0; font-size: 11px; color: #555; }
+
+  .flow-mid { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+
+  .flow-transfer {
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .flow-transfer-label { font-size: 11px; font-weight: 700; line-height: 1.3; }
+  .flow-transfer-sub { font-size: 9px; color: #888; margin-top: 2px; line-height: 1.3; }
+
+  .flow-branch { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #333; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 12px; margin-bottom: 5px; }
+
+  /* PULL TABLE */
+  .pull-cond { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+  .pull-cond th { background: #111; color: #888; font-weight: 700; padding: 7px 10px; text-align: left; border: 1px solid #333; font-size: 11px; text-transform: uppercase; }
+  .pull-cond td { padding: 7px 10px; border: 1px solid #333; color: #ccc; vertical-align: top; line-height: 1.5; }
+  .pull-cond tr:nth-child(even) td { background: #0a0a0a; }
+  .ok-cell  { color: #4caf50; font-weight: 700; }
+  .bad-cell { color: #e86060; font-weight: 700; }
+
+  @media (max-width: 600px) {
+    .pill-grid { grid-template-columns: 1fr 1fr; }
+    nav { gap: 4px; }
+    .nav-btn { padding: 5px 10px; font-size: 12px; }
+    .pull-cond { font-size: 11px; }
+  }
+
+  @media (max-width: 380px) {
+    .pill-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-tabs">
-    <button class="nav-btn active" onclick="go('home')">Pipeline & Rules</button>
-    <button class="nav-btn" onclick="go('flow')">How Git Works</button>
-    <button class="nav-btn" onclick="go('guide')">Step Guide</button>
-    <button class="nav-btn" onclick="go('rescue')">🚨 Rescue / Reflog</button>
-  </div>
+  <button class="nav-btn active" onclick="go('home')">Pipeline &amp; Rules</button>
+  <button class="nav-btn" onclick="go('flow')">How Git Works</button>
+  <button class="nav-btn" onclick="go('guide')">Step Guide</button>
+  <button class="nav-btn" onclick="go('rescue')">🚨 Rescue / Reflog</button>
 </nav>
 
-<!-- ══════════════════════════════════════
-     TAB 1 — PIPELINE & RULES
-══════════════════════════════════════ -->
+<!-- TAB 1 — PIPELINE & RULES -->
 <div class="page on" id="page-home">
   <h1>Git Guide</h1>
   <p class="page-sub">The correct process for clean PRs — and what never to do</p>
@@ -298,22 +487,22 @@ code {
     <div class="elixir-box-title">⚡ The Elixir — Two phases, zero edge cases</div>
     <div class="elixir-row">
       <span class="elixir-badge dev">DAILY DEV</span>
-      <span style="color:var(--txt3);">Commit freely as you work. When you have multiple WIP commits piling up, run <code>git rebase -i HEAD~N</code> to squash them into 1 clean commit locally. No develop involved. No mixed files. Completely safe anytime.</span>
+      <span>Commit freely as you work. When you have multiple WIP commits piling up, run <code>git rebase -i HEAD~N</code> to squash them into 1 clean commit locally. No develop involved. No mixed files. Completely safe anytime.</span>
     </div>
     <div class="elixir-row">
       <span class="elixir-badge pr">PR TIME</span>
-      <span style="color:var(--txt3);">You already have 1 clean commit from daily squashing. Just stash → fetch → rebase onto develop → push. The rebase is trivial — 1 commit replaying onto develop, one conflict at most.</span>
+      <span>You already have 1 clean commit from daily squashing. Just stash → fetch → rebase onto develop → push. The rebase is trivial — 1 commit replaying onto develop, one conflict at most.</span>
     </div>
   </div>
 
   <h2>Daily dev order — squash your own WIP anytime</h2>
   <div class="card yellow">
-    <div class="order-bar" style="background:var(--blue-bg);border-color:var(--blue-bd);">
-      <div class="op" style="background:var(--blue);">Commit WIP freely</div><div class="oa">→</div>
+    <div class="order-bar">
+      <div class="op">Commit WIP freely</div><div class="oa">→</div>
       <div class="op gold">git rebase -i HEAD~N</div><div class="oa">→</div>
-      <div class="op" style="background:var(--blue);">1 clean local commit</div>
+      <div class="op">1 clean local commit</div>
     </div>
-    <div class="note blue" style="margin-top:10px;margin-bottom:0;">
+    <div class="note blue">
       <strong>N = how many of your commits to squash.</strong> Run <code>git log --oneline</code> and count the commits at the top that are yours. That number is N. This never touches develop, never touches other people's files, works anytime.
     </div>
   </div>
@@ -327,7 +516,7 @@ code {
       <div class="op">4. Push</div><div class="oa">→</div>
       <div class="op">5. Stash pop</div>
     </div>
-    <div class="note green" style="margin-top:10px;margin-bottom:0;">
+    <div class="note green">
       Because you already have 1 clean commit from <code>rebase -i</code>, there is no squash step needed here. Just rebase onto develop and push.
     </div>
   </div>
@@ -336,20 +525,18 @@ code {
     <div class="edge-box-title">⚠ Why rebase -i is the safe squash — not soft reset</div>
     <p>Soft reset squash (the old way) un-commits everything including other people's work into your working directory at once. If any file was touched by both you and a teammate, their changes appear mixed in with yours. You have to hand-separate lines — error-prone and risky.</p>
     <p><code>git rebase -i HEAD~N</code> only operates on YOUR commits. It never touches develop, never touches other people's files, and nothing lands in your working directory. It is completely safe to run anytime during development.</p>
-    <p style="color:var(--yellow);font-weight:600;">rebase -i to squash → rebase onto develop to sync. That's the complete answer.</p>
+    <p style="color:#f0c040;font-weight:600;margin-top:8px;">rebase -i to squash → rebase onto develop to sync. That's the complete answer.</p>
   </div>
 
   <h2>Never use these — and what to do instead</h2>
   <div class="card">
 
-    <!-- GIT PULL — banned but with expandable "when it's okay" -->
     <div class="ban-item">
       <div class="ban-cmd bad">git pull</div>
       <div class="ban-why">Runs fetch + merge silently. Creates a hidden merge commit on your branch. Skips rebase and squash entirely. This is the #1 cause of messy histories on shared branches.</div>
       <div class="ban-arrow">Use this instead:</div>
       <div class="ban-cmd good">stash → fetch → rebase onto develop → push → stash pop</div>
 
-      <!-- expandable: when pull is actually okay -->
       <div class="opt-toggle" id="ot-pull" onclick="document.getElementById('ot-pull').classList.toggle('open');document.getElementById('ob-pull').classList.toggle('open');" style="margin-top:10px;">
         <span class="opt-arrow">&#9654;</span>
         <span class="opt-label">When is git pull actually okay? (expand)</span>
@@ -403,8 +590,8 @@ code {
           <strong>The safe version of pull:</strong> If you genuinely need to pull, use <code>git pull --rebase</code> instead of plain <code>git pull</code>. This runs fetch + rebase instead of fetch + merge, so no hidden merge commit is created. But on this team, fetch + rebase manually is still preferred because it gives you full control.
         </div>
 
-        <div style="margin-top:12px;font-size:12px;color:var(--txt3);">
-          <strong style="color:var(--txt2);">Full safe sequence when pull is okay (solo branch, no local commits):</strong>
+        <div style="margin-top:12px;font-size:12px;color:#888;">
+          <strong style="color:#fff;">Full safe sequence when pull is okay (solo branch, no local commits):</strong>
         </div>
         <div class="term" style="margin-top:6px;">
           <button class="cp" onclick="cp(this)">Copy</button>
@@ -500,9 +687,7 @@ code {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     TAB 2 — HOW GIT WORKS
-══════════════════════════════════════ -->
+<!-- TAB 2 — HOW GIT WORKS -->
 <div class="page" id="page-flow">
   <h1>How Git Works</h1>
   <p class="page-sub">Your code lives in two places. Here is what moves where.</p>
@@ -510,97 +695,91 @@ code {
   <div class="flow-wrap">
     <div class="flow-local">
       <div class="flow-head">
-        <div class="flow-head-title" style="color:var(--green);">Your Computer</div>
+        <div class="flow-head-title" style="color:#4caf50;">Your Computer</div>
         <div class="flow-head-sub">Private until you push</div>
       </div>
-      <div class="flow-zone" style="background:var(--yellow-bg);border:1px dashed var(--yellow-bd);">
-        <div class="flow-zone-title" style="color:var(--yellow);">Stash</div>
+      <div class="flow-zone" style="border-color:#5a4a10;">
+        <div class="flow-zone-title" style="color:#f0c040;">Stash</div>
         <div class="flow-zone-desc">Temporary pocket.<br><code style="font-size:10px;">git stash</code> saves · <code style="font-size:10px;">git stash pop</code> restores</div>
       </div>
-      <div class="flow-down"><div style="font-size:14px;color:var(--txt4);">↕</div></div>
-      <div class="flow-zone" style="background:var(--yellow-bg);border:2px solid var(--yellow-bd);">
-        <div class="flow-zone-title" style="color:var(--yellow);">Working Directory</div>
+      <div class="flow-down">↕</div>
+      <div class="flow-zone" style="border-color:#5a4a10;">
+        <div class="flow-zone-title" style="color:#f0c040;">Working Directory</div>
         <div class="flow-zone-desc">Files you see and edit every day</div>
       </div>
-      <div class="flow-down">
-        <div style="color:var(--yellow);">↓</div>
-        <div class="flow-down-label"><code style="font-size:10px;">git add yourfile</code></div>
-      </div>
-      <div class="flow-zone" style="background:var(--blue-bg);border:2px solid var(--blue-bd);">
-        <div class="flow-zone-title" style="color:var(--blue);">Staging Area</div>
+      <div class="flow-down">↓ <code style="font-size:10px;">git add yourfile</code></div>
+      <div class="flow-zone" style="border-color:#1a3560;">
+        <div class="flow-zone-title" style="color:#7ec8f0;">Staging Area</div>
         <div class="flow-zone-desc">Files marked ready to commit. Only YOUR files should be here.</div>
       </div>
-      <div class="flow-down">
-        <div style="color:var(--blue);">↓</div>
-        <div class="flow-down-label"><code style="font-size:10px;">git commit -m "message"</code></div>
-      </div>
-      <div class="flow-zone" style="background:var(--green-bg);border:2px solid var(--green-bd);">
-        <div class="flow-zone-title" style="color:var(--green);">Local Repository</div>
+      <div class="flow-down">↓ <code style="font-size:10px;">git commit -m "message"</code></div>
+      <div class="flow-zone" style="border-color:#1a4d2e;">
+        <div class="flow-zone-title" style="color:#4caf50;">Local Repository</div>
         <div class="flow-zone-desc">Saved commits on your machine. Nobody sees these until you push.</div>
       </div>
-      <div style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);">
-        <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Local-only operations</div>
+      <div style="margin-top:12px;border:1px solid #333;border-radius:4px;padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Local-only operations</div>
         <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
-          <div style="padding:5px 8px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);border-radius:var(--r2);"><strong style="color:var(--yellow);">rebase -i HEAD~N</strong> — squashes only YOUR commits. Safe anytime. Zero mixed files. Do this during dev.</div>
-          <div style="padding:5px 8px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--r2);"><strong style="color:var(--red);">rebase onto develop</strong> — moves your 1 clean commit to tip of latest develop. Do this at PR time.</div>
-          <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);"><strong style="color:var(--blue);">checkout</strong> — switch branches locally. Nothing goes to origin.</div>
-          <div style="padding:5px 8px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:var(--r2);"><strong style="color:var(--green);">reset --soft</strong> — un-commits but keeps files safe. Use only when you need the old squash path.</div>
+          <div style="padding:5px 8px;border:1px solid #5a4a10;border-radius:3px;"><strong style="color:#f0c040;">rebase -i HEAD~N</strong> — squashes only YOUR commits. Safe anytime. Zero mixed files. Do this during dev.</div>
+          <div style="padding:5px 8px;border:1px solid #5a1e1e;border-radius:3px;"><strong style="color:#e86060;">rebase onto develop</strong> — moves your 1 clean commit to tip of latest develop. Do this at PR time.</div>
+          <div style="padding:5px 8px;border:1px solid #1a3560;border-radius:3px;"><strong style="color:#7ec8f0;">checkout</strong> — switch branches locally. Nothing goes to origin.</div>
+          <div style="padding:5px 8px;border:1px solid #1a4d2e;border-radius:3px;"><strong style="color:#4caf50;">reset --soft</strong> — un-commits but keeps files safe. Use only when you need the old squash path.</div>
         </div>
       </div>
     </div>
 
     <div class="flow-mid">
-      <div style="font-size:9px;color:var(--txt4);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px;">Sync</div>
-      <div class="flow-transfer" style="background:var(--green-bg);border:1px solid var(--green-bd);">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px;font-weight:700;text-align:center;margin-bottom:4px;">Sync</div>
+      <div class="flow-transfer" style="border-color:#1a4d2e;">
         <div style="font-size:16px;">→</div>
-        <div class="flow-transfer-label" style="color:var(--green);">git push</div>
-        <div class="flow-transfer-sub">--force-with-lease<br>after rebase</div>
+        <div class="flow-transfer-label" style="color:#4caf50;">git push</div>
+        <div class="flow-transfer-sub">--force-with-lease after rebase</div>
       </div>
-      <div class="flow-transfer" style="background:var(--blue-bg);border:1px solid var(--blue-bd);">
+      <div class="flow-transfer" style="border-color:#1a3560;">
         <div style="font-size:16px;">←</div>
-        <div class="flow-transfer-label" style="color:var(--blue);">git fetch</div>
-        <div class="flow-transfer-sub">safe — changes<br>nothing locally</div>
+        <div class="flow-transfer-label" style="color:#7ec8f0;">git fetch</div>
+        <div class="flow-transfer-sub">safe — changes nothing locally</div>
       </div>
-      <div class="flow-transfer" style="background:var(--red-bg);border:1px solid var(--red-bd);">
-        <div style="font-size:13px;color:var(--red);font-weight:700;">BANNED</div>
-        <div class="flow-transfer-label" style="color:var(--red);">git pull</div>
-        <div class="flow-transfer-sub" style="color:var(--red);">fetch + hidden<br>merge</div>
+      <div class="flow-transfer" style="border-color:#5a1e1e;">
+        <div style="font-size:13px;color:#e86060;font-weight:700;">BANNED</div>
+        <div class="flow-transfer-label" style="color:#e86060;">git pull</div>
+        <div class="flow-transfer-sub" style="color:#888;">fetch + hidden merge</div>
       </div>
-      <div class="flow-transfer" style="background:var(--red-bg);border:1px solid var(--red-bd);">
-        <div style="font-size:13px;color:var(--red);font-weight:700;">BANNED</div>
-        <div class="flow-transfer-label" style="color:var(--red);">Sync button</div>
-        <div class="flow-transfer-sub" style="color:var(--red);">pull + push<br>one click</div>
+      <div class="flow-transfer" style="border-color:#5a1e1e;">
+        <div style="font-size:13px;color:#e86060;font-weight:700;">BANNED</div>
+        <div class="flow-transfer-label" style="color:#e86060;">Sync button</div>
+        <div class="flow-transfer-sub" style="color:#888;">pull + push one click</div>
       </div>
     </div>
 
     <div class="flow-remote">
       <div class="flow-head">
-        <div class="flow-head-title" style="color:var(--blue);">GitHub / GitLab (origin)</div>
+        <div class="flow-head-title" style="color:#7ec8f0;">GitHub / GitLab (origin)</div>
         <div class="flow-head-sub">Shared — whole team reads and writes here</div>
       </div>
-      <div class="flow-zone" style="background:var(--blue-bg);border:2px solid var(--blue-bd);margin-bottom:12px;">
-        <div class="flow-zone-title" style="color:var(--blue);">Remote Repository</div>
+      <div class="flow-zone" style="border-color:#1a3560;margin-bottom:12px;">
+        <div class="flow-zone-title" style="color:#7ec8f0;">Remote Repository</div>
         <div class="flow-zone-desc">All branches and commits online. PRs and code reviews happen here.</div>
       </div>
-      <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Branches on origin</div>
-      <div class="flow-branch" style="background:var(--green-bg);border:2px solid var(--green-bd);">
-        <span style="color:var(--green);font-weight:700;">origin/mvp/develop</span>
-        <span style="color:var(--txt4);font-size:10px;margin-left:auto;">never touched</span>
+      <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Branches on origin</div>
+      <div class="flow-branch" style="border-color:#1a4d2e;">
+        <span style="color:#4caf50;font-weight:700;">origin/mvp/develop</span>
+        <span style="color:#555;font-size:10px;margin-left:auto;">never touched</span>
       </div>
-      <div class="flow-branch" style="background:var(--blue-bg);border:1px solid var(--blue-bd);">
-        <span style="color:var(--blue);">origin/feature/your-branch</span>
-        <span style="color:var(--txt4);font-size:10px;margin-left:auto;">push here</span>
+      <div class="flow-branch" style="border-color:#1a3560;">
+        <span style="color:#7ec8f0;">origin/feature/your-branch</span>
+        <span style="color:#555;font-size:10px;margin-left:auto;">push here</span>
       </div>
-      <div class="flow-branch" style="background:var(--bg);border:1px solid var(--border);">
-        <span style="color:var(--txt3);">origin/feature/teammate</span>
-        <span style="color:var(--txt4);font-size:10px;margin-left:auto;">their branch</span>
+      <div class="flow-branch">
+        <span style="color:#888;">origin/feature/teammate</span>
+        <span style="color:#555;font-size:10px;margin-left:auto;">their branch</span>
       </div>
-      <div style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);">
-        <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">What happens here</div>
+      <div style="margin-top:12px;border:1px solid #333;border-radius:4px;padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">What happens here</div>
         <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
-          <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Pull Requests — code reviews, approvals</div>
-          <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Merge to develop — via PR button in browser only</div>
-          <div style="padding:5px 8px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r2);">Team visibility — everyone sees all branches and commits</div>
+          <div style="padding:5px 8px;border:1px solid #1a3560;border-radius:3px;">Pull Requests — code reviews, approvals</div>
+          <div style="padding:5px 8px;border:1px solid #1a3560;border-radius:3px;">Merge to develop — via PR button in browser only</div>
+          <div style="padding:5px 8px;border:1px solid #1a3560;border-radius:3px;">Team visibility — everyone sees all branches and commits</div>
         </div>
       </div>
       <div class="note green" style="margin-top:10px;">
@@ -610,15 +789,13 @@ code {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     TAB 3 — STEP GUIDE
-══════════════════════════════════════ -->
+<!-- TAB 3 — STEP GUIDE -->
 <div class="page" id="page-guide">
   <h1>Step Guide</h1>
   <p class="page-sub">Pick what you want to do, fill in your branch names, and follow the steps</p>
 
   <div class="card grey" id="builder">
-    <div style="font-size:13px;font-weight:600;color:var(--txt2);margin-bottom:12px;">What do you want to do?</div>
+    <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:12px;">What do you want to do?</div>
     <div class="pill-grid">
       <button class="pill" onclick="pickA('newbranch',this)">Create new branch</button>
       <button class="pill gold" onclick="pickA('interactivesquash',this)">⚡ Squash WIP commits (rebase -i)</button>
@@ -649,16 +826,14 @@ code {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     TAB 4 — RESCUE / REFLOG
-══════════════════════════════════════ -->
+<!-- TAB 4 — RESCUE / REFLOG -->
 <div class="page" id="page-rescue">
   <h1>🚨 Rescue / Reflog</h1>
   <p class="page-sub">Git never truly deletes commits — reflog is your ultimate safety net</p>
 
   <div class="reflog-box">
     <div class="reflog-box-title">🟣 What is git reflog?</div>
-    <p style="font-size:13px;color:var(--txt3);line-height:1.7;">
+    <p>
       <code>git reflog</code> is a local log of every position HEAD has been in — every checkout, commit, reset, rebase, merge, and cherry-pick. Even if you deleted a branch, hard-reset past commits, or had a rebase go wrong, those commits still exist in reflog for ~90 days. This is your ultimate undo tool. It only exists locally — it is not on origin.
     </p>
   </div>
@@ -827,7 +1002,6 @@ code {
     return e ? (e.value.trim() || e.placeholder) : '';
   }
 
-  // ── RENDER HELPERS ──────────────────────────────
   function T(lines) {
     var rows = lines.map(function(l){
       if (l === '')             return '<div style="height:5px"></div>';
@@ -846,7 +1020,7 @@ code {
 
   function GUI(vsc, ij) {
     var vs   = vsc.map(function(s,i){ return '<div class="gui-item"><span class="gui-item-n">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
-    var irow = ij.map(function(s,i){  return '<div class="gui-item"><span class="gui-item-n" style="background:var(--green-bg);border-color:var(--green-bd);color:var(--green);">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
+    var irow = ij.map(function(s,i){  return '<div class="gui-item"><span class="gui-item-n">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
     return '<div class="gui-block"><div class="gui-block-title">Do this in your IDE — VS Code or IntelliJ</div><div class="gui-cols"><div><div class="gui-col-title">VS Code</div>'+vs+'</div><div><div class="gui-col-title">IntelliJ</div>'+irow+'</div></div></div>';
   }
 
@@ -861,7 +1035,6 @@ code {
       '</div></div>';
   }
 
-  // ── REBASE ONTO DEVELOP BLOCK ────────────────────
   function REBASE_BLOCK(db) {
     return WHERE('terminal','Terminal') +
     T([
@@ -884,7 +1057,6 @@ code {
     NOTE('blue', '<strong>Stash pop warning:</strong> If you stashed files before this rebase, and those files overlap with conflicts just resolved, <code>git stash pop</code> at the end may also cause a conflict. Resolve it the same way — IDE merge editor → <code>git add file</code> → done. Do not panic.');
   }
 
-  // ── INTERACTIVE SQUASH BLOCK (the elixir) ────────
   function INTERACTIVE_SQUASH_BLOCK(mb) {
     return CTX(
       'Count how many commits at the top of the log are yours — that number is N. ' +
@@ -948,7 +1120,6 @@ code {
     NOTE('green', 'Done. You now have 1 clean local commit. No develop involved. No other files touched. Run this anytime you want to tidy up during development.');
   }
 
-  // ── SQUASH BLOCK (soft reset — only for addmore edge case) ──
   function SQUASH_BLOCK(db, myFiles, msg) {
     var fileList = myFiles.split(' ').filter(Boolean).map(function(f){ return '<code>'+f+'</code>'; }).join(', ');
     return CTX(
@@ -994,7 +1165,6 @@ code {
     NOTE('blue', '<code>origin/'+db+'</code> is only a reference point — never modified. Only your branch moves.');
   }
 
-  // ── GUIDE GENERATOR ─────────────────────────────
   window.genGuide = function () {
     var mb  = gv('mb'), db  = gv('db'), tb  = gv('tb');
     var ch  = gv('ch'), nb  = gv('nb'), sb  = gv('sb');
@@ -1006,25 +1176,19 @@ code {
 
     var h = '<div class="steps">';
 
-    // ── CREATE NEW BRANCH ────────────────────────
     if (curA === 'newbranch') {
-
       h += S(1,'b','Fetch the latest from origin','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin','git branch -a','# Confirm the exact name of your base branch.','OK Fetched']));
-
       h += S(2,'b','Switch to the base branch: '+db,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+db,'OK Switched to '+db]));
-
       h += S(3,'b','Bring your local '+db+' up to date','',
         WHERE('terminal','Terminal') +
         T(['git rebase origin/'+db,'OK Matches origin']));
-
       h += S(4,'g','Create and switch to the new branch: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout -b '+mb,'OK On new branch '+mb]));
-
       h += S(5,'g','Publish to origin',
         'The -u flag sets up tracking so future git push commands know where to go automatically.',
         WHERE('terminal','Terminal') +
@@ -1032,59 +1196,46 @@ code {
         NOTE('green','Branch is visible on GitHub/GitLab. When ready to raise a PR, come back and choose "Full PR flow".'));
     }
 
-    // ── INTERACTIVE SQUASH (THE ELIXIR) ──────────
     else if (curA === 'interactivesquash') {
-
       h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb,'OK On branch '+mb]));
-
       h += S(2,'g','⚡ Squash your WIP commits with interactive rebase',
         'Count how many commits at the top of the log are yours. That number is N.',
         INTERACTIVE_SQUASH_BLOCK(mb));
-
       h += S(3,'g','That\'s it — you now have 1 clean local commit','',
         NOTE('green','Run this anytime during development to keep your branch clean. At PR time all you need is a fetch → rebase onto develop → push. No squash step needed at PR time at all.'));
     }
 
-    // ── FULL PR FLOW ─────────────────────────────
     else if (curA === 'pr') {
-
       h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb,'OK On branch '+mb]));
-
       h += S(2,'y','Squash your WIP commits first if you haven\'t already',
         'If you have multiple WIP commits, squash them into 1 now using interactive rebase before doing anything else. This is the safe squash — it never touches develop or other people\'s files.',
         optSection('Squash WIP commits with rebase -i — do this if you have more than 1 commit', 'Do this first',
           INTERACTIVE_SQUASH_BLOCK(mb)
         ));
-
       h += S(3,'y','Stash uncommitted work',
         'Save anything uncommitted before we start. Will be restored at the end.',
         WHERE('terminal','Terminal') +
         T(['git status','','# If you see any modified or untracked files:',
            'git stash push -m "my-wip"','OK Saved','','# If git status showed nothing, skip this.']));
-
       h += S(4,'b','Fetch the latest from origin','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin','git branch -a','OK Fetched']));
-
-      h += S(5,'r','<strong style="color:var(--red);">Rebase</strong> onto the latest '+db,
+      h += S(5,'r','<strong style="color:#e86060;">Rebase</strong> onto the latest '+db,
         'You already have 1 clean commit. This just moves it to the tip of the latest develop. One commit = at most one conflict, done quickly.',
         REBASE_BLOCK(db));
-
       h += S(6,'g','Push',
         'History was rewritten (rebase) so use --force-with-lease. It checks nobody pushed to your branch since you last fetched.',
         WHERE('terminal','Terminal') +
         T(['git push origin '+mb+' --force-with-lease','OK Pushed']) +
         NOTE('red','Always <code>--force-with-lease</code>, never <code>--force</code>. Plain --force can silently overwrite teammates\' commits.'));
-
       h += S(7,'g','Restore your WIP',
         'If you stashed files before the rebase, pop them now. If the stash overlaps with any files that were part of the rebase conflict, you may see another conflict — resolve it in the IDE the same way.',
         WHERE('terminal','Terminal') +
         T(['git stash pop','# If a conflict appears here — resolve in IDE, then: git add <file>','OK Work restored']));
-
       h += S(8,'g','Open the Pull Request on GitHub/GitLab','',
         T(['# Go to your repository on GitHub or GitLab',
            '# Click "New Pull Request" or "Create Merge Request"',
@@ -1093,59 +1244,46 @@ code {
         NOTE('green','Your PR now has exactly 1 clean commit with only your files, sitting on top of the latest '+db+'.'));
     }
 
-    // ── REBASE ONLY ──────────────────────────────
     else if (curA === 'rebase') {
-
       h += S(1,'b','Switch to: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb]));
-
       h += S(2,'y','Squash your WIP commits first if you have more than 1',
         'If you have multiple commits, squash them with rebase -i before syncing. This makes the rebase onto develop trivial — 1 commit, at most 1 conflict.',
         optSection('Squash WIP commits with rebase -i — recommended before syncing', 'Recommended',
           INTERACTIVE_SQUASH_BLOCK(mb)
         ));
-
       h += S(3,'y','Stash uncommitted work','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "my-wip"','# Skip if git status shows nothing']));
-
       h += S(4,'b','Fetch latest','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin','git branch -a']));
-
-      h += S(5,'r','<strong style="color:var(--red);">Rebase</strong> onto the latest '+db,'',
+      h += S(5,'r','<strong style="color:#e86060;">Rebase</strong> onto the latest '+db,'',
         REBASE_BLOCK(db));
-
       h += S(6,'g','Push','',
         WHERE('terminal','Terminal') +
         T(['git push origin '+mb+' --force-with-lease','OK Done']) +
         NOTE('blue','Use <code>--force-with-lease</code> any time you have rebased — history was rewritten so a normal push will be rejected.'));
-
       h += S(7,'g','Restore your stash',
         'If the stashed files overlap with anything touched during rebase, a conflict may appear on pop. Resolve in IDE → git add → done.',
         WHERE('terminal','Terminal') +
         T(['git stash pop','OK Restored']));
     }
 
-    // ── SWITCH BRANCH ────────────────────────────
     else if (curA === 'switch') {
-
       h += S(1,'b','Fetch latest first','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin']));
-
       h += S(2,'y','Check what you have uncommitted','',
         WHERE('terminal','Terminal') +
         T(['git status','# If you see any files listed, use Option A or B below.']));
-
       h += S(3,'g','Option A: Stash and switch (recommended)','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "my-wip"',
            'git checkout '+tb,'OK Switched to '+tb,'',
            '# When you want to come back:',
            'git checkout '+mb,'git stash pop','OK Back on '+mb+' with work restored']));
-
       h += S(4,'r','Option B: Discard and switch (only if 100% sure)',
         'Permanently deletes all uncommitted changes. No undo. If you are not certain, use Option A.',
         WHERE('terminal','Terminal') +
@@ -1153,26 +1291,21 @@ code {
         NOTE('red','Use Option A unless you are absolutely certain you do not need any of those changes. There is no recovery from this without reflog — and reflog only helps for committed work, not uncommitted files.'));
     }
 
-    // ── PR APPROVED CLEANUP ──────────────────────
     else if (curA === 'approved') {
-
       h += S(1,'g','Merge on GitHub or GitLab in the browser','',
         T(['# Go to your PR on GitHub or GitLab',
            '# Click "Merge Pull Request" or "Merge" → Confirm']) +
         NOTE('yellow','Ask your team who should click the merge button before proceeding.'));
-
       h += S(2,'b','Update your local '+db,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+db,'git fetch origin',
            'git rebase origin/'+db,'OK Local '+db+' is up to date']));
-
       h += S(3,'b','Delete the merged branch','',
         WHERE('terminal','Terminal') +
         T(['git branch -d '+mb,
            '# If "not fully merged" warning and you are sure it was merged via PR:',
            '# git branch -D '+mb,'',
            'git push origin --delete '+mb,'OK Branch deleted']));
-
       h += S(4,'g','Start your next task','',
         WHERE('terminal','Terminal') +
         T(['git checkout '+db,'git fetch origin','git rebase origin/'+db,
@@ -1180,14 +1313,11 @@ code {
            'git push -u origin feature/next-task','OK Ready']));
     }
 
-    // ── UNDO COMMITS ─────────────────────────────
     else if (curA === 'undo') {
-
       h += S(1,'b','Look at your commit history first','',
         WHERE('terminal','Terminal') +
         T(['git log --oneline','# Figure out how many commits you want to undo.',
            '# Note the hash of your current HEAD in case you need to recover via reflog.']));
-
       h += S(2,'g','Option A: Soft reset — safest',
         'Removes the commit from history but keeps all file changes in your working directory.',
         WHERE('terminal','Terminal') +
@@ -1196,42 +1326,34 @@ code {
            'git reset --soft origin/'+db,'',
            'OK Commit removed — files still safe in working directory']) +
         NOTE('green','Your code is not deleted — it is just un-committed. If you reset too far by accident, open the Rescue/Reflog tab and restore via the hash you noted above.'));
-
       h += S(3,'b','Option B: Revert — safe for branches already shared',
         'Creates a new commit that undoes the previous one. Does not remove any history. Safe to push without force.',
         WHERE('terminal','Terminal') +
         T(['git revert HEAD',
            '# Opens editor for commit message. Save and close.',
            'git push origin '+mb]));
-
       h += S(4,'y','If you already pushed — force push after soft reset','',
         WHERE('terminal','Terminal') +
         T(['git push origin '+mb+' --force-with-lease']) +
         NOTE('yellow','<strong>Caution:</strong> If a teammate has already pulled your branch and you force push, they will need to reset their local copy. Communicate before force pushing a shared branch.'));
     }
 
-    // ── CHERRY PICK ──────────────────────────────
     else if (curA === 'cherry') {
-
       h += S(1,'b','Fetch latest','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin']));
-
       h += S(2,'b','Find the commit hash on the source branch','',
         WHERE('terminal','Terminal') +
         T(['git log --oneline origin/'+sb,
            '# Each line: hash  message. Find the commit and copy its hash.',
            'WN '+ch+'  this is the one you want']));
-
       h += S(3,'b','Switch to your branch: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb]));
-
       h += S(4,'g','Cherry pick the commit',
         'Copies only that specific commit to your branch. Nothing else comes along.',
         WHERE('terminal','Terminal') +
         T(['git cherry-pick '+ch,'OK Commit applied to '+mb]));
-
       h += S(5,'y','If a conflict appears',
         'Resolve it in the IDE merge editor, then continue.',
         GUI(
@@ -1250,29 +1372,23 @@ code {
         ) +
         WHERE('terminal','Then Terminal') +
         T(['git add .','git cherry-pick --continue','','# To cancel and recover:','# git cherry-pick --abort']));
-
       h += S(6,'b','Push','',
         WHERE('terminal','Terminal') +
         T(['git push origin '+mb]));
     }
 
-    // ── RESCUE ───────────────────────────────────
     else if (curA === 'rescue') {
-
       h += S(1,'r','Do not panic — your code is not lost',
         'Pull or Sync created a hidden merge commit. Follow these steps in order.',
         NOTE('red','Do not run more random git commands. Follow these steps in order.') +
         NOTE('blue','Tip: Before doing anything, run <code>git reflog</code> and note the last clean commit hash. If these steps go wrong, you can always recover from reflog.'));
-
       h += S(2,'y','Abort any operation currently in progress','',
         WHERE('terminal','Terminal') +
         T(['git rebase --abort','git merge --abort','git cherry-pick --abort',
            '# Errors here are fine — means that operation was not running']));
-
       h += S(3,'y','Stash any uncommitted files','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "rescue-stash"','OK Saved']));
-
       h += S(4,'b','Reset your branch to remove the bad merge commit',
         'This uses the remote copy of your branch as the reset target. If your branch was never pushed, use origin/'+db+' instead.',
         WHERE('terminal','Terminal') +
@@ -1285,34 +1401,27 @@ code {
            'git reset --soft origin/'+db,
            '',
            'OK Branch is now clean — files preserved in working directory']));
-
       h += S(5,'b','Restore your files','',
         WHERE('terminal','Terminal') +
         T(['git stash pop',
            '# If a conflict appears on pop, resolve in IDE then: git add <file>',
            'OK Restored']));
-
       h += S(6,'g','Verify everything is clean','',
         WHERE('terminal','Terminal') +
         T(['git status','git log --oneline -5','OK Looks clean']) +
         NOTE('green','Now follow the correct flow: squash with rebase -i if needed → stash → fetch → rebase onto develop → push → stash pop.') +
-        NOTE('purple','Still stuck? Open the <strong>Rescue/Reflog</strong> tab (top nav) for full reflog recovery scenarios.'));
+        NOTE('blue','Still stuck? Open the <strong>Rescue/Reflog</strong> tab (top nav) for full reflog recovery scenarios.'));
     }
 
-    // ── STASH ────────────────────────────────────
     else if (curA === 'stash') {
-
       h += S(1,'b','Save your current work','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "my-wip"','OK Saved']));
-
       h += S(2,'b','Switch to the other branch: '+tb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+tb]));
-
       h += S(3,'b','Do your work on '+tb+'...','',
         T(['# Make changes, commit, push — whatever you need to do.']));
-
       h += S(4,'g','Come back and restore your work','',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb,'git stash list',
@@ -1322,14 +1431,11 @@ code {
            'OK All your work is restored on '+mb]));
     }
 
-    // ── CONFLICT ─────────────────────────────────
     else if (curA === 'conflict') {
-
       h += S(1,'b','See which files have conflicts','',
         WHERE('terminal','Terminal') +
         T(['git status','ER both modified: '+fl,
            '# Files listed under "both modified" have conflicts.']));
-
       h += S(2,'y','Open the conflicting file in your IDE and resolve it','',
         GUI(
           [
@@ -1346,7 +1452,6 @@ code {
             'Click Apply, then save',
           ]
         ));
-
       h += S(3,'b','Stage the resolved file and continue','',
         WHERE('terminal','Terminal') +
         T(['git add '+fl,'',
@@ -1354,27 +1459,22 @@ code {
            '# If rebasing:','git rebase --continue','',
            '# If merging:','git commit','',
            '# If cherry-picking:','git cherry-pick --continue']));
-
       h += S(4,'r','If too complex — abort and recover',
         'Abort returns everything to the state before the operation started. If abort also fails, use reflog.',
         WHERE('terminal','Terminal') +
         T(['git rebase --abort',
            '# or: git merge --abort  /  git cherry-pick --abort',
            'OK Everything is back to how it was']) +
-        NOTE('purple','If abort leaves things in a bad state, open the <strong>Rescue/Reflog</strong> tab and recover using the hash from before the operation.'));
-
+        NOTE('blue','If abort leaves things in a bad state, open the <strong>Rescue/Reflog</strong> tab and recover using the hash from before the operation.'));
       h += S(5,'b','Push after resolving','',
         WHERE('terminal','Terminal') +
         T(['git push origin '+mb+' --force-with-lease']));
     }
 
-    // ── DELETE BRANCH ────────────────────────────
     else if (curA === 'delete') {
-
       h += S(1,'b','Switch off the branch first','',
         WHERE('terminal','Terminal') +
         T(['git checkout '+db,'OK Switched to '+db]));
-
       h += S(2,'b','Delete locally','',
         WHERE('terminal','Terminal') +
         T(['git branch -d '+mb,
@@ -1382,24 +1482,19 @@ code {
            '# git branch -D '+mb,
            'OK Deleted locally']) +
         NOTE('yellow','<strong>Caution:</strong> <code>git branch -D</code> (uppercase) force deletes without checking if the branch was merged. Only use if you are certain. Commits are still in reflog for ~90 days if you need to recover.'));
-
       h += S(3,'b','Delete on origin','',
         WHERE('terminal','Terminal') +
         T(['git push origin --delete '+mb,'OK Deleted from origin']) +
         NOTE('red','Deleting from origin removes it for everyone. Make sure the PR was merged and the branch is no longer needed before running this.'));
     }
 
-    // ── RENAME BRANCH ────────────────────────────
     else if (curA === 'rename') {
-
       h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb]));
-
       h += S(2,'b','Rename to: '+nb,'',
         WHERE('terminal','Terminal') +
         T(['git branch -m '+nb,'OK Renamed locally to '+nb]));
-
       h += S(3,'y','If the branch is already on origin — update remote too',
         'Deletes the old name from origin and pushes the new name. Any open PRs on the old branch name will need to be updated in GitHub/GitLab.',
         WHERE('terminal','Terminal') +
@@ -1408,20 +1503,16 @@ code {
         NOTE('yellow','<strong>Caution:</strong> If you have an open PR under the old branch name, GitHub/GitLab may close it automatically. Check your PRs after renaming and reopen if needed.'));
     }
 
-    // ── AMEND COMMIT MESSAGE ─────────────────────
     else if (curA === 'amend') {
       var msg2 = gv('msg');
-
       h += S(1,'b','Make sure you are on: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb]));
-
       h += S(2,'g','Change the last commit message',
         'Rewrites only the most recent commit\'s message. No files are touched.',
         WHERE('terminal','Terminal') +
         T(['git commit --amend -m "'+msg2+'"','OK Message updated']) +
         NOTE('blue','This only works on the very last commit. For older commits use rebase -i — pick the commit and change <code>pick</code> to <code>reword</code>.'));
-
       h += S(3,'y','If you already pushed — force push',
         'Amend rewrites history, so a normal push will be rejected.',
         WHERE('terminal','Terminal') +
@@ -1429,31 +1520,25 @@ code {
         NOTE('yellow','<strong>Caution:</strong> If a teammate has already pulled this branch, force pushing will conflict with their local copy. Tell them to run <code>git fetch origin</code> and <code>git reset --hard origin/'+mb+'</code> after your force push.'));
     }
 
-    // ── WRONG BRANCH ─────────────────────────────
     else if (curA === 'wrongbranch') {
-
       h += S(1,'r','Stop — do not push anything yet',
         'Your code is safe. We will move it to the correct branch.',
         NOTE('yellow','Your code is not lost. We are just going to move it.') +
         NOTE('blue','Safety step: run <code>git log --oneline -3</code> and note your commit hash now. If anything goes wrong, open Rescue/Reflog tab to recover it.'));
-
       h += S(2,'b','Soft reset the wrong branch',
         'Removes the commit from the wrong branch. Your file changes stay in your working directory.',
         WHERE('terminal','Terminal') +
         T(['git reset --soft HEAD~1',
            'OK Commit removed — files still in working directory']));
-
       h += S(3,'y','Stash the files','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "wrong-branch-rescue"','OK Files saved']));
-
       h += S(4,'b','Get onto the correct branch: '+tb,'',
         WHERE('terminal','Terminal') +
         T(['# If the correct branch already exists:','git checkout '+tb,'',
            '# If it does NOT exist yet:','git checkout '+db,
            'git fetch origin','git rebase origin/'+db,
            'git checkout -b '+tb,'git push -u origin '+tb]));
-
       h += S(5,'g','Pop the stash and commit on the correct branch','',
         WHERE('terminal','Terminal') +
         T(['git stash pop','# Your files are back in your working directory.']) +
@@ -1474,19 +1559,15 @@ code {
           ]
         ) +
         NOTE('green','Your code is now committed on the correct branch: '+tb));
-
       h += S(6,'b','Push','',
         WHERE('terminal','Terminal') +
         T(['git push origin '+tb]));
     }
 
-    // ── ADD MORE TO PR ───────────────────────────
     else if (curA === 'addmore') {
-
       h += S(1,'b','Switch to your PR branch: '+mb,'',
         WHERE('terminal','Terminal') +
         T(['git checkout '+mb]));
-
       h += S(2,'b','Make your additional changes and commit them','',
         WHERE('gui','VS Code or IntelliJ — edit your files') +
         GUI(
@@ -1506,29 +1587,23 @@ code {
           ]
         ) +
         NOTE('blue','Temporary commit. We will squash it with the original commits in the next step.'));
-
       h += S(3,'g','⚡ Squash everything with rebase -i',
         'Count ALL your commits on this branch — originals + the new one. That is your N. Squash them all into 1 clean commit.',
         INTERACTIVE_SQUASH_BLOCK(mb));
-
       h += S(4,'y','Stash uncommitted work if any','',
         WHERE('terminal','Terminal') +
         T(['git stash push -m "my-wip"','# Skip if git status shows nothing']));
-
       h += S(5,'b','Fetch latest','',
         WHERE('terminal','Terminal') +
         T(['git fetch origin']));
-
-      h += S(6,'r','<strong style="color:var(--red);">Rebase</strong> onto the latest '+db,
+      h += S(6,'r','<strong style="color:#e86060;">Rebase</strong> onto the latest '+db,
         'You have 1 clean commit. This just moves it to the tip of develop.',
         REBASE_BLOCK(db));
-
       h += S(7,'g','Force push — PR updates automatically',
         'No new PR needed. Force pushing to the same branch updates the existing PR.',
         WHERE('terminal','Terminal') +
         T(['git push origin '+mb+' --force-with-lease','OK PR updated']) +
         NOTE('green','Your PR now shows 1 updated clean commit. Reviewers see the changes automatically.'));
-
       h += S(8,'g','Restore your stash',
         'If stashed files overlap with anything changed during rebase, a conflict may appear. Resolve in IDE → git add → done.',
         WHERE('terminal','Terminal') +
