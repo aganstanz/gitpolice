@@ -1,1383 +1,3221 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Git Guide</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: #000;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
-  a { color: #fff; }
-
-  nav {
-    display: flex;
-    gap: 8px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #333;
-    flex-wrap: wrap;
-    position: sticky;
-    top: 0;
-    background: #000;
-    z-index: 100;
-  }
-
-  .nav-btn {
-    background: none;
-    border: 1px solid #444;
-    color: #aaa;
-    padding: 6px 14px;
-    border-radius: 0;
-    cursor: pointer;
-    font-size: 13px;
-    font-family: inherit;
-  }
-
-  .nav-btn:hover { color: #fff; border-color: #fff; }
-  .nav-btn.active { color: #fff; border-color: #fff; font-weight: 600; }
-
-  .page { display: none; max-width: 800px; margin: 0 auto; padding: 32px 16px 80px; }
-  .page.on { display: block; }
-
-  h1 { font-size: 22px; margin-bottom: 6px; }
-  h2 { font-size: 15px; margin: 36px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #333; }
-  .page-sub { color: #888; font-size: 13px; margin-bottom: 28px; }
-  p { font-size: 13px; color: #ccc; line-height: 1.7; margin-bottom: 8px; }
-
-  code {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 1px 5px;
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    color: #7ec8f0;
-  }
-
-  .term {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 14px;
-    margin: 10px 0;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.9;
-    overflow-x: auto;
-    position: relative;
-  }
-
-  .term .cp {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #000;
-    border: 1px solid #444;
-    color: #888;
-    border-radius: 0;
-    padding: 2px 10px;
-    font-size: 11px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  .term .cp:hover { color: #fff; border-color: #fff; }
-
-  .t-c { color: #555; font-style: italic; }
-  .t-g { color: #4caf50; }
-  .t-b { color: #7ec8f0; }
-  .t-y { color: #f0c040; }
-  .t-r { color: #e86060; }
-  .t-w { color: #fff; }
-
-  .note {
-    border-left: 3px solid #444;
-    padding: 8px 12px;
-    margin: 8px 0;
-    font-size: 12px;
-    line-height: 1.6;
-    background: #0a0a0a;
-    color: #ccc;
-    border-radius: 0;
-  }
-
-  .note.green  { border-color: #4caf50; color: #4caf50; }
-  .note.blue   { border-color: #7ec8f0; color: #7ec8f0; }
-  .note.yellow { border-color: #f0c040; color: #f0c040; }
-  .note.red    { border-color: #e86060; color: #e86060; }
-
-  .card {
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 16px;
-    margin-bottom: 14px;
-  }
-
-  .card.green  { border-color: #2a5c2a; }
-  .card.blue   { border-color: #1a3560; }
-  .card.yellow { border-color: #5a4a10; }
-  .card.red    { border-color: #5a1e1e; }
-  .card.grey   { border-color: #333; background: #0a0a0a; }
-
-  .card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px; }
-  .card-label.green  { color: #4caf50; }
-  .card-label.blue   { color: #7ec8f0; }
-  .card-label.yellow { color: #f0c040; }
-  .card-label.red    { color: #e86060; }
-  .card-label.grey   { color: #888; }
-
-  .order-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    padding: 12px;
-    border: 1px solid #333;
-    border-radius: 0;
-    margin-bottom: 10px;
-  }
-
-  .op {
-    background: #fff;
-    color: #000;
-    border-radius: 0;
-    padding: 4px 12px;
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .op.danger { background: #e86060; color: #fff; }
-  .op.gold   { background: #f0c040; color: #000; }
-  .oa { color: #555; font-size: 12px; }
-
-  .ban-item { padding: 14px 0; border-bottom: 1px solid #222; }
-  .ban-item:last-child { border-bottom: none; }
-
-  .ban-cmd {
-    display: inline-block;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    padding: 3px 10px;
-    border-radius: 0;
-    margin-bottom: 4px;
-  }
-
-  .ban-cmd.bad  { background: #1c0e0e; color: #e86060; border: 1px solid #5a1e1e; }
-  .ban-cmd.good { background: #0a1c10; color: #4caf50; border: 1px solid #1a4d2e; }
-  .ban-why { font-size: 12px; color: #888; margin: 4px 0 6px; line-height: 1.5; }
-  .ban-arrow { font-size: 11px; font-weight: 700; color: #555; margin: 4px 0; }
-
-  .row { display: flex; gap: 14px; flex-wrap: wrap; }
-  .row > .card { flex: 1; min-width: 220px; margin-bottom: 0; }
-
-  .steps { display: flex; flex-direction: column; }
-
-  .step {
-    display: flex;
-    gap: 16px;
-    padding: 20px 0;
-    border-bottom: 1px solid #222;
-  }
-
-  .step:last-child { border-bottom: none; }
-
-  .step-num {
-    width: 28px;
-    height: 28px;
-    border-radius: 0;
-    border: 2px solid #444;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .step-num.g { border-color: #4caf50; color: #4caf50; }
-  .step-num.y { border-color: #f0c040; color: #f0c040; }
-  .step-num.r { border-color: #e86060; color: #e86060; }
-
-  .step-body { flex: 1; min-width: 0; }
-  .step-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 6px; }
-
-  .step-context {
-    font-size: 13px;
-    color: #888;
-    border-left: 3px solid #333;
-    padding: 6px 10px;
-    margin-bottom: 8px;
-    line-height: 1.6;
-    border-radius: 0;
-  }
-
-  .where {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 0;
-    margin: 0 0 6px;
-  }
-
-  .where.terminal { background: #0a1428; color: #7ec8f0; border: 1px solid #1a3560; }
-  .where.gui      { background: #140e20; color: #a87de8; border: 1px solid #3e2870; }
-  .where.verify   { background: #0a1c10; color: #4caf50; border: 1px solid #1a4d2e; }
-
-  .gui-block {
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 12px 14px;
-    margin: 8px 0;
-  }
-
-  .gui-block-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a87de8; margin-bottom: 10px; }
-
-  .gui-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 540px) { .gui-cols { grid-template-columns: 1fr; } }
-
-  .gui-col-title { font-size: 11px; font-weight: 700; color: #888; margin-bottom: 6px; text-transform: uppercase; }
-
-  .gui-item { display: flex; gap: 8px; font-size: 13px; color: #ccc; margin-bottom: 5px; line-height: 1.5; }
-
-  .gui-item-n {
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    border: 1px solid #444;
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    color: #888;
-    margin-top: 1px;
-  }
-
-  .opt-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 12px;
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 0;
-    cursor: pointer;
-    margin-top: 8px;
-    user-select: none;
-  }
-
-  .opt-toggle:hover { border-color: #555; }
-  .opt-toggle.open { border-bottom-color: transparent; }
-  .opt-arrow { font-size: 10px; color: #555; transition: transform 0.2s; }
-  .opt-toggle.open .opt-arrow { transform: rotate(90deg); }
-  .opt-label { font-size: 13px; font-weight: 600; color: #fff; flex: 1; }
-  .opt-tag { font-size: 10px; padding: 2px 7px; border-radius: 0; font-weight: 700; background: #111; color: #f0c040; border: 1px solid #5a4a10; }
-  .opt-tag.green { color: #4caf50; border-color: #1a4d2e; }
-  .opt-tag.red   { color: #e86060; border-color: #5a1e1e; }
-  .opt-body { display: none; border: 1px solid #333; border-top: none; border-radius: 0; padding: 14px; background: #000; }
-  .opt-body.open { display: block; }
-
-  .pill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 18px; }
-
-  .pill {
-    background: #000;
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 10px 13px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #ccc;
-    text-align: left;
-    font-family: inherit;
-  }
-
-  .pill:hover { border-color: #fff; color: #fff; }
-  .pill.on    { border-color: #fff; color: #fff; font-weight: 600; }
-  .pill.gold  { border-color: #f0c040; color: #f0c040; font-weight: 600; }
-  .pill.gold:hover { border-color: #fff; }
-
-  .input-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-  .input-group { flex: 1; min-width: 180px; }
-  .input-label { font-size: 11px; color: #888; display: block; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-
-  .inp {
-    background: #000;
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 8px 11px;
-    color: #fff;
-    font-size: 13px;
-    font-family: 'Courier New', monospace;
-    width: 100%;
-    outline: none;
-  }
-
-  .inp:focus { border-color: #fff; }
-  .inp::placeholder { color: #555; }
-
-  .run-btn {
-    background: #fff;
-    border: none;
-    color: #000;
-    border-radius: 0;
-    padding: 9px 22px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  .run-btn:hover { background: #ccc; }
-
-  .back-btn {
-    background: none;
-    border: 1px solid #333;
-    color: #888;
-    border-radius: 0;
-    padding: 6px 14px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: inherit;
-    margin-bottom: 20px;
-  }
-
-  .back-btn:hover { border-color: #e86060; color: #e86060; }
-
-  .edge-box {
-    border: 1px solid #5a4a10;
-    border-radius: 0;
-    padding: 14px;
-    margin: 10px 0;
-  }
-
-  .edge-box-title { font-size: 12px; font-weight: 700; color: #f0c040; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
-
-  .squash-input-block {
-    border: 1px solid #333;
-    padding: 14px;
-    margin: 12px 0;
-    background: #0a0a0a;
-  }
-  .squash-input-block-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: #f0c040;
-    margin-bottom: 12px;
-  }
-  .squash-divider { border: none; border-top: 1px solid #222; margin: 12px 0; }
-
-  .flow-wrap { display: flex; flex-direction: column; gap: 16px; margin: 14px 0; }
-
-  @media (min-width: 640px) {
-    .flow-wrap { flex-direction: row; align-items: flex-start; }
-    .flow-local, .flow-remote { flex: 1; }
-    .flow-mid { width: 110px; flex-shrink: 0; }
-  }
-
-  .flow-local, .flow-remote, .flow-mid {
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 18px;
-  }
-
-  .flow-head { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #333; text-align: center; }
-  .flow-head-title { font-size: 16px; font-weight: 700; }
-  .flow-head-sub { font-size: 12px; color: #888; margin-top: 4px; }
-
-  .flow-zone { border: 1px solid #333; border-radius: 0; padding: 12px; text-align: center; margin-bottom: 10px; }
-  .flow-zone-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
-  .flow-zone-desc { font-size: 12px; color: #888; line-height: 1.6; }
-
-  .flow-down { text-align: center; padding: 5px 0; font-size: 12px; color: #555; }
-
-  .flow-mid { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
-
-  .flow-transfer {
-    border: 1px solid #333;
-    border-radius: 0;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .flow-transfer-label { font-size: 12px; font-weight: 700; line-height: 1.3; }
-  .flow-transfer-sub { font-size: 10px; color: #888; margin-top: 3px; line-height: 1.4; }
-
-  .flow-branch { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid #333; border-radius: 0; font-family: 'Courier New', monospace; font-size: 12px; margin-bottom: 6px; }
-
-  @media (max-width: 600px) {
-    .pill-grid { grid-template-columns: 1fr 1fr; }
-    nav { gap: 4px; }
-    .nav-btn { padding: 5px 10px; font-size: 12px; }
-  }
-
-  @media (max-width: 380px) {
-    .pill-grid { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
-
-<nav>
-  <button class="nav-btn active" onclick="go('home')">Rules</button>
-  <button class="nav-btn" onclick="go('flow')">How Git Works</button>
-  <button class="nav-btn" onclick="go('guide')">Step Guide</button>
-</nav>
-
-<!-- TAB 1 — RULES -->
-<div class="page on" id="page-home">
-  <h1>Rules</h1>
-  <p class="page-sub">What you must never do — and what to use instead</p>
-
-  <h2>Never use these</h2>
-  <div class="card">
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">git pull</div>
-      <div class="ban-why">Runs fetch + merge silently. Creates a hidden merge commit on your branch. The #1 cause of messy histories.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git fetch → git rebase origin/develop</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">VS Code "Sync Changes" button</div>
-      <div class="ban-why">Does pull + push in one click silently. You cannot see what it does before it does it.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">Open terminal (Ctrl+`) and run every step manually</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">VS Code Pull button (down arrow)</div>
-      <div class="ban-why">Identical to git pull. Creates a hidden merge commit.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git fetch → git rebase origin/develop</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">git reset --soft on a shared branch + git add .</div>
-      <div class="ban-why">Un-commits everything including teammates' work into your working directory. One wrong git add . and you commit someone else's code as your own.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git rebase -i HEAD~N — only touches your own commits</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">git push --force</div>
-      <div class="ban-why">Overwrites remote with no safety check. Can silently delete teammates' commits.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git push --force-with-lease</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">git reset --hard</div>
-      <div class="ban-why">Permanently deletes all uncommitted file changes. No undo possible.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git stash — saves everything, restore anytime with git stash pop</div>
-    </div>
-
-    <div class="ban-item">
-      <div class="ban-cmd bad">VS Code "Discard All Changes"</div>
-      <div class="ban-why">Same as git reset --hard. Permanently wipes all uncommitted work instantly.</div>
-      <div class="ban-arrow">Use this instead:</div>
-      <div class="ban-cmd good">git stash — or right-click individual files and discard only those</div>
-    </div>
-
-  </div>
-
-  <h2>IDE — what's safe and what's not</h2>
-  <div class="row">
-    <div class="card green">
-      <div class="card-label green">Safe to use</div>
-      <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;">
-        <div><strong>Stage file (+)</strong> — click + next to individual files only, never "Stage All"</div>
-        <div><strong>Commit button</strong> — same as git commit</div>
-        <div><strong>Merge conflict editor</strong> — 3-way conflict resolver</div>
-        <div><strong>Discard single file</strong> — right-click one file only</div>
-        <div><strong>Branch switcher</strong> — bottom-left VS Code, Git panel IntelliJ</div>
-      </div>
-    </div>
-    <div class="card red">
-      <div class="card-label red">Never click</div>
-      <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;">
-        <div><strong>Sync Changes</strong> — pull + push silently</div>
-        <div><strong>Pull button (down arrow)</strong> — hidden merge commit</div>
-        <div><strong>Push button after rebase</strong> — use terminal with --force-with-lease</div>
-        <div><strong>Discard All Changes</strong> — permanent, use git stash</div>
-        <div><strong>Stage All after soft reset</strong> — stages everyone's files</div>
-      </div>
-    </div>
-  </div>
-  <div class="note blue" style="margin-top:14px;">
-    Golden pattern: <strong>Terminal (prepare) → IDE (stage your files + commit) → Terminal (push, verify).</strong>
-  </div>
-</div>
-
-<!-- TAB 2 — HOW GIT WORKS -->
-<div class="page" id="page-flow">
-  <h1>How Git Works</h1>
-  <p class="page-sub">Your code lives in two places. Here is what moves where.</p>
-
-  <div class="flow-wrap">
-    <div class="flow-local">
-      <div class="flow-head">
-        <div class="flow-head-title" style="color:#4caf50;">💻 Your Computer</div>
-        <div class="flow-head-sub">Private until you push</div>
-      </div>
-      <div class="flow-zone" style="border-color:#5a4a10;">
-        <div class="flow-zone-title" style="color:#f0c040;">Stash</div>
-        <div class="flow-zone-desc">Temporary pocket.<br><code style="font-size:10px;">git stash</code> saves · <code style="font-size:10px;">git stash pop</code> restores</div>
-      </div>
-      <div class="flow-down">↕</div>
-      <div class="flow-zone" style="border-color:#5a4a10;">
-        <div class="flow-zone-title" style="color:#f0c040;">Working Directory</div>
-        <div class="flow-zone-desc">Files you see and edit every day</div>
-      </div>
-      <div class="flow-down">↓ <code style="font-size:10px;">git add yourfile</code></div>
-      <div class="flow-zone" style="border-color:#1a3560;">
-        <div class="flow-zone-title" style="color:#7ec8f0;">Staging Area</div>
-        <div class="flow-zone-desc">Files marked ready to commit. Only YOUR files should be here.</div>
-      </div>
-      <div class="flow-down">↓ <code style="font-size:10px;">git commit -m "message"</code></div>
-      <div class="flow-zone" style="border-color:#1a4d2e;">
-        <div class="flow-zone-title" style="color:#4caf50;">Local Repository</div>
-        <div class="flow-zone-desc">Saved commits on your machine. Nobody sees these until you push.</div>
-      </div>
-      <div style="margin-top:14px;border:1px solid #333;padding:12px;">
-        <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;">Local-only operations</div>
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
-          <div style="padding:6px 10px;border:1px solid #5a4a10;"><strong style="color:#f0c040;">rebase -i HEAD~N</strong> — squashes only YOUR commits. Safe anytime. Zero mixed files.</div>
-          <div style="padding:6px 10px;border:1px solid #5a1e1e;"><strong style="color:#e86060;">rebase onto develop</strong> — moves your clean commit to tip of latest develop. Do this at PR time.</div>
-          <div style="padding:6px 10px;border:1px solid #1a3560;"><strong style="color:#7ec8f0;">checkout</strong> — switch branches locally. Nothing goes to origin.</div>
-          <div style="padding:6px 10px;border:1px solid #1a4d2e;"><strong style="color:#4caf50;">stash</strong> — saves uncommitted work safely. Restore with stash pop.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flow-mid">
-      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px;font-weight:700;text-align:center;margin-bottom:4px;">Sync</div>
-      <div class="flow-transfer" style="border-color:#1a4d2e;">
-        <div style="font-size:18px;">→</div>
-        <div class="flow-transfer-label" style="color:#4caf50;">git push</div>
-        <div class="flow-transfer-sub">--force-with-lease after rebase</div>
-      </div>
-      <div class="flow-transfer" style="border-color:#1a3560;">
-        <div style="font-size:18px;">←</div>
-        <div class="flow-transfer-label" style="color:#7ec8f0;">git fetch</div>
-        <div class="flow-transfer-sub">safe — changes nothing locally</div>
-      </div>
-      <div class="flow-transfer" style="border-color:#5a1e1e;">
-        <div style="font-size:12px;color:#e86060;font-weight:700;">BANNED</div>
-        <div class="flow-transfer-label" style="color:#e86060;">git pull</div>
-        <div class="flow-transfer-sub" style="color:#888;">fetch + hidden merge</div>
-      </div>
-      <div class="flow-transfer" style="border-color:#5a1e1e;">
-        <div style="font-size:12px;color:#e86060;font-weight:700;">BANNED</div>
-        <div class="flow-transfer-label" style="color:#e86060;">Sync button</div>
-        <div class="flow-transfer-sub" style="color:#888;">pull + push one click</div>
-      </div>
-    </div>
-
-    <div class="flow-remote">
-      <div class="flow-head">
-        <div class="flow-head-title" style="color:#7ec8f0;">☁️ GitHub / GitLab (origin)</div>
-        <div class="flow-head-sub">Shared — whole team reads and writes here</div>
-      </div>
-      <div class="flow-zone" style="border-color:#1a3560;margin-bottom:14px;">
-        <div class="flow-zone-title" style="color:#7ec8f0;">Remote Repository</div>
-        <div class="flow-zone-desc">All branches and commits online. PRs and code reviews happen here.</div>
-      </div>
-      <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;">Branches on origin</div>
-      <div class="flow-branch" style="border-color:#1a4d2e;">
-        <span style="color:#4caf50;font-weight:700;">origin/mvp/develop</span>
-        <span style="color:#555;font-size:10px;margin-left:auto;">never touched directly</span>
-      </div>
-      <div class="flow-branch" style="border-color:#1a3560;">
-        <span style="color:#7ec8f0;">origin/feature/your-branch</span>
-        <span style="color:#555;font-size:10px;margin-left:auto;">push here</span>
-      </div>
-      <div class="flow-branch">
-        <span style="color:#888;">origin/feature/teammate</span>
-        <span style="color:#555;font-size:10px;margin-left:auto;">their branch</span>
-      </div>
-      <div style="margin-top:14px;border:1px solid #333;padding:12px;">
-        <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;">What happens here</div>
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
-          <div style="padding:6px 10px;border:1px solid #1a3560;">Pull Requests — code reviews, approvals</div>
-          <div style="padding:6px 10px;border:1px solid #1a3560;">Merge to develop — via PR button in browser only</div>
-          <div style="padding:6px 10px;border:1px solid #1a3560;">Team visibility — everyone sees all branches and commits</div>
-        </div>
-      </div>
-      <div class="note green" style="margin-top:12px;">
-        You only ever push to YOUR feature branch. Develop is read-only reference. To accidentally push to develop you'd have to explicitly type <code>git push origin mvp/develop</code> — which we never do.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 3 — STEP GUIDE -->
-<div class="page" id="page-guide">
-  <h1>Step Guide</h1>
-  <p class="page-sub">Pick what you want to do, fill in your branch names, and follow the steps</p>
-
-  <div class="card grey" id="builder">
-    <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:12px;">What do you want to do?</div>
-    <div class="pill-grid">
-      <button class="pill" onclick="pickA('newbranch',this)">Create new branch</button>
-      <button class="pill gold" onclick="pickA('interactivesquash',this)">⚡ Squash and save it in the same branch</button>
-      <button class="pill" onclick="pickA('rebase',this)">REBASE with main branch</button>
-      <button class="pill" onclick="pickA('getlatest',this)">Get latest changes in your branch</button>
-      <button class="pill" onclick="pickA('stash',this)">Save work, switch to other branches safely, come back</button>
-      <button class="pill" onclick="pickA('wrongbranch',this)">I committed to the wrong branch</button>
-      <button class="pill" onclick="pickA('conflict',this)">My rebase has conflicts</button>
-      <button class="pill" onclick="pickA('undo',this)">Undo my last commit (keep my files)</button>
-      <button class="pill" onclick="pickA('delete',this)">Delete a branch</button>
-      <button class="pill" onclick="pickA('rename',this)">Rename current branch</button>
-      <button class="pill" onclick="pickA('rescue',this)">Stuck after Pull/Sync — rescue me</button>
-      <button class="pill" onclick="pickA('recoverstash',this)">Recover a deleted stash</button>
-      <button class="pill" onclick="pickA('recoverbranch',this)">Bring back a deleted branch</button>
-    </div>
-    <div id="gfields" style="display:none;">
-      <div class="input-row" id="ginputs"></div>
-      <button class="run-btn" onclick="genGuide()">Generate Steps</button>
-    </div>
-  </div>
-
-  <div id="gout" style="display:none;">
-    <button class="back-btn" onclick="resetG()">← Back to menu</button>
-    <div id="gbody"></div>
-  </div>
-</div>
-
-<script>
-(function () {
-
-  window.go = function (id) {
-    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
-    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
-    document.getElementById('page-' + id).classList.add('on');
-    var idx = ['home','flow','guide'].indexOf(id);
-    if (idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
-    window.scrollTo(0,0);
-  };
-
-  window.cp = function (btn) {
-    var raw = btn.closest('.term').innerText.replace(/^Copy$|^Copied!$/mg,'').trim();
-    navigator.clipboard.writeText(raw).then(function(){
-      btn.textContent = 'Copied!';
-      setTimeout(function(){ btn.textContent = 'Copy'; }, 2000);
-    });
-  };
-
-  var optCount = 0;
-  window.toggleOpt = function (id) {
-    var tog  = document.getElementById('ot-' + id);
-    var body = document.getElementById('ob-' + id);
-    if (tog && body) { tog.classList.toggle('open'); body.classList.toggle('open'); }
-  };
-  function optSection(label, tag, content, tagClass) {
-    var id = ++optCount;
-    var tc = tagClass || '';
-    return '<div class="opt-toggle" id="ot-'+id+'" onclick="toggleOpt('+id+')">' +
-      '<span class="opt-arrow">&#9654;</span>' +
-      '<span class="opt-label">'+label+'</span>' +
-      '<span class="opt-tag '+tc+'">'+tag+'</span>' +
-      '</div>' +
-      '<div class="opt-body" id="ob-'+id+'">'+content+'</div>';
-  }
-
-  var curA = null;
-  var aconf = {
-    newbranch:        { fields: [{id:'db',lbl:'Base branch',ph:'mvp/develop'},{id:'mb',lbl:'New branch name',ph:'feature/login-page'}] },
-    interactivesquash:{ fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'}] },
-    rebase:           { fields: [{id:'mb',lbl:'Your feature branch',ph:'feature/login-page'},{id:'db',lbl:'Main branch',ph:'mvp/develop'}] },
-    getlatest:        { fields: [{id:'mb',lbl:'Your feature branch',ph:'feature/login-page'},{id:'db',lbl:'Main branch',ph:'mvp/develop'}] },
-    stash:            { fields: [{id:'mb',lbl:'Your current branch',ph:'feature/login-page'},{id:'tb',lbl:'Branch to switch to',ph:'feature/other-task'}] },
-    wrongbranch:      { fields: [{id:'mb',lbl:'Wrong branch (committed here)',ph:'mvp/develop'},{id:'tb',lbl:'Correct branch',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
-    conflict:         { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'},{id:'fl',lbl:'Conflicting file',ph:'src/components/Login.tsx'}] },
-    undo:             { fields: [{id:'mb',lbl:'Your branch',ph:'feature/login-page'}] },
-    delete:           { fields: [{id:'mb',lbl:'Branch to delete',ph:'feature/old-feature'},{id:'db',lbl:'Branch to switch to first',ph:'mvp/develop'}] },
-    rename:           { fields: [{id:'mb',lbl:'Current name',ph:'feature/old-name'},{id:'nb',lbl:'New name',ph:'feature/new-name'}] },
-    rescue:           { fields: [{id:'mb',lbl:'Branch that broke',ph:'feature/login-page'},{id:'db',lbl:'Base branch',ph:'mvp/develop'}] },
-    recoverstash:     { fields: [] },
-    recoverbranch:    { fields: [{id:'mb',lbl:'Deleted branch name',ph:'feature/login-page'}] }
-  };
-
-  window.pickA = function (a, el) {
-    curA = a;
-    document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
-    el.classList.add('on');
-    var h = '';
-    aconf[a].fields.forEach(function(f){
-      h += '<div class="input-group"><label class="input-label">'+f.lbl+'</label><input class="inp" id="gf-'+f.id+'" placeholder="'+f.ph+'"/></div>';
-    });
-    document.getElementById('ginputs').innerHTML = h;
-    document.getElementById('gfields').style.display = 'block';
-    document.getElementById('gout').style.display = 'none';
-  };
-
-  function gv(id) {
-    var e = document.getElementById('gf-' + id);
-    return e ? (e.value.trim() || e.placeholder) : '';
-  }
-
-  function T(lines) {
-    var rows = lines.map(function(l){
-      if (l === '')             return '<div style="height:5px"></div>';
-      if (l.charAt(0) === '#') return '<div class="t-c">'+l+'</div>';
-      if (l.slice(0,3)==='OK ') return '<div class="t-g">'+l.slice(3)+'</div>';
-      if (l.slice(0,3)==='WN ') return '<div class="t-y">'+l.slice(3)+'</div>';
-      if (l.slice(0,3)==='ER ') return '<div class="t-r">'+l.slice(3)+'</div>';
-      return '<div><span class="t-b">$ </span><span class="t-w">'+l+'</span></div>';
-    }).join('');
-    return '<div class="term"><button class="cp" onclick="cp(this)">Copy</button>'+rows+'</div>';
-  }
-
-  function CTX(html) { return '<div class="step-context">'+html+'</div>'; }
-  function WHERE(type, label) { return '<span class="where '+type+'">'+label+'</span> '; }
-  function NOTE(color, html) { return '<div class="note '+color+'">'+html+'</div>'; }
-
-  function GUI(vsc, ij) {
-    var vs   = vsc.map(function(s,i){ return '<div class="gui-item"><span class="gui-item-n">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
-    var irow = ij.map(function(s,i){  return '<div class="gui-item"><span class="gui-item-n">'+(i+1)+'</span><span>'+s+'</span></div>'; }).join('');
-    return '<div class="gui-block"><div class="gui-block-title">Do this in your IDE — VS Code or IntelliJ</div><div class="gui-cols"><div><div class="gui-col-title">VS Code</div>'+vs+'</div><div><div class="gui-col-title">IntelliJ</div>'+irow+'</div></div></div>';
-  }
-
-  var colMap = { b:'', g:'g', y:'y', r:'r' };
-  function S(n, col, title, ctx, body) {
-    return '<div class="step">' +
-      '<div class="step-num '+(colMap[col]||'')+'">'+n+'</div>' +
-      '<div class="step-body">' +
-        '<div class="step-title">'+title+'</div>' +
-        (ctx ? CTX(ctx) : '') +
-        body +
-      '</div></div>';
-  }
-
-  function REBASE_BLOCK(db) {
-    return WHERE('terminal','Terminal') +
-    T([
-      'git rebase origin/' + db,
-      '',
-      '# ---- If a conflict appears: ----',
-      '# Open each conflicting file in VS Code or IntelliJ.',
-      '# Use Accept Current / Accept Incoming / Accept Both buttons.',
-      '# Save the file, then:',
-      'git add .',
-      'git rebase --continue',
-      '',
-      '# ---- Too messy? Cancel completely: ----',
-      'git rebase --abort',
-      '',
-      'OK Rebased successfully',
-    ]) +
-    NOTE('yellow', 'Conflicts here are surgical — only the exact lines that clash between your commit and develop. Resolve file by file in the IDE merge editor.');
-  }
-
-  var squashBlockCount = 0;
-
-  function INTERACTIVE_SQUASH_BLOCK(mb) {
-    var uid = ++squashBlockCount;
-    var inputsId  = 'sq-inputs-'+uid;
-    var previewId = 'sq-preview-'+uid;
-    var nId       = 'sq-n-'+uid;
-    var ohId      = 'sq-oh-'+uid;
-    var omId      = 'sq-om-'+uid;
-    var nhId      = 'sq-nh-'+uid;
-    var nmId      = 'sq-nm-'+uid;
-
-    var html = '';
-
-    // Step A — run git log
-    html += WHERE('terminal','Terminal') +
-    T([
-      '# Run this first — count how many commits at the top are yours',
-      'git log --oneline',
-      '',
-      '# Output example (newest at top, oldest at bottom):',
-      '# j0k1l2  wip: changed as per the figma       ← newest (yours)',
-      '# g7h8i9  wip: fixed styling                  ← yours',
-      '# d4e5f6  wip: added logic                    ← yours',
-      '# a1b2c3  wip: implemented the changes        ← oldest (yours)',
-      '# 99zz88  some older commit not yours         ← stop here',
-    ]);
-
-    html += NOTE('blue',
-      '<strong>git log shows newest commit at the top, oldest at the bottom.</strong> ' +
-      'Count only the commits that are yours from the top downward. That count is N. ' +
-      'Stop counting when you hit a commit that is not yours.'
-    );
-
-    // Inline input block
-    html += '<div class="squash-input-block" id="'+inputsId+'">' +
-      '<div class="squash-input-block-title">After running git log — fill in your details</div>' +
-
-      '<div class="input-row">' +
-        '<div class="input-group" style="max-width:80px;">' +
-          '<label class="input-label">How many commits are yours? (N)</label>' +
-          '<input class="inp" id="'+nId+'" type="number" min="2" placeholder="e.g. 4" oninput="updateSquashPreview(\''+uid+'\')" />' +
-        '</div>' +
-      '</div>' +
-
-      '<hr class="squash-divider">' +
-
-      '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Your OLDEST commit — the bottom one of your N (this stays as <code style=\'color:#f0c040\'>pick</code>)</div>' +
-      '<div class="input-row">' +
-        '<div class="input-group" style="max-width:140px;">' +
-          '<label class="input-label">Hash</label>' +
-          '<input class="inp" id="'+ohId+'" placeholder="e.g. a1b2c3" oninput="updateSquashPreview(\''+uid+'\')" />' +
-        '</div>' +
-        '<div class="input-group">' +
-          '<label class="input-label">Commit message</label>' +
-          '<input class="inp" id="'+omId+'" placeholder="e.g. wip: implemented the changes" oninput="updateSquashPreview(\''+uid+'\')" />' +
-        '</div>' +
-      '</div>' +
-
-      '<hr class="squash-divider">' +
-
-      '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Your NEWEST commit — the top one of your N (this gets squashed)</div>' +
-      '<div class="input-row">' +
-        '<div class="input-group" style="max-width:140px;">' +
-          '<label class="input-label">Hash</label>' +
-          '<input class="inp" id="'+nhId+'" placeholder="e.g. j0k1l2" oninput="updateSquashPreview(\''+uid+'\')" />' +
-        '</div>' +
-        '<div class="input-group">' +
-          '<label class="input-label">Commit message</label>' +
-          '<input class="inp" id="'+nmId+'" placeholder="e.g. wip: changed as per the figma" oninput="updateSquashPreview(\''+uid+'\')" />' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-
-    // Live preview block — hidden until N is typed
-    html += '<div id="'+previewId+'" style="display:none;">' +
-
-      // ── NEW: command appears first, generated from N ──
-      '<div style="font-size:12px;font-weight:700;color:#fff;margin:14px 0 6px;">Run this command — it opens the rebase editor:</div>' +
-      '<div class="term" id="sq-cmd-'+uid+'"></div>' +
-
-      // ── Editor preview ──
-      '<div style="font-size:12px;font-weight:700;color:#fff;margin:14px 0 6px;">Your rebase editor will look like this:</div>' +
-      '<div class="term" id="sq-check-'+uid+'"></div>' +
-
-      NOTE('blue',
-        '<strong>The editor lists commits oldest at top → newest at bottom</strong> (opposite of git log). ' +
-        'Leave the <strong>top line</strong> (your oldest commit) as <code>pick</code>. ' +
-        'Change every line below it from <code>pick</code> to <code>s</code>. ' +
-        'Save and close. Git opens a second editor for your final commit message.'
-      ) +
-
-      '<div style="font-size:12px;font-weight:700;color:#fff;margin:14px 0 6px;">Second editor — write your final commit message:</div>' +
-      '<div class="term">' +
-        '<div class="t-c"># DELETE everything Git pre-fills (all the old wip: lines).</div>' +
-        '<div class="t-c"># Write one clean message from scratch. Suggested format:</div>' +
-        '<div style="height:5px"></div>' +
-        '<div id="sq-msg-suggest-'+uid+'" class="t-y"></div>' +
-        '<div style="height:5px"></div>' +
-        '<div class="t-c"># First line = subject, keep it under 72 characters.</div>' +
-        '<div class="t-c"># Leave a blank line, then add detail bullets if needed:</div>' +
-        '<div class="t-c"># - What changed</div>' +
-        '<div class="t-c"># - Why it changed</div>' +
-      '</div>' +
-
-      NOTE('red',
-        '<strong>Already pushed this branch?</strong> Squashing rewrites history. You will need <code>git push --force-with-lease</code> after. ' +
-        'Warn teammates who may have checked out your branch.'
-      ) +
-
-      GUI(
-        [
-          'The editor opens automatically in VS Code',
-          'Leave the <strong>top/first line</strong> as <code>pick</code> — that is your oldest commit',
-          'Change every line below it from <code>pick</code> to <code>s</code>',
-          'Save and close the tab (Ctrl+S, then close)',
-          'A second editor opens — delete all pre-filled text, write your clean message, save and close',
-        ],
-        [
-          'The editor opens automatically in IntelliJ',
-          'Leave the <strong>top/first line</strong> as <code>pick</code> — that is your oldest commit',
-          'Change every line below it from <code>pick</code> to <code>s</code>',
-          'Save the file and close it',
-          'A second editor opens — delete all pre-filled text, write your clean message, save and close',
-        ]
-      ) +
-
-      WHERE('verify','Verify') +
-      T([
-        'git log --oneline',
-        'OK You should now see exactly 1 clean commit at the top',
-        '',
-        '# Something went wrong? Abort and try again:',
-        'git rebase --abort',
-      ]) +
-      NOTE('green', 'Done. 1 clean commit. No develop involved. No other files touched.') +
-
-    '</div>';
-
-    return html;
-  }
-
-  window.updateSquashPreview = function(uid) {
-    var n   = document.getElementById('sq-n-'+uid).value.trim();
-    var oh  = document.getElementById('sq-oh-'+uid).value.trim();
-    var om  = document.getElementById('sq-om-'+uid).value.trim();
-    var nh  = document.getElementById('sq-nh-'+uid).value.trim();
-    var nm  = document.getElementById('sq-nm-'+uid).value.trim();
-
-    var preview  = document.getElementById('sq-preview-'+uid);
-    var checkEl  = document.getElementById('sq-check-'+uid);
-    var cmdEl    = document.getElementById('sq-cmd-'+uid);
-    var msgEl    = document.getElementById('sq-msg-suggest-'+uid);
-
-    // Show preview as soon as N is entered — hashes/messages optional
-    if (!n) { preview.style.display = 'none'; return; }
-    preview.style.display = 'block';
-
-    var count   = parseInt(n) || 2;
-    var oldHash = oh || 'a1b2c3';
-    var oldMsg  = om || 'wip: implemented the changes';
-    var newHash = nh || 'j0k1l2';
-    var newMsg  = nm || 'wip: changed as per the figma';
-
-    // ── Render the copyable command with actual N ──
-    cmdEl.innerHTML =
-      '<button class="cp" onclick="cp(this)">Copy</button>' +
-      '<div><span class="t-b">$ </span><span class="t-w">git rebase -i HEAD~' + count + '</span></div>';
-
-    // ── Render the editor preview ──
-    var lines = '';
-    lines += '<div><span class="t-y">pick</span> <span class="t-b">'+oldHash+'</span>  <span class="t-w">'+oldMsg+'</span>  <span class="t-c">← YOUR oldest — keep as pick</span></div>';
-    if (count > 2) {
-      for (var i = 1; i < count - 1; i++) {
-        lines += '<div><span class="t-g">s</span>    <span class="t-c">...      middle commit '+i+'                    ← change to s</span></div>';
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Guide</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-    }
-    lines += '<div><span class="t-g">s</span>    <span class="t-b">'+newHash+'</span>  <span class="t-w">'+newMsg+'</span>  <span class="t-c">← YOUR newest — squash into pick</span></div>';
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      a {
+        color: #fff;
+      }
+      nav {
+        display: flex;
+        gap: 8px;
+        padding: 12px 16px;
+        border-bottom: 1px solid #333;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        background: #000;
+        z-index: 100;
+      }
+      .nav-btn {
+        background: none;
+        border: 1px solid #444;
+        color: #aaa;
+        padding: 6px 14px;
+        border-radius: 0;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: inherit;
+      }
+      .nav-btn:hover {
+        color: #fff;
+        border-color: #fff;
+      }
+      .nav-btn.active {
+        color: #fff;
+        border-color: #fff;
+        font-weight: 600;
+      }
+      .page {
+        display: none;
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 32px 16px 80px;
+      }
+      .page.on {
+        display: block;
+      }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 6px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 36px 0 12px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #333;
+      }
+      .page-sub {
+        color: #888;
+        font-size: 13px;
+        margin-bottom: 28px;
+      }
+      p {
+        font-size: 13px;
+        color: #ccc;
+        line-height: 1.7;
+        margin-bottom: 8px;
+      }
+      code {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 1px 5px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        color: #7ec8f0;
+      }
+      .term {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 14px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.9;
+        overflow-x: auto;
+        position: relative;
+      }
+      .term .cp {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #000;
+        border: 1px solid #444;
+        color: #888;
+        border-radius: 0;
+        padding: 2px 10px;
+        font-size: 11px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .term .cp:hover {
+        color: #fff;
+        border-color: #fff;
+      }
+      .t-c {
+        color: #555;
+        font-style: italic;
+      }
+      .t-g {
+        color: #4caf50;
+      }
+      .t-b {
+        color: #7ec8f0;
+      }
+      .t-y {
+        color: #f0c040;
+      }
+      .t-r {
+        color: #e86060;
+      }
+      .t-w {
+        color: #fff;
+      }
+      .note {
+        border-left: 3px solid #444;
+        padding: 8px 12px;
+        margin: 8px 0;
+        font-size: 12px;
+        line-height: 1.6;
+        background: #0a0a0a;
+        color: #ccc;
+        border-radius: 0;
+      }
+      .note.green {
+        border-color: #4caf50;
+        color: #4caf50;
+      }
+      .note.blue {
+        border-color: #7ec8f0;
+        color: #7ec8f0;
+      }
+      .note.yellow {
+        border-color: #f0c040;
+        color: #f0c040;
+      }
+      .note.red {
+        border-color: #e86060;
+        color: #e86060;
+      }
+      .card {
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 16px;
+        margin-bottom: 14px;
+      }
+      .card.green {
+        border-color: #2a5c2a;
+      }
+      .card.blue {
+        border-color: #1a3560;
+      }
+      .card.yellow {
+        border-color: #5a4a10;
+      }
+      .card.red {
+        border-color: #5a1e1e;
+      }
+      .card.grey {
+        border-color: #333;
+        background: #0a0a0a;
+      }
+      .card-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-bottom: 10px;
+      }
+      .card-label.green {
+        color: #4caf50;
+      }
+      .card-label.blue {
+        color: #7ec8f0;
+      }
+      .card-label.yellow {
+        color: #f0c040;
+      }
+      .card-label.red {
+        color: #e86060;
+      }
+      .card-label.grey {
+        color: #888;
+      }
+      .ban-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #222;
+      }
+      .ban-item:last-child {
+        border-bottom: none;
+      }
+      .ban-cmd {
+        display: inline-block;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        padding: 3px 10px;
+        border-radius: 0;
+        margin-bottom: 4px;
+      }
+      .ban-cmd.bad {
+        background: #1c0e0e;
+        color: #e86060;
+        border: 1px solid #5a1e1e;
+      }
+      .ban-cmd.good {
+        background: #0a1c10;
+        color: #4caf50;
+        border: 1px solid #1a4d2e;
+      }
+      .ban-why {
+        font-size: 12px;
+        color: #888;
+        margin: 4px 0 6px;
+        line-height: 1.5;
+      }
+      .ban-arrow {
+        font-size: 11px;
+        font-weight: 700;
+        color: #555;
+        margin: 4px 0;
+      }
+      .row {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .row > .card {
+        flex: 1;
+        min-width: 220px;
+        margin-bottom: 0;
+      }
+      .steps {
+        display: flex;
+        flex-direction: column;
+      }
+      .step {
+        display: flex;
+        gap: 16px;
+        padding: 20px 0;
+        border-bottom: 1px solid #222;
+      }
+      .step:last-child {
+        border-bottom: none;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 0;
+        border: 2px solid #444;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .step-num.g {
+        border-color: #4caf50;
+        color: #4caf50;
+      }
+      .step-num.y {
+        border-color: #f0c040;
+        color: #f0c040;
+      }
+      .step-num.r {
+        border-color: #e86060;
+        color: #e86060;
+      }
+      .step-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .step-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 6px;
+      }
+      .step-context {
+        font-size: 13px;
+        color: #888;
+        border-left: 3px solid #333;
+        padding: 6px 10px;
+        margin-bottom: 8px;
+        line-height: 1.6;
+        border-radius: 0;
+      }
+      .where {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 0;
+        margin: 0 0 6px;
+      }
+      .where.terminal {
+        background: #0a1428;
+        color: #7ec8f0;
+        border: 1px solid #1a3560;
+      }
+      .where.gui {
+        background: #140e20;
+        color: #a87de8;
+        border: 1px solid #3e2870;
+      }
+      .where.verify {
+        background: #0a1c10;
+        color: #4caf50;
+        border: 1px solid #1a4d2e;
+      }
+      .gui-block {
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 12px 14px;
+        margin: 8px 0;
+      }
+      .gui-block-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #a87de8;
+        margin-bottom: 10px;
+      }
+      .gui-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .gui-col-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #888;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+      }
+      .gui-item {
+        display: flex;
+        gap: 8px;
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 5px;
+        line-height: 1.5;
+      }
+      .gui-item-n {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #444;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+        color: #888;
+        margin-top: 1px;
+      }
+      .opt-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 12px;
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 0;
+        cursor: pointer;
+        margin-top: 8px;
+        user-select: none;
+      }
+      .opt-toggle:hover {
+        border-color: #555;
+      }
+      .opt-toggle.open {
+        border-bottom-color: transparent;
+      }
+      .opt-arrow {
+        font-size: 10px;
+        color: #555;
+        transition: transform 0.2s;
+      }
+      .opt-toggle.open .opt-arrow {
+        transform: rotate(90deg);
+      }
+      .opt-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        flex: 1;
+      }
+      .opt-tag {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 0;
+        font-weight: 700;
+        background: #111;
+        color: #f0c040;
+        border: 1px solid #5a4a10;
+      }
+      .opt-tag.green {
+        color: #4caf50;
+        border-color: #1a4d2e;
+      }
+      .opt-tag.red {
+        color: #e86060;
+        border-color: #5a1e1e;
+      }
+      .opt-body {
+        display: none;
+        border: 1px solid #333;
+        border-top: none;
+        border-radius: 0;
+        padding: 14px;
+        background: #000;
+      }
+      .opt-body.open {
+        display: block;
+      }
+      .pill-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+      .pill {
+        background: #000;
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 10px 13px;
+        cursor: pointer;
+        font-size: 13px;
+        color: #ccc;
+        text-align: left;
+        font-family: inherit;
+      }
+      .pill:hover {
+        border-color: #fff;
+        color: #fff;
+      }
+      .pill.on {
+        border-color: #fff;
+        color: #fff;
+        font-weight: 600;
+      }
+      .pill.gold {
+        border-color: #f0c040;
+        color: #f0c040;
+        font-weight: 600;
+      }
+      .pill.gold:hover {
+        border-color: #fff;
+      }
+      .input-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .input-group {
+        flex: 1;
+        min-width: 180px;
+      }
+      .input-label {
+        font-size: 11px;
+        color: #888;
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .inp {
+        background: #000;
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 8px 11px;
+        color: #fff;
+        font-size: 13px;
+        font-family: "Courier New", monospace;
+        width: 100%;
+        outline: none;
+      }
+      .inp:focus {
+        border-color: #fff;
+      }
+      .inp::placeholder {
+        color: #555;
+      }
+      .run-btn {
+        background: #fff;
+        border: none;
+        color: #000;
+        border-radius: 0;
+        padding: 9px 22px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .run-btn:hover {
+        background: #ccc;
+      }
+      .back-btn {
+        background: none;
+        border: 1px solid #333;
+        color: #888;
+        border-radius: 0;
+        padding: 6px 14px;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: inherit;
+        margin-bottom: 20px;
+      }
+      .back-btn:hover {
+        border-color: #e86060;
+        color: #e86060;
+      }
+      .squash-input-block {
+        border: 1px solid #333;
+        padding: 14px;
+        margin: 12px 0;
+        background: #0a0a0a;
+      }
+      .squash-input-block-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #f0c040;
+        margin-bottom: 12px;
+      }
+      .squash-divider {
+        border: none;
+        border-top: 1px solid #222;
+        margin: 12px 0;
+      }
+      /* How Git Works tab */
+      .flow-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin: 14px 0;
+      }
+      @media (min-width: 640px) {
+        .flow-wrap {
+          flex-direction: row;
+          align-items: flex-start;
+        }
+        .flow-local,
+        .flow-remote {
+          flex: 1;
+        }
+        .flow-mid {
+          width: 110px;
+          flex-shrink: 0;
+        }
+      }
+      .flow-local,
+      .flow-remote,
+      .flow-mid {
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 18px;
+      }
+      .flow-head {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #333;
+        text-align: center;
+      }
+      .flow-head-title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .flow-head-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 4px;
+      }
+      .flow-zone {
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 12px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .flow-zone-title {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .flow-zone-desc {
+        font-size: 12px;
+        color: #888;
+        line-height: 1.6;
+      }
+      .flow-down {
+        text-align: center;
+        padding: 5px 0;
+        font-size: 12px;
+        color: #555;
+      }
+      .flow-mid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+      }
+      .flow-transfer {
+        border: 1px solid #333;
+        border-radius: 0;
+        padding: 10px;
+        text-align: center;
+      }
+      .flow-transfer-label {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+      .flow-transfer-sub {
+        font-size: 10px;
+        color: #888;
+        margin-top: 3px;
+        line-height: 1.4;
+      }
+      .flow-branch {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 1px solid #333;
+        border-radius: 0;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+      /* Diagnose tab */
+      .diag-section {
+        margin-bottom: 28px;
+      }
+      .diag-section h3 {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #222;
+      }
+      .diag-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      @media (max-width: 540px) {
+        .diag-row {
+          grid-template-columns: 1fr;
+        }
+        .gui-cols {
+          grid-template-columns: 1fr;
+        }
+      }
+      .diag-box {
+        border: 1px solid #333;
+        padding: 12px;
+        background: #0a0a0a;
+      }
+      .diag-box-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        margin-bottom: 8px;
+        color: #888;
+      }
+      .diag-box-label.green {
+        color: #4caf50;
+      }
+      .diag-box-label.red {
+        color: #e86060;
+      }
+      .diag-box-label.yellow {
+        color: #f0c040;
+      }
+      .diag-box-label.blue {
+        color: #7ec8f0;
+      }
+      .diag-line {
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+      .diag-line .ok {
+        color: #4caf50;
+      }
+      .diag-line .bad {
+        color: #e86060;
+      }
+      .diag-line .warn {
+        color: #f0c040;
+      }
+      .diag-line .dim {
+        color: #555;
+      }
+      @media (max-width: 600px) {
+        .pill-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        nav {
+          gap: 4px;
+        }
+        .nav-btn {
+          padding: 5px 10px;
+          font-size: 12px;
+        }
+      }
+      @media (max-width: 380px) {
+        .pill-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <button class="nav-btn active" onclick="go('home')">Rules</button>
+      <button class="nav-btn" onclick="go('flow')">How Git Works</button>
+      <button class="nav-btn" onclick="go('diagnose')">
+        Read Your Terminal
+      </button>
+      <button class="nav-btn" onclick="go('guide')">Step Guide</button>
+    </nav>
 
-    checkEl.innerHTML = '<button class="cp" onclick="cp(this)">Copy</button>' + lines;
+    <!-- TAB 1 — RULES -->
+    <div class="page on" id="page-home">
+      <h1>Rules</h1>
+      <p class="page-sub">What you must never do — and what to use instead</p>
+      <h2>Never use these</h2>
+      <div class="card">
+        <div class="ban-item">
+          <div class="ban-cmd bad">git pull</div>
+          <div class="ban-why">
+            Runs fetch + merge silently. Creates a hidden merge commit on your
+            branch. The #1 cause of messy histories.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">git fetch → git rebase origin/develop</div>
+        </div>
+        <div class="ban-item">
+          <div class="ban-cmd bad">VS Code "Sync Changes" button</div>
+          <div class="ban-why">
+            Does pull + push in one click silently. You cannot see what it does
+            before it does it.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">
+            Open terminal (Ctrl+`) and run every step manually
+          </div>
+        </div>
+        <div class="ban-item">
+          <div class="ban-cmd bad">VS Code Pull button (down arrow)</div>
+          <div class="ban-why">
+            Identical to git pull. Creates a hidden merge commit.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">git fetch → git rebase origin/develop</div>
+        </div>
+        <div class="ban-item">
+          <div class="ban-cmd bad">
+            git reset --soft on a shared branch + git add .
+          </div>
+          <div class="ban-why">
+            Un-commits everything including teammates' work into your working
+            directory. One wrong git add . and you commit someone else's code as
+            your own. Only safe if you are the ONLY person who has ever
+            committed to this branch — and even then, use rebase -i when in
+            doubt.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">
+            git rebase -i HEAD~N — only touches your own commits
+          </div>
+        </div>
+        <div class="ban-item">
+          <div class="ban-cmd bad">git push --force</div>
+          <div class="ban-why">
+            Overwrites remote with no safety check. Can silently delete
+            teammates' commits.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">git push --force-with-lease</div>
+        </div>
+        <div class="ban-item">
+          <div class="ban-cmd bad">git reset --hard</div>
+          <div class="ban-why">
+            Permanently deletes all uncommitted file changes. No undo possible.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">
+            git stash — saves everything, restore anytime with git stash pop
+          </div>
+        </div>
+        <div class="ban-item">
+          <div class="ban-cmd bad">VS Code "Discard All Changes"</div>
+          <div class="ban-why">
+            Same as git reset --hard. Permanently wipes all uncommitted work
+            instantly.
+          </div>
+          <div class="ban-arrow">Use this instead:</div>
+          <div class="ban-cmd good">
+            git stash — or right-click individual files and discard only those
+          </div>
+        </div>
+      </div>
 
-    // ── Suggest a clean commit message ──
-    var suggested = nm ? nm.replace(/^wip:\s*/i,'').replace(/^wip\s*/i,'') : 'feat(login-page): your clean message here';
-    if (suggested && !suggested.match(/^feat|^fix|^chore|^refactor/)) {
-      suggested = 'feat: ' + suggested;
-    }
-    msgEl.textContent = suggested;
-  };
+      <h2>IDE — what's safe and what's not</h2>
+      <div class="row">
+        <div class="card green">
+          <div class="card-label green">Safe to use</div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 7px;
+              font-size: 13px;
+            "
+          >
+            <div>
+              <strong>Stage file (+)</strong> — click + next to individual files
+              only, never "Stage All"
+            </div>
+            <div><strong>Commit button</strong> — same as git commit</div>
+            <div>
+              <strong>Merge conflict editor</strong> — 3-way conflict resolver
+            </div>
+            <div>
+              <strong>Discard single file</strong> — right-click one file only
+            </div>
+            <div>
+              <strong>Branch switcher</strong> — bottom-left VS Code, Git panel
+              IntelliJ
+            </div>
+          </div>
+        </div>
+        <div class="card red">
+          <div class="card-label red">Never click</div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 7px;
+              font-size: 13px;
+            "
+          >
+            <div><strong>Sync Changes</strong> — pull + push silently</div>
+            <div>
+              <strong>Pull button (down arrow)</strong> — hidden merge commit
+            </div>
+            <div>
+              <strong>Push button after rebase</strong> — use terminal with
+              --force-with-lease
+            </div>
+            <div>
+              <strong>Discard All Changes</strong> — permanent, use git stash
+            </div>
+            <div>
+              <strong>Stage All after soft reset</strong> — stages everyone's
+              files
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="note blue" style="margin-top: 14px">
+        Golden pattern:
+        <strong
+          >Terminal (prepare) → IDE (stage your files + commit) → Terminal
+          (push, verify).</strong
+        >
+      </div>
+    </div>
 
-  window.genGuide = function () {
-    var mb  = gv('mb'), db  = gv('db'), tb  = gv('tb');
-    var nb  = gv('nb'), fl  = gv('fl');
+    <!-- TAB 2 — HOW GIT WORKS -->
+    <div class="page" id="page-flow">
+      <h1>How Git Works</h1>
+      <p class="page-sub">
+        Your code lives in two places. Here is what moves where — and why each
+        operation exists.
+      </p>
+      <div class="flow-wrap">
+        <div class="flow-local">
+          <div class="flow-head">
+            <div class="flow-head-title" style="color: #4caf50">
+              Your Computer
+            </div>
+            <div class="flow-head-sub">Private until you push</div>
+          </div>
+          <div class="flow-zone" style="border-color: #5a4a10">
+            <div class="flow-zone-title" style="color: #f0c040">Stash</div>
+            <div class="flow-zone-desc">
+              Temporary pocket. <code>git stash</code> saves ·
+              <code>git stash pop</code> restores. Nothing is lost.
+            </div>
+          </div>
+          <div class="flow-down">↕</div>
+          <div class="flow-zone" style="border-color: #5a4a10">
+            <div class="flow-zone-title" style="color: #f0c040">
+              Working Directory
+            </div>
+            <div class="flow-zone-desc">
+              Files you see and edit every day. Git sees changes here but they
+              are NOT saved yet.
+            </div>
+          </div>
+          <div class="flow-down">↓ <code>git add yourfile.ts</code></div>
+          <div class="flow-zone" style="border-color: #1a3560">
+            <div class="flow-zone-title" style="color: #7ec8f0">
+              Staging Area
+            </div>
+            <div class="flow-zone-desc">
+              Files marked ready to commit. Only YOUR files should be here. Run
+              <code>git status</code> to verify what is staged before
+              committing.
+            </div>
+          </div>
+          <div class="flow-down">↓ <code>git commit -m "message"</code></div>
+          <div class="flow-zone" style="border-color: #1a4d2e">
+            <div class="flow-zone-title" style="color: #4caf50">
+              Local Repository
+            </div>
+            <div class="flow-zone-desc">
+              Saved commits on your machine. Nobody sees these until you push.
+              Safe to experiment here freely.
+            </div>
+          </div>
+          <div style="margin-top: 14px; border: 1px solid #333; padding: 12px">
+            <div
+              style="
+                font-size: 11px;
+                font-weight: 700;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 9px;
+              "
+            >
+              Local-only operations
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                font-size: 12px;
+              "
+            >
+              <div style="padding: 6px 10px; border: 1px solid #5a4a10">
+                <strong style="color: #f0c040">rebase -i HEAD~N</strong> —
+                squashes only YOUR commits. Surgical. Safe in teams. Count N
+                first with:
+                <code
+                  >git fetch origin && git rev-list --count
+                  origin/develop..HEAD</code
+                >
+              </div>
+              <div style="padding: 6px 10px; border: 1px solid #5a1e1e">
+                <strong style="color: #e86060">rebase onto develop</strong> —
+                replays your ONE clean commit on top of latest develop. Do AFTER
+                squashing. One conflict round max.
+              </div>
+              <div style="padding: 6px 10px; border: 1px solid #1a3560">
+                <strong style="color: #7ec8f0">checkout</strong> — switch
+                branches locally. Nothing goes to origin.
+              </div>
+              <div style="padding: 6px 10px; border: 1px solid #1a4d2e">
+                <strong style="color: #4caf50">stash</strong> — saves
+                uncommitted work safely. Restore with stash pop.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-mid">
+          <div
+            style="
+              font-size: 9px;
+              color: #555;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              font-weight: 700;
+              text-align: center;
+              margin-bottom: 4px;
+            "
+          >
+            Sync
+          </div>
+          <div class="flow-transfer" style="border-color: #1a4d2e">
+            <div style="font-size: 18px">→</div>
+            <div class="flow-transfer-label" style="color: #4caf50">
+              git push
+            </div>
+            <div class="flow-transfer-sub">--force-with-lease after rebase</div>
+          </div>
+          <div class="flow-transfer" style="border-color: #1a3560">
+            <div style="font-size: 18px">←</div>
+            <div class="flow-transfer-label" style="color: #7ec8f0">
+              git fetch
+            </div>
+            <div class="flow-transfer-sub">safe — changes nothing locally</div>
+          </div>
+          <div class="flow-transfer" style="border-color: #5a1e1e">
+            <div style="font-size: 12px; color: #e86060; font-weight: 700">
+              BANNED
+            </div>
+            <div class="flow-transfer-label" style="color: #e86060">
+              git pull
+            </div>
+            <div class="flow-transfer-sub" style="color: #888">
+              fetch + hidden merge
+            </div>
+          </div>
+          <div class="flow-transfer" style="border-color: #5a1e1e">
+            <div style="font-size: 12px; color: #e86060; font-weight: 700">
+              BANNED
+            </div>
+            <div class="flow-transfer-label" style="color: #e86060">
+              Sync button
+            </div>
+            <div class="flow-transfer-sub" style="color: #888">
+              pull + push one click
+            </div>
+          </div>
+        </div>
+        <div class="flow-remote">
+          <div class="flow-head">
+            <div class="flow-head-title" style="color: #7ec8f0">
+              GitHub / GitLab (origin)
+            </div>
+            <div class="flow-head-sub">
+              Shared — whole team reads and writes here
+            </div>
+          </div>
+          <div
+            class="flow-zone"
+            style="border-color: #1a3560; margin-bottom: 14px"
+          >
+            <div class="flow-zone-title" style="color: #7ec8f0">
+              Remote Repository
+            </div>
+            <div class="flow-zone-desc">
+              All branches and commits online. PRs and code reviews happen here.
+            </div>
+          </div>
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 700;
+              color: #888;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              margin-bottom: 9px;
+            "
+          >
+            Branches on origin
+          </div>
+          <div class="flow-branch" style="border-color: #1a4d2e">
+            <span style="color: #4caf50; font-weight: 700"
+              >origin/mvp/develop</span
+            ><span style="color: #555; font-size: 10px; margin-left: auto"
+              >never touched directly</span
+            >
+          </div>
+          <div class="flow-branch" style="border-color: #1a3560">
+            <span style="color: #7ec8f0">origin/feature/your-branch</span
+            ><span style="color: #555; font-size: 10px; margin-left: auto"
+              >push here</span
+            >
+          </div>
+          <div class="flow-branch">
+            <span style="color: #888">origin/feature/teammate</span
+            ><span style="color: #555; font-size: 10px; margin-left: auto"
+              >their branch</span
+            >
+          </div>
+          <div style="margin-top: 14px; border: 1px solid #333; padding: 12px">
+            <div
+              style="
+                font-size: 11px;
+                font-weight: 700;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 9px;
+              "
+            >
+              What happens here
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                font-size: 12px;
+              "
+            >
+              <div style="padding: 6px 10px; border: 1px solid #1a3560">
+                Pull Requests — code reviews, approvals
+              </div>
+              <div style="padding: 6px 10px; border: 1px solid #1a3560">
+                Merge to develop — via PR button in browser only
+              </div>
+              <div style="padding: 6px 10px; border: 1px solid #1a3560">
+                Squash and merge — GitHub's PR merge button can squash
+                everything for you — no local squash needed
+              </div>
+              <div style="padding: 6px 10px; border: 1px solid #1a3560">
+                Team visibility — everyone sees all branches and commits
+              </div>
+            </div>
+          </div>
+          <div class="note green" style="margin-top: 12px">
+            You only ever push to YOUR feature branch. Develop is read-only
+            reference. To accidentally push to develop you would have to
+            explicitly type <code>git push origin mvp/develop</code> — which we
+            never do.
+          </div>
+        </div>
+      </div>
 
-    var h = '<div class="steps">';
+      <h2>Why squash before rebase — the key insight</h2>
+      <div class="card grey">
+        <p style="margin-bottom: 12px">
+          Rebase replays commits <strong>one by one</strong> on top of develop.
+          If you have 6 WIP commits, it does 6 replays — each one can produce a
+          conflict on the same file, over and over. That is not a bug, that is
+          how rebase works mechanically.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap">
+          <div
+            style="
+              flex: 1;
+              min-width: 200px;
+              border: 1px solid #5a1e1e;
+              padding: 12px;
+            "
+          >
+            <div
+              style="
+                font-size: 11px;
+                font-weight: 700;
+                color: #e86060;
+                margin-bottom: 8px;
+              "
+            >
+              WITHOUT squashing first
+            </div>
+            <div style="font-size: 12px; color: #ccc; line-height: 1.8">
+              6 commits → 6 replays<br />6 possible conflict rounds<br />Same
+              file, same conflict, 6 times<br />Exhausting and error-prone
+            </div>
+          </div>
+          <div
+            style="
+              flex: 1;
+              min-width: 200px;
+              border: 1px solid #1a4d2e;
+              padding: 12px;
+            "
+          >
+            <div
+              style="
+                font-size: 11px;
+                font-weight: 700;
+                color: #4caf50;
+                margin-bottom: 8px;
+              "
+            >
+              WITH squashing first
+            </div>
+            <div style="font-size: 12px; color: #ccc; line-height: 1.8">
+              1 commit → 1 replay<br />1 possible conflict round max<br />Clean,
+              predictable, fast<br />The right order every time
+            </div>
+          </div>
+        </div>
+        <div class="note blue" style="margin-top: 12px">
+          The correct order is always:
+          <strong>squash first → then rebase.</strong> Never rebase first with
+          many commits.
+        </div>
+      </div>
+    </div>
 
-    if (curA === 'newbranch') {
-      h += S(1,'b','Fetch the latest from origin','',
-        WHERE('terminal','Terminal') +
-        T(['git fetch origin','git branch -a','# Confirm the exact name of your base branch.','OK Fetched']));
-      h += S(2,'b','Switch to the base branch: '+db,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+db,'OK Switched to '+db]));
-      h += S(3,'b','Bring your local '+db+' up to date','',
-        WHERE('terminal','Terminal') +
-        T(['git rebase origin/'+db,'OK Matches origin']));
-      h += S(4,'g','Create and switch to the new branch: '+mb,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout -b '+mb,'OK On new branch '+mb]));
-      h += S(5,'g','Publish to origin',
-        'The -u flag sets up tracking so future git push commands know where to go automatically.',
-        WHERE('terminal','Terminal') +
-        T(['git push -u origin '+mb,'OK Branch is live on origin']));
-    }
+    <!-- TAB 3 — READ YOUR TERMINAL -->
+    <div class="page" id="page-diagnose">
+      <h1>Read Your Terminal</h1>
+      <p class="page-sub">
+        When something looks off, run these three commands first. Here is
+        exactly what every output means.
+      </p>
 
-    else if (curA === 'interactivesquash') {
-      h += S(1,'b','Make sure you are on: '+mb,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+mb,'OK On branch '+mb]));
-      h += S(2,'g','⚡ Squash your WIP commits into 1 clean commit',
-        'Run git log first, count your commits, fill in the details below — the command and editor preview will generate automatically.',
-        INTERACTIVE_SQUASH_BLOCK(mb));
-      h += S(3,'g','Done — you now have 1 clean local commit','',
-        NOTE('green','Run this anytime during development. At PR time all you need is fetch → rebase onto develop → push.'));
-    }
+      <div class="diag-section">
+        <h3>git status — what is happening right now</h3>
+        <div class="diag-row">
+          <div class="diag-box">
+            <div class="diag-box-label green">Clean — nothing to commit</div>
+            <div class="diag-line">
+              <span class="t-g">On branch feature/login-page</span><br /><span
+                class="t-g"
+                >nothing to commit, working tree clean</span
+              >
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              You are safe. No uncommitted changes. Good to fetch, rebase, or
+              switch branches.
+            </div>
+          </div>
+          <div class="diag-box">
+            <div class="diag-box-label yellow">
+              Modified files — not staged yet
+            </div>
+            <div class="diag-line">
+              <span class="t-r">modified: src/Login.tsx</span><br /><span
+                class="t-r"
+                >modified: src/styles.css</span
+              >
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              Files changed but not added yet. Stage only your files with
+              <code>git add yourfile</code> — never <code>git add .</code>
+            </div>
+          </div>
+        </div>
+        <div class="diag-row">
+          <div class="diag-box">
+            <div class="diag-box-label blue">Staged — ready to commit</div>
+            <div class="diag-line">
+              <span class="t-g">Changes to be committed:</span><br /><span
+                class="t-g"
+              >
+                modified: src/Login.tsx</span
+              >
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              These files will go into your next commit. Verify ONLY your files
+              are here before committing.
+            </div>
+          </div>
+          <div class="diag-box">
+            <div class="diag-box-label red">Conflict markers still in file</div>
+            <div class="diag-line">
+              <span class="t-r">both modified: src/Login.tsx</span>
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              A rebase conflict is unresolved. Open the file in IDE. Find and
+              fix all &lt;&lt;&lt; === &gt;&gt;&gt; markers. Then git add the
+              file.
+            </div>
+          </div>
+        </div>
+        <div class="note red" style="margin-top: 4px">
+          After resolving a conflict and running <code>git add</code>, always
+          open the file one more time and search for &lt;&lt;&lt; — if any
+          conflict markers remain, your code is broken even if it compiles. Fix
+          them before continuing.
+        </div>
+      </div>
 
-    else if (curA === 'rebase') {
-      h += S(1,'b','Make sure you are on: '+mb,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+mb,'OK On branch '+mb]));
-      h += S(2,'y','Squash your commits first if you have more than 1',
-        'If you have multiple WIP commits, squash them into 1 before rebasing. This makes the rebase trivial — 1 commit, at most 1 conflict.',
-        optSection('Squash WIP commits first — do this if you have more than 1 commit', 'Recommended',
-          INTERACTIVE_SQUASH_BLOCK(mb)
-        ));
-      h += S(3,'y','Stash any uncommitted work','',
-        WHERE('terminal','Terminal') +
-        T(['git status','','# If any files are modified or untracked:','git stash push -m "my-wip"','OK Saved','','# If git status showed nothing, skip this.']));
-      h += S(4,'b','Fetch the latest from origin','',
-        WHERE('terminal','Terminal') +
-        T(['git fetch origin','OK Fetched']));
-      h += S(5,'r','Rebase onto latest '+db,
-        'Your 1 clean commit moves to the tip of the latest '+db+'. At most 1 conflict.',
-        REBASE_BLOCK(db));
-      h += S(6,'g','Push',
-        'History was rewritten by rebase — use --force-with-lease.',
-        WHERE('terminal','Terminal') +
-        T(['git push origin '+mb+' --force-with-lease','OK Pushed']) +
-        NOTE('red','Always <code>--force-with-lease</code>, never <code>--force</code>.'));
-      h += S(7,'g','Restore your stash','',
-        WHERE('terminal','Terminal') +
-        T(['git stash pop','# If a conflict appears — resolve in IDE, then: git add <file>','OK Work restored']));
-    }
+      <div class="diag-section">
+        <h3>git log --oneline — your commit history</h3>
+        <div class="diag-box" style="margin-bottom: 10px">
+          <div class="diag-box-label green">What good looks like</div>
+          <div class="diag-line">
+            <span class="t-b">a1b2c3d</span>
+            <span class="t-g">feat: implement login form with validation</span>
+            <span class="dim">← your 1 clean commit</span><br />
+            <span class="t-b">99zz88x</span>
+            <span class="dim">chore: update dependencies</span>
+            <span class="dim">← someone else's commit — stop here</span>
+          </div>
+        </div>
+        <div class="diag-box" style="margin-bottom: 10px">
+          <div class="diag-box-label yellow">
+            Too many WIP commits — squash before rebasing
+          </div>
+          <div class="diag-line">
+            <span class="t-b">j0k1l2m</span>
+            <span class="warn">wip: changed as per figma</span>
+            <span class="dim">← newest (yours)</span><br />
+            <span class="t-b">g7h8i9j</span>
+            <span class="warn">wip: fixed styling</span>
+            <span class="dim">← yours</span><br />
+            <span class="t-b">d4e5f6g</span>
+            <span class="warn">wip: added logic</span>
+            <span class="dim">← yours</span><br />
+            <span class="t-b">99zz88x</span>
+            <span class="dim">chore: update dependencies</span>
+            <span class="dim">← stop here, not yours</span>
+          </div>
+          <div style="font-size: 12px; color: #888; margin-top: 8px">
+            Count from the top down until you hit a commit that is not yours.
+            That count is N. Run:
+            <code
+              >git fetch origin && git rev-list --count
+              origin/mvp/develop..HEAD</code
+            >
+            to get N automatically.
+          </div>
+        </div>
+        <div class="diag-box">
+          <div class="diag-box-label red">
+            Merge commit appeared — something went wrong
+          </div>
+          <div class="diag-line">
+            <span class="t-b">z9y8x7w</span>
+            <span class="bad"
+              >Merge branch 'mvp/develop' into feature/login</span
+            >
+            <span class="dim">← this should NOT be here</span><br />
+            <span class="t-b">a1b2c3d</span>
+            <span class="dim">wip: added logic</span>
+          </div>
+          <div style="font-size: 12px; color: #888; margin-top: 8px">
+            A git pull or Sync button created this. Go to the Rescue step in the
+            Step Guide immediately.
+          </div>
+        </div>
+      </div>
 
-    else if (curA === 'getlatest') {
-      h += S(1,'b','Make sure you are on: '+mb,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+mb,'OK On branch '+mb]));
-      h += S(2,'b','Fetch the latest from origin','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git fetch origin',
-          '',
-          '# This downloads what is new on origin but changes NOTHING locally yet.',
-          '# Safe to run anytime.',
-          'OK Fetched'
-        ]));
-      h += S(3,'b','See what has changed on '+db+' since you branched','',
-        WHERE('terminal','Terminal') +
-        T([
-          '# See commits on develop that are NOT yet in your branch:',
-          'git log '+mb+'..origin/'+db+' --oneline',
-          '',
-          '# See which of your files would conflict:',
-          'git diff '+mb+' origin/'+db+' --name-only',
-        ]));
-      h += S(4,'y','Stash any uncommitted work','',
-        WHERE('terminal','Terminal') +
-        T(['git status','','# If any files are modified:','git stash push -m "my-wip"','OK Saved','','# If nothing to commit, skip this.']));
-      h += S(5,'r','Bring those changes into your branch via rebase',
-        'Rebase replays your commits on top of the latest '+db+'. Your work stays on top — new develop changes come underneath.',
-        REBASE_BLOCK(db));
-      h += S(6,'g','Restore your stash','',
-        WHERE('terminal','Terminal') +
-        T(['git stash pop','OK Work restored']));
-      h += S(7,'g','Push if your branch is on origin','',
-        WHERE('terminal','Terminal') +
-        T(['git push origin '+mb+' --force-with-lease','OK Up to date']) +
-        NOTE('blue','After this your branch has all of '+db+'\'s latest changes underneath your work.'));
-    }
+      <div class="diag-section">
+        <h3>git log --oneline — newest at top, oldest at bottom</h3>
+        <div class="diag-box">
+          <div class="diag-box-label blue">
+            Reading direction — critical for squash
+          </div>
+          <div class="diag-line">
+            <span class="t-b">j0k1l2m</span>
+            <span class="warn">wip: newest commit</span>
+            <span class="dim">← top = newest</span><br />
+            <span class="t-b">g7h8i9j</span>
+            <span class="warn">wip: middle commit</span><br />
+            <span class="t-b">d4e5f6g</span>
+            <span class="warn">wip: oldest of yours</span>
+            <span class="dim">← bottom of yours</span><br />
+            <span class="t-b">99zz88x</span> <span class="dim">not yours</span>
+            <span class="dim">← stop counting here</span>
+          </div>
+          <div style="font-size: 12px; color: #888; margin-top: 8px">
+            When the rebase editor opens it shows commits OLDEST at top → NEWEST
+            at bottom. The opposite of git log. Keep the TOP line as
+            <code>pick</code>, change everything below to <code>s</code>.
+          </div>
+        </div>
+      </div>
 
-    else if (curA === 'stash') {
-      h += S(1,'b','Save your current work on: '+mb,'',
-        WHERE('terminal','Terminal') +
-        T(['git stash push -m "my-wip"','OK Saved — your working directory is now clean']));
-      h += S(2,'b','Switch to the other branch: '+tb,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+tb,'OK On '+tb]));
-      h += S(3,'b','Do your work on '+tb+'...','',
-        T(['# Make changes, commit, whatever you need to do on this branch.']));
-      h += S(4,'g','Come back to '+mb+' and restore your work','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git checkout '+mb,
-          '',
-          '# See your saved stashes:',
-          'git stash list',
-          '',
-          '# Restore the latest stash:',
-          'git stash pop',
-          '',
-          '# If you have multiple stashes, restore a specific one:',
-          '# git stash pop stash@{1}',
-          '',
-          '# If a conflict appears on pop — resolve in IDE, then:',
-          '# git add <file>',
-          '',
-          'OK All your work is restored on '+mb,
-        ]));
-    }
+      <div class="diag-section">
+        <h3>git reflog — your safety net for everything</h3>
+        <div class="diag-box">
+          <div class="diag-box-label green">Run this when something breaks</div>
+          <div class="diag-line">
+            <span class="t-b">a1b2c3d</span>
+            <span class="t-g"
+              >HEAD@{0}: rebase (finish): returning to
+              refs/heads/feature/login</span
+            ><br />
+            <span class="t-b">d4e5f6g</span>
+            <span class="t-g">HEAD@{1}: commit: wip: added logic</span><br />
+            <span class="t-b">99zz88x</span>
+            <span class="t-g"
+              >HEAD@{2}: checkout: moving from mvp/develop to
+              feature/login</span
+            >
+          </div>
+          <div style="font-size: 12px; color: #888; margin-top: 8px">
+            Every position HEAD has ever been. If you break something, find the
+            last good hash here and run
+            <code>git reset --soft THAT_HASH</code> to go back. Reflog keeps
+            history for ~90 days.
+          </div>
+        </div>
+      </div>
 
-    else if (curA === 'wrongbranch') {
-      h += S(1,'r','Stop — do not push anything yet',
-        'Your code is safe. We are going to move it to the correct branch.',
-        NOTE('yellow','Your code is not lost. We are just moving it.') +
-        NOTE('blue','Safety: run <code>git log --oneline -3</code> and note your commit hash now before doing anything.'));
-      h += S(2,'b','Remove the commit from the wrong branch',
-        'Soft reset keeps your file changes in the working directory — only the commit is removed from history.',
-        WHERE('terminal','Terminal') +
-        T(['git reset --soft HEAD~1','OK Commit removed — your files are still here']));
-      h += S(3,'y','Stash the files','',
-        WHERE('terminal','Terminal') +
-        T(['git stash push -m "wrong-branch-rescue"','OK Files saved']));
-      h += S(4,'b','Get onto the correct branch: '+tb,'',
-        WHERE('terminal','Terminal') +
-        T([
-          '# If the correct branch already exists:',
-          'git checkout '+tb,
-          '',
-          '# If it does NOT exist yet:',
-          'git checkout '+db,
-          'git fetch origin',
-          'git rebase origin/'+db,
-          'git checkout -b '+tb,
-          'git push -u origin '+tb,
-        ]));
-      h += S(5,'g','Pop the stash and commit on the correct branch','',
-        WHERE('terminal','Terminal') +
-        T(['git stash pop','# Your files are back in your working directory.']) +
-        GUI(
-          [
-            'Open Source Control panel — Ctrl+Shift+G',
-            'Click + next to your files only',
-            'Do NOT click "Stage All Changes"',
-            'Type your commit message',
-            'Click the Commit button',
-          ],
-          [
-            'Open Commit tool window — Ctrl+K',
-            'Check the box next to your files only',
-            'Do NOT click "Select All"',
-            'Type your commit message',
-            'Click the Commit button',
-          ]
-        ) +
-        NOTE('green','Your code is now committed on the correct branch: '+tb));
-      h += S(6,'b','Push','',
-        WHERE('terminal','Terminal') +
-        T(['git push origin '+tb]));
-    }
+      <div class="diag-section">
+        <h3>What a successful rebase output looks like</h3>
+        <div class="diag-row">
+          <div class="diag-box">
+            <div class="diag-box-label green">
+              Rebase succeeded — what you want to see
+            </div>
+            <div class="diag-line">
+              <span class="t-g"
+                >Successfully rebased and updated
+                refs/heads/feature/login.</span
+              >
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              One line. That is it. Your branch is now on top of develop.
+            </div>
+          </div>
+          <div class="diag-box">
+            <div class="diag-box-label red">
+              Rebase conflict — action required
+            </div>
+            <div class="diag-line">
+              <span class="t-r"
+                >CONFLICT (content): Merge conflict in src/Login.tsx</span
+              ><br />
+              <span class="t-y">error: could not apply a1b2c3d...</span><br />
+              <span class="t-y">hint: Resolve all conflicts manually</span>
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              Not a disaster. Open the file in IDE, fix the markers, git add,
+              git rebase --continue.
+            </div>
+          </div>
+        </div>
+        <div class="diag-row">
+          <div class="diag-box">
+            <div class="diag-box-label green">Push succeeded</div>
+            <div class="diag-line">
+              <span class="t-g">To github.com:org/repo.git</span><br />
+              <span class="t-g">
+                + a1b2c3d...j0k1l2m feature/login -> feature/login (forced
+                update)</span
+              >
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              "forced update" is expected after rebase. That is correct.
+            </div>
+          </div>
+          <div class="diag-box">
+            <div class="diag-box-label red">
+              Push rejected — do NOT force blindly
+            </div>
+            <div class="diag-line">
+              <span class="t-r"
+                >! [rejected] feature/login -> feature/login
+                (non-fast-forward)</span
+              ><br />
+              <span class="t-r">error: failed to push some refs</span>
+            </div>
+            <div style="font-size: 12px; color: #888; margin-top: 8px">
+              This means the remote has commits your local does not. Run
+              <code>git fetch origin</code> first, check
+              <code>git log --oneline</code>, then push with
+              <code>--force-with-lease</code> only if those extra commits are
+              yours.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    else if (curA === 'conflict') {
-      h += S(1,'b','See which files have conflicts','',
-        WHERE('terminal','Terminal') +
-        T(['git status','ER both modified: '+fl,'# Files listed under "both modified" have conflicts.']));
-      h += S(2,'y','Open the conflicting file in your IDE and resolve it','',
-        GUI(
-          [
-            'Open <code>'+fl+'</code> in VS Code',
-            '<strong>Accept Current Change</strong> = keep your version',
-            '<strong>Accept Incoming Change</strong> = take their version from develop',
-            '<strong>Accept Both Changes</strong> = keep both (use carefully)',
-            'Delete any remaining markers: &lt;&lt;&lt;, ===, &gt;&gt;&gt;',
-            'Save the file',
-          ],
-          [
-            'Open <code>'+fl+'</code> in IntelliJ',
-            '3-panel diff: your code left, merged result middle, incoming right',
-            'Click arrow buttons to accept chunks, or edit the middle panel directly',
-            'Click Apply, then save',
-          ]
-        ));
-      h += S(3,'b','Stage the resolved file and continue the rebase','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git add '+fl,
-          '',
-          '# Continue the rebase:',
-          'git rebase --continue',
-          '',
-          '# If more conflicts appear — repeat steps 2 and 3 for each file.',
-          '',
-          'OK Rebase completed',
-        ]));
-      h += S(4,'r','If it is too messy — abort and start over',
-        'Abort puts everything back exactly as it was before the rebase started.',
-        WHERE('terminal','Terminal') +
-        T(['git rebase --abort','OK Everything is back to how it was']));
-      h += S(5,'b','Push after resolving','',
-        WHERE('terminal','Terminal') +
-        T(['git push origin '+mb+' --force-with-lease']));
-    }
+    <!-- TAB 4 — STEP GUIDE -->
+    <div class="page" id="page-guide">
+      <h1>Step Guide</h1>
+      <p class="page-sub">
+        Pick what you want to do, fill in your branch names, and follow the
+        steps
+      </p>
+      <div class="card grey" id="builder">
+        <div
+          style="
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+          "
+        >
+          What do you want to do?
+        </div>
+        <div class="pill-grid">
+          <button class="pill" onclick="pickA('newbranch',this)">
+            Create new branch
+          </button>
+          <button class="pill gold" onclick="pickA('interactivesquash',this)">
+            Squash WIP commits into 1 clean commit
+          </button>
+          <button class="pill" onclick="pickA('rebase',this)">
+            Rebase with main branch
+          </button>
+          <button class="pill" onclick="pickA('getlatest',this)">
+            Get latest changes in your branch
+          </button>
+          <button class="pill" onclick="pickA('stash',this)">
+            Save work, switch branches, come back
+          </button>
+          <button class="pill" onclick="pickA('amend',this)">
+            Fix my last commit (forgot file or typo)
+          </button>
+          <button class="pill" onclick="pickA('wrongbranch',this)">
+            I committed to the wrong branch
+          </button>
+          <button class="pill" onclick="pickA('conflict',this)">
+            My rebase has conflicts
+          </button>
+          <button class="pill" onclick="pickA('pushrejected',this)">
+            My push was rejected
+          </button>
+          <button class="pill" onclick="pickA('undo',this)">
+            Undo my last commit (keep my files)
+          </button>
+          <button class="pill" onclick="pickA('delete',this)">
+            Delete a branch
+          </button>
+          <button class="pill" onclick="pickA('rename',this)">
+            Rename current branch
+          </button>
+          <button class="pill" onclick="pickA('rescue',this)">
+            Stuck after Pull/Sync — rescue me
+          </button>
+          <button class="pill" onclick="pickA('recoverstash',this)">
+            Recover a deleted stash
+          </button>
+          <button class="pill" onclick="pickA('recoverbranch',this)">
+            Bring back a deleted branch
+          </button>
+          <button class="pill" onclick="pickA('deletedfile',this)">
+            I accidentally deleted a file
+          </button>
+        </div>
+        <div id="gfields" style="display: none">
+          <div class="input-row" id="ginputs"></div>
+          <button class="run-btn" onclick="genGuide()">Generate Steps</button>
+        </div>
+      </div>
+      <div id="gout" style="display: none">
+        <button class="back-btn" onclick="resetG()">Back to menu</button>
+        <div id="gbody"></div>
+      </div>
+    </div>
 
-    else if (curA === 'undo') {
-      h += S(1,'b','Check your last commit first','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git log --oneline -5',
-          '# Note the hash of your current HEAD in case you need to recover.',
-        ]));
-      h += S(2,'g','Undo the last commit — files stay safe',
-        'Soft reset removes only the most recent commit from history. Your file changes stay in the working directory exactly as they were.',
-        WHERE('terminal','Terminal') +
-        T([
-          'git reset --soft HEAD~1',
-          '',
-          'OK Commit removed — all your files are still here, unchanged',
-        ]) +
-        NOTE('green','Your code is not deleted. It is just un-committed. You can re-stage and recommit whenever you are ready.') +
-        NOTE('blue','Went too far? Run <code>git reflog</code>, find the hash from before the reset, and run <code>git reset --soft THAT_HASH</code> to get back.'));
-      h += S(3,'y','If you already pushed — force push after','',
-        WHERE('terminal','Terminal') +
-        T(['git push origin '+mb+' --force-with-lease']) +
-        NOTE('yellow','Tell your teammates before force pushing a shared branch.'));
-    }
+    <script>
+      (function () {
+        window.go = function (id) {
+          document.querySelectorAll(".page").forEach(function (p) {
+            p.classList.remove("on");
+          });
+          document.querySelectorAll(".nav-btn").forEach(function (b) {
+            b.classList.remove("active");
+          });
+          document.getElementById("page-" + id).classList.add("on");
+          var idx = ["home", "flow", "diagnose", "guide"].indexOf(id);
+          if (idx >= 0)
+            document.querySelectorAll(".nav-btn")[idx].classList.add("active");
+          window.scrollTo(0, 0);
+        };
 
-    else if (curA === 'delete') {
-      h += S(1,'b','Switch off the branch first','',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+db,'OK Switched to '+db]));
-      h += S(2,'b','Delete locally','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git branch -d '+mb,
-          '# If "not fully merged" warning and you are sure it is safe:',
-          '# git branch -D '+mb,
-          'OK Deleted locally',
-        ]) +
-        NOTE('yellow','<code>-D</code> (uppercase) force deletes without checking if merged. Commits stay in reflog for ~90 days if you need to recover.'));
-      h += S(3,'b','Delete on origin','',
-        WHERE('terminal','Terminal') +
-        T(['git push origin --delete '+mb,'OK Deleted from origin']) +
-        NOTE('red','This removes the branch for everyone. Make sure the PR was merged first.'));
-    }
+        window.cp = function (btn) {
+          var raw = btn
+            .closest(".term")
+            .innerText.replace(/^Copy$|^Copied!$/gm, "")
+            .trim();
+          navigator.clipboard.writeText(raw).then(function () {
+            btn.textContent = "Copied!";
+            setTimeout(function () {
+              btn.textContent = "Copy";
+            }, 2000);
+          });
+        };
 
-    else if (curA === 'rename') {
-      h += S(1,'b','Make sure you are on: '+mb,'',
-        WHERE('terminal','Terminal') +
-        T(['git checkout '+mb]));
-      h += S(2,'b','Rename to: '+gv('nb'),'',
-        WHERE('terminal','Terminal') +
-        T(['git branch -m '+gv('nb'),'OK Renamed locally to '+gv('nb')]));
-      h += S(3,'y','If already on origin — update remote too',
-        'Deletes the old name from origin and pushes the new name.',
-        WHERE('terminal','Terminal') +
-        T([
-          'git push origin --delete '+mb,
-          'git push -u origin '+gv('nb'),
-          'OK Remote branch renamed',
-        ]) +
-        NOTE('yellow','If you have an open PR under the old branch name, check GitHub/GitLab — it may need to be updated or reopened.'));
-    }
+        var optCount = 0;
+        window.toggleOpt = function (id) {
+          var tog = document.getElementById("ot-" + id);
+          var body = document.getElementById("ob-" + id);
+          if (tog && body) {
+            tog.classList.toggle("open");
+            body.classList.toggle("open");
+          }
+        };
+        function optSection(label, tag, content, tagClass) {
+          var id = ++optCount;
+          var tc = tagClass || "";
+          return (
+            '<div class="opt-toggle" id="ot-' +
+            id +
+            '" onclick="toggleOpt(' +
+            id +
+            ')">' +
+            '<span class="opt-arrow">&#9654;</span>' +
+            '<span class="opt-label">' +
+            label +
+            "</span>" +
+            '<span class="opt-tag ' +
+            tc +
+            '">' +
+            tag +
+            "</span>" +
+            "</div>" +
+            '<div class="opt-body" id="ob-' +
+            id +
+            '">' +
+            content +
+            "</div>"
+          );
+        }
 
-    else if (curA === 'rescue') {
-      h += S(1,'r','Do not run more random git commands — follow these steps in order','',
-        NOTE('blue','First: run <code>git reflog</code> and note the last clean commit hash. If anything goes wrong you can always recover from it.'));
-      h += S(2,'y','Abort any operation currently in progress','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git rebase --abort',
-          'git merge --abort',
-          '# Errors here are fine — means that operation was not running',
-        ]));
-      h += S(3,'y','Stash any uncommitted files','',
-        WHERE('terminal','Terminal') +
-        T(['git stash push -m "rescue-stash"','OK Saved']));
-      h += S(4,'b','Reset your branch to remove the bad merge commit','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git fetch origin',
-          '',
-          '# If this branch HAS been pushed to origin:',
-          'git reset --soft origin/'+mb,
-          '',
-          '# If this branch has NEVER been pushed (local only):',
-          'git reset --soft origin/'+db,
-          '',
-          'OK Branch is now clean — files preserved in working directory',
-        ]));
-      h += S(5,'b','Restore your files','',
-        WHERE('terminal','Terminal') +
-        T(['git stash pop','OK Restored']));
-      h += S(6,'g','Verify everything is clean','',
-        WHERE('terminal','Terminal') +
-        T(['git status','git log --oneline -5','OK Looks clean']) +
-        NOTE('green','Now follow the correct flow: squash with rebase -i if needed → stash → fetch → rebase onto develop → push.'));
-    }
+        var curA = null;
+        var aconf = {
+          newbranch: {
+            fields: [
+              { id: "db", lbl: "Base branch", ph: "mvp/develop" },
+              { id: "mb", lbl: "New branch name", ph: "feature/login-page" },
+            ],
+          },
+          interactivesquash: {
+            fields: [
+              { id: "mb", lbl: "Your branch", ph: "feature/login-page" },
+              {
+                id: "db",
+                lbl: "Base branch (for counting)",
+                ph: "mvp/develop",
+              },
+            ],
+          },
+          rebase: {
+            fields: [
+              {
+                id: "mb",
+                lbl: "Your feature branch",
+                ph: "feature/login-page",
+              },
+              { id: "db", lbl: "Main branch", ph: "mvp/develop" },
+            ],
+          },
+          getlatest: {
+            fields: [
+              {
+                id: "mb",
+                lbl: "Your feature branch",
+                ph: "feature/login-page",
+              },
+              { id: "db", lbl: "Main branch", ph: "mvp/develop" },
+            ],
+          },
+          stash: {
+            fields: [
+              {
+                id: "mb",
+                lbl: "Your current branch",
+                ph: "feature/login-page",
+              },
+              {
+                id: "tb",
+                lbl: "Branch to switch to",
+                ph: "feature/other-task",
+              },
+            ],
+          },
+          amend: {
+            fields: [
+              { id: "mb", lbl: "Your branch", ph: "feature/login-page" },
+            ],
+          },
+          wrongbranch: {
+            fields: [
+              {
+                id: "mb",
+                lbl: "Wrong branch (committed here)",
+                ph: "mvp/develop",
+              },
+              { id: "tb", lbl: "Correct branch", ph: "feature/login-page" },
+              { id: "db", lbl: "Base branch", ph: "mvp/develop" },
+            ],
+          },
+          conflict: {
+            fields: [
+              { id: "mb", lbl: "Your branch", ph: "feature/login-page" },
+              {
+                id: "fl",
+                lbl: "Conflicting file",
+                ph: "src/components/Login.tsx",
+              },
+            ],
+          },
+          pushrejected: {
+            fields: [
+              { id: "mb", lbl: "Your branch", ph: "feature/login-page" },
+              { id: "db", lbl: "Main branch", ph: "mvp/develop" },
+            ],
+          },
+          undo: {
+            fields: [
+              { id: "mb", lbl: "Your branch", ph: "feature/login-page" },
+            ],
+          },
+          delete: {
+            fields: [
+              { id: "mb", lbl: "Branch to delete", ph: "feature/old-feature" },
+              { id: "db", lbl: "Branch to switch to first", ph: "mvp/develop" },
+            ],
+          },
+          rename: {
+            fields: [
+              { id: "mb", lbl: "Current name", ph: "feature/old-name" },
+              { id: "nb", lbl: "New name", ph: "feature/new-name" },
+            ],
+          },
+          rescue: {
+            fields: [
+              { id: "mb", lbl: "Branch that broke", ph: "feature/login-page" },
+              { id: "db", lbl: "Base branch", ph: "mvp/develop" },
+            ],
+          },
+          recoverstash: { fields: [] },
+          recoverbranch: {
+            fields: [
+              {
+                id: "mb",
+                lbl: "Deleted branch name",
+                ph: "feature/login-page",
+              },
+            ],
+          },
+          deletedfile: {
+            fields: [
+              { id: "mb", lbl: "Your branch", ph: "feature/login-page" },
+              {
+                id: "fl",
+                lbl: "Deleted file path",
+                ph: "src/components/Login.tsx",
+              },
+            ],
+          },
+        };
 
-    else if (curA === 'recoverstash') {
-      h += S(1,'b','Try to find the dropped stash in reflog','',
-        WHERE('terminal','Terminal') +
-        T([
-          '# List all stash positions including dropped ones:',
-          'git reflog stash',
-          '',
-          '# Output looks like:',
-          '# stash@{0}: WIP on feature/login: a1b2c3 wip: styling',
-          '# stash@{1}: WIP on feature/login: d4e5f6 wip: logic',
-          '',
-          '# Find the stash you want and note its ref e.g. stash@{1}',
-        ]));
-      h += S(2,'b','If reflog stash shows nothing — search deeper','',
-        WHERE('terminal','Terminal') +
-        T([
-          '# Find all unreachable commits (includes dropped stashes):',
-          'git fsck --no-reflog | grep commit',
-          '',
-          '# For each hash listed, inspect it to see if it is your stash:',
-          'git show <hash> --stat',
-        ]));
-      h += S(3,'g','Apply the stash by its ref or hash','',
-        WHERE('terminal','Terminal') +
-        T([
-          '# Apply by stash ref (keeps it in the stash list):',
-          'git stash apply stash@{1}',
-          '',
-          '# Or apply by commit hash directly:',
-          'git stash apply <hash>',
-          '',
-          'OK Stash contents restored to your working directory',
-        ]) +
-        NOTE('green','<code>git stash apply</code> restores the files without removing the stash entry. Use <code>git stash drop stash@{1}</code> to clean it up after you have confirmed everything is back.') +
-        NOTE('yellow','Stashes exist in reflog for ~90 days. If you ran <code>git gc</code> recently they may be gone permanently.'));
-    }
+        window.pickA = function (a, el) {
+          curA = a;
+          document.querySelectorAll(".pill").forEach(function (p) {
+            p.classList.remove("on");
+          });
+          el.classList.add("on");
+          var h = "";
+          aconf[a].fields.forEach(function (f) {
+            h +=
+              '<div class="input-group"><label class="input-label">' +
+              f.lbl +
+              '</label><input class="inp" id="gf-' +
+              f.id +
+              '" placeholder="' +
+              f.ph +
+              '"/></div>';
+          });
+          document.getElementById("ginputs").innerHTML = h;
+          document.getElementById("gfields").style.display = "block";
+          document.getElementById("gout").style.display = "none";
+        };
 
-    else if (curA === 'recoverbranch') {
-      h += S(1,'b','Find the last commit that was on the deleted branch','',
-        WHERE('terminal','Terminal') +
-        T([
-          '# See the full reflog — every position HEAD has been at:',
-          'git reflog',
-          '',
-          '# Look for the last commit message you remember from that branch.',
-          '# Example output:',
-          '# a1b2c3d HEAD@{4}: commit: feat: add login form    ← this one',
-          '# 9g8h7i6 HEAD@{5}: checkout: moving from '+mb+' to mvp/develop',
-          '',
-          '# Copy the hash of the last commit on that branch (e.g. a1b2c3d)',
-        ]));
-      h += S(2,'g','Recreate the branch at that commit hash','',
-        WHERE('terminal','Terminal') +
-        T([
-          '# Replace HASH with the hash you found above:',
-          'git checkout -b '+mb+' HASH',
-          '',
-          'OK Branch is back with all its commits',
-        ]) +
-        NOTE('green','Your branch is fully restored. Verify with <code>git log --oneline</code> to confirm all commits are there.') +
-        NOTE('blue','Reflog entries exist for ~90 days. Push the recovered branch to origin immediately so it is safe: <code>git push -u origin '+mb+'</code>'));
-      h += S(3,'b','Push to origin to make it safe','',
-        WHERE('terminal','Terminal') +
-        T([
-          'git push -u origin '+mb,
-          'OK Branch is safe on origin',
-        ]));
-    }
+        function gv(id) {
+          var e = document.getElementById("gf-" + id);
+          return e ? e.value.trim() || e.placeholder : "";
+        }
 
-    h += '</div>';
-    document.getElementById('gbody').innerHTML = h;
-    document.getElementById('gout').style.display = 'block';
-    document.getElementById('gout').scrollIntoView({ behavior:'smooth', block:'start' });
-  };
+        function T(lines) {
+          var rows = lines
+            .map(function (l) {
+              if (l === "") return '<div style="height:5px"></div>';
+              if (l.charAt(0) === "#")
+                return '<div class="t-c">' + l + "</div>";
+              if (l.slice(0, 3) === "OK ")
+                return '<div class="t-g">' + l.slice(3) + "</div>";
+              if (l.slice(0, 3) === "WN ")
+                return '<div class="t-y">' + l.slice(3) + "</div>";
+              if (l.slice(0, 3) === "ER ")
+                return '<div class="t-r">' + l.slice(3) + "</div>";
+              return (
+                '<div><span class="t-b">$ </span><span class="t-w">' +
+                l +
+                "</span></div>"
+              );
+            })
+            .join("");
+          return (
+            '<div class="term"><button class="cp" onclick="cp(this)">Copy</button>' +
+            rows +
+            "</div>"
+          );
+        }
 
-  window.resetG = function () {
-    document.getElementById('gout').style.display = 'none';
-    document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
-    document.getElementById('gfields').style.display = 'none';
-    curA = null;
-    optCount = 0;
-    squashBlockCount = 0;
-  };
+        function CTX(html) {
+          return '<div class="step-context">' + html + "</div>";
+        }
+        function WHERE(type, label) {
+          return '<span class="where ' + type + '">' + label + "</span> ";
+        }
+        function NOTE(color, html) {
+          return '<div class="note ' + color + '">' + html + "</div>";
+        }
 
-})();
-</script>
-</body>
+        function GUI(vsc, ij) {
+          var vs = vsc
+            .map(function (s, i) {
+              return (
+                '<div class="gui-item"><span class="gui-item-n">' +
+                (i + 1) +
+                "</span><span>" +
+                s +
+                "</span></div>"
+              );
+            })
+            .join("");
+          var irow = ij
+            .map(function (s, i) {
+              return (
+                '<div class="gui-item"><span class="gui-item-n">' +
+                (i + 1) +
+                "</span><span>" +
+                s +
+                "</span></div>"
+              );
+            })
+            .join("");
+          return (
+            '<div class="gui-block"><div class="gui-block-title">Do this in your IDE — VS Code or IntelliJ</div><div class="gui-cols"><div><div class="gui-col-title">VS Code</div>' +
+            vs +
+            '</div><div><div class="gui-col-title">IntelliJ</div>' +
+            irow +
+            "</div></div></div>"
+          );
+        }
+
+        var colMap = { b: "", g: "g", y: "y", r: "r" };
+        function S(n, col, title, ctx, body) {
+          return (
+            '<div class="step">' +
+            '<div class="step-num ' +
+            (colMap[col] || "") +
+            '">' +
+            n +
+            "</div>" +
+            '<div class="step-body">' +
+            '<div class="step-title">' +
+            title +
+            "</div>" +
+            (ctx ? CTX(ctx) : "") +
+            body +
+            "</div></div>"
+          );
+        }
+
+        function REBASE_BLOCK(db) {
+          return (
+            WHERE("terminal", "Terminal") +
+            T([
+              "git rebase origin/" + db,
+              "",
+              "# ---- What success looks like: ----",
+              "OK Successfully rebased and updated refs/heads/your-branch",
+              "",
+              "# ---- If a conflict appears: ----",
+              "ER CONFLICT (content): Merge conflict in src/Login.tsx",
+              "# Open each conflicting file in VS Code or IntelliJ.",
+              "# Use Accept Current / Accept Incoming / Accept Both buttons.",
+              "# Save the file. Then search the file for <<< to confirm NO markers remain.",
+              "git add .",
+              "git rebase --continue",
+              "",
+              "# ---- Too messy? Cancel completely: ----",
+              "git rebase --abort",
+              "OK Everything restored to exactly how it was before the rebase started",
+            ]) +
+            NOTE(
+              "yellow",
+              "Conflicts here are surgical — only the exact lines that clash between your commit and develop. Resolve file by file in the IDE merge editor. After fixing, always search the file for &lt;&lt;&lt; before adding it."
+            )
+          );
+        }
+
+        var squashBlockCount = 0;
+        function INTERACTIVE_SQUASH_BLOCK(mb, db) {
+          var uid = ++squashBlockCount;
+          var previewId = "sq-preview-" + uid;
+          var nId = "sq-n-" + uid;
+          var ohId = "sq-oh-" + uid;
+          var omId = "sq-om-" + uid;
+          var nhId = "sq-nh-" + uid;
+          var nmId = "sq-nm-" + uid;
+          var html = "";
+
+          html += NOTE(
+            "blue",
+            "<strong>Why squash before rebasing?</strong> Rebase replays each commit one by one. 6 WIP commits = 6 replays = up to 6 conflict rounds on the same file. Squash to 1 commit first = 1 replay = at most 1 conflict round. Always squash first."
+          );
+
+          html +=
+            WHERE("terminal", "Terminal") +
+            T([
+              "# Step 1 — Get your exact commit count automatically:",
+              "git fetch origin && git rev-list --count origin/" +
+                db +
+                "..HEAD",
+              "",
+              "# This prints a single number — that is your N.",
+              "# Example output:",
+              "WN 4",
+              "# That means you have 4 commits to squash.",
+              "",
+              "# Step 2 — Also run this to see the commits visually:",
+              "git log --oneline",
+              "",
+              "# Newest at top, oldest at bottom.",
+              "# Count only YOUR commits from the top. Stop at the first commit not yours.",
+              "# That count should match the number above.",
+            ]);
+
+          html += NOTE(
+            "blue",
+            "<strong>git log shows newest at top, oldest at bottom.</strong> The rebase editor shows them OLDEST at top — the opposite. Keep the TOP line in the editor as <code>pick</code>. Change all lines below it to <code>s</code>. This collapses everything into the oldest commit."
+          );
+
+          html +=
+            '<div class="squash-input-block">' +
+            '<div class="squash-input-block-title">Fill in your details — the command and editor preview will generate automatically</div>' +
+            '<div class="input-row">' +
+            '<div class="input-group" style="max-width:80px;">' +
+            '<label class="input-label">How many commits are yours? (N)</label>' +
+            '<input class="inp" id="' +
+            nId +
+            '" type="number" min="2" placeholder="e.g. 4" oninput="updateSquashPreview(\'' +
+            uid +
+            "')\" />" +
+            "</div>" +
+            "</div>" +
+            '<hr class="squash-divider">' +
+            "<div style=\"font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;\">Your OLDEST commit — the bottom one of your N (this stays as <code style='color:#f0c040'>pick</code> in the editor)</div>" +
+            '<div class="input-row">' +
+            '<div class="input-group" style="max-width:140px;">' +
+            '<label class="input-label">Hash</label>' +
+            '<input class="inp" id="' +
+            ohId +
+            '" placeholder="e.g. a1b2c3" oninput="updateSquashPreview(\'' +
+            uid +
+            "')\" />" +
+            "</div>" +
+            '<div class="input-group">' +
+            '<label class="input-label">Commit message</label>' +
+            '<input class="inp" id="' +
+            omId +
+            '" placeholder="e.g. wip: implemented the changes" oninput="updateSquashPreview(\'' +
+            uid +
+            "')\" />" +
+            "</div>" +
+            "</div>" +
+            '<hr class="squash-divider">' +
+            '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Your NEWEST commit — the top one of your N (this gets squashed into the oldest)</div>' +
+            '<div class="input-row">' +
+            '<div class="input-group" style="max-width:140px;">' +
+            '<label class="input-label">Hash</label>' +
+            '<input class="inp" id="' +
+            nhId +
+            '" placeholder="e.g. j0k1l2" oninput="updateSquashPreview(\'' +
+            uid +
+            "')\" />" +
+            "</div>" +
+            '<div class="input-group">' +
+            '<label class="input-label">Commit message</label>' +
+            '<input class="inp" id="' +
+            nmId +
+            '" placeholder="e.g. wip: changed as per the figma" oninput="updateSquashPreview(\'' +
+            uid +
+            "')\" />" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+
+          html +=
+            '<div id="' +
+            previewId +
+            '" style="display:none;">' +
+            '<div style="font-size:12px;font-weight:700;color:#fff;margin:14px 0 6px;">Run this command — opens the rebase editor:</div>' +
+            '<div class="term" id="sq-cmd-' +
+            uid +
+            '"></div>' +
+            '<div style="font-size:12px;font-weight:700;color:#fff;margin:14px 0 6px;">Your rebase editor will look exactly like this — oldest at top:</div>' +
+            '<div class="term" id="sq-check-' +
+            uid +
+            '"></div>' +
+            NOTE(
+              "blue",
+              "<strong>Editor shows oldest at top → newest at bottom</strong> (opposite of git log). Leave the TOP line as <code>pick</code>. Change every line below it from <code>pick</code> to <code>s</code>. Save and close. Git opens a second editor for your final commit message."
+            ) +
+            '<div style="font-size:12px;font-weight:700;color:#fff;margin:14px 0 6px;">Second editor — write your final commit message:</div>' +
+            '<div class="term">' +
+            '<div class="t-c"># DELETE everything Git pre-fills (all the old wip: lines).</div>' +
+            '<div class="t-c"># Write ONE clean message from scratch. Suggested format:</div>' +
+            '<div style="height:5px"></div>' +
+            '<div id="sq-msg-suggest-' +
+            uid +
+            '" class="t-y"></div>' +
+            '<div style="height:5px"></div>' +
+            '<div class="t-c"># First line = subject, keep it under 72 characters.</div>' +
+            '<div class="t-c"># Leave a blank line, then add detail bullets if needed:</div>' +
+            '<div class="t-c"># - What changed</div>' +
+            '<div class="t-c"># - Why it changed</div>' +
+            "</div>" +
+            NOTE(
+              "red",
+              "<strong>Already pushed this branch?</strong> Squashing rewrites history. You will need <code>git push --force-with-lease</code> after. Warn teammates who may have checked out your branch."
+            ) +
+            GUI(
+              [
+                "The editor opens automatically in VS Code",
+                "Leave the TOP/FIRST line as <code>pick</code> — that is your oldest commit. The editor is oldest at top, newest at bottom.",
+                "Change every line below it from <code>pick</code> to <code>s</code>",
+                "Save and close the tab (Ctrl+S, then close)",
+                "A second editor opens — DELETE all pre-filled text, write your clean message, save and close",
+              ],
+              [
+                "The editor opens automatically in IntelliJ",
+                "Leave the TOP/FIRST line as <code>pick</code> — that is your oldest commit",
+                "Change every line below it from <code>pick</code> to <code>s</code>",
+                "Save the file and close it",
+                "A second editor opens — DELETE all pre-filled text, write your clean message, save and close",
+              ]
+            ) +
+            WHERE("verify", "Verify") +
+            T([
+              "git log --oneline",
+              "OK You should now see exactly 1 clean commit at the top",
+              "",
+              "# What success looks like:",
+              "OK a1b2c3d feat: implement login form with validation",
+              "OK 99zz88x chore: update dependencies   <- not yours, this is correct",
+              "",
+              "# Something went wrong? Abort and try again:",
+              "git rebase --abort",
+            ]) +
+            NOTE(
+              "green",
+              "Done. 1 clean commit. No develop involved. No other files touched. Your teammates code is untouched."
+            ) +
+            "</div>";
+
+          return html;
+        }
+
+        window.updateSquashPreview = function (uid) {
+          var n = document.getElementById("sq-n-" + uid).value.trim();
+          var oh = document.getElementById("sq-oh-" + uid).value.trim();
+          var om = document.getElementById("sq-om-" + uid).value.trim();
+          var nh = document.getElementById("sq-nh-" + uid).value.trim();
+          var nm = document.getElementById("sq-nm-" + uid).value.trim();
+          var preview = document.getElementById("sq-preview-" + uid);
+          var checkEl = document.getElementById("sq-check-" + uid);
+          var cmdEl = document.getElementById("sq-cmd-" + uid);
+          var msgEl = document.getElementById("sq-msg-suggest-" + uid);
+          if (!n) {
+            preview.style.display = "none";
+            return;
+          }
+          preview.style.display = "block";
+          var count = parseInt(n) || 2;
+          var oldHash = oh || "a1b2c3";
+          var oldMsg = om || "wip: implemented the changes";
+          var newHash = nh || "j0k1l2";
+          var newMsg = nm || "wip: changed as per the figma";
+          cmdEl.innerHTML =
+            '<button class="cp" onclick="cp(this)">Copy</button>' +
+            '<div><span class="t-b">$ </span><span class="t-w">git rebase -i HEAD~' +
+            count +
+            "</span></div>";
+          var lines = "";
+          lines +=
+            '<div><span class="t-y">pick</span> <span class="t-b">' +
+            oldHash +
+            '</span>  <span class="t-w">' +
+            oldMsg +
+            '</span>  <span class="t-c">← YOUR oldest — keep as pick</span></div>';
+          if (count > 2) {
+            for (var i = 1; i < count - 1; i++) {
+              lines +=
+                '<div><span class="t-g">s</span>    <span class="t-c">...      middle commit ' +
+                i +
+                "                    ← change to s</span></div>";
+            }
+          }
+          lines +=
+            '<div><span class="t-g">s</span>    <span class="t-b">' +
+            newHash +
+            '</span>  <span class="t-w">' +
+            newMsg +
+            '</span>  <span class="t-c">← YOUR newest — squash into pick</span></div>';
+          checkEl.innerHTML =
+            '<button class="cp" onclick="cp(this)">Copy</button>' + lines;
+          var suggested = nm
+            ? nm.replace(/^wip:\s*/i, "").replace(/^wip\s*/i, "")
+            : "feat(login-page): your clean message here";
+          if (suggested && !suggested.match(/^feat|^fix|^chore|^refactor/)) {
+            suggested = "feat: " + suggested;
+          }
+          msgEl.textContent = suggested;
+        };
+
+        window.genGuide = function () {
+          var mb = gv("mb"),
+            db = gv("db"),
+            tb = gv("tb");
+          var nb = gv("nb"),
+            fl = gv("fl");
+          var h = '<div class="steps">';
+
+          if (curA === "newbranch") {
+            h += S(
+              1,
+              "b",
+              "Check you are starting clean",
+              "Never create a branch when you have uncommitted changes floating around. Verify first.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git status",
+                  "",
+                  "# What you want to see:",
+                  "OK nothing to commit, working tree clean",
+                  "",
+                  "# If you see modified files, stash them first:",
+                  'git stash push -m "my-wip"',
+                  "OK Stashed — now safe to proceed",
+                ])
+            );
+            h += S(
+              2,
+              "b",
+              "Fetch the latest from origin",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git fetch origin",
+                  "git branch -a",
+                  "# Confirm the exact name of your base branch in the list above.",
+                  "OK Fetched",
+                ])
+            );
+            h += S(
+              3,
+              "b",
+              "Switch to the base branch: " + db,
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout " + db, "OK Switched to " + db])
+            );
+            h += S(
+              4,
+              "b",
+              "Bring your local " + db + " up to date",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git rebase origin/" + db,
+                  "OK What success looks like: Successfully rebased and updated refs/heads/" +
+                    db,
+                ])
+            );
+            h += S(
+              5,
+              "g",
+              "Create and switch to the new branch: " + mb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout -b " + mb, "OK On new branch " + mb])
+            );
+            h += S(
+              6,
+              "g",
+              "Publish to origin",
+              "The -u flag sets up tracking so future git push commands know where to go automatically. You only need -u the first time.",
+              WHERE("terminal", "Terminal") +
+                T(["git push -u origin " + mb, "OK Branch is live on origin"]) +
+                NOTE(
+                  "green",
+                  "Your branch is created and live. You are ready to start committing your work."
+                )
+            );
+          } else if (curA === "interactivesquash") {
+            h += S(
+              1,
+              "b",
+              "Make sure you are on: " + mb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout " + mb, "OK On branch " + mb])
+            );
+            h += S(
+              2,
+              "g",
+              "Squash your WIP commits into 1 clean commit",
+              "Run the count command first to get N automatically, then fill in the details below — the command and editor preview will generate for you.",
+              INTERACTIVE_SQUASH_BLOCK(mb, db)
+            );
+            h += S(
+              3,
+              "g",
+              "Done — you now have 1 clean local commit",
+              "",
+              NOTE(
+                "green",
+                "Run this anytime during development. At PR time all you need is fetch → rebase onto develop → push. 1 clean commit makes everything that comes next trivially easy."
+              )
+            );
+          } else if (curA === "rebase") {
+            h += S(
+              1,
+              "b",
+              "Make sure you are on: " + mb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout " + mb, "OK On branch " + mb])
+            );
+            h += S(
+              2,
+              "y",
+              "Squash your commits first — this is critical",
+              "If you have more than 1 commit, squash them into 1 BEFORE rebasing. Rebase replays each commit one by one — 6 WIP commits = up to 6 conflict rounds. 1 squashed commit = 1 replay = at most 1 conflict. Always squash first.",
+              optSection(
+                "Squash WIP commits first — do this if you have more than 1 commit",
+                "Required if N > 1",
+                INTERACTIVE_SQUASH_BLOCK(mb, db)
+              )
+            );
+            h += S(
+              3,
+              "y",
+              "Stash any uncommitted work",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git status",
+                  "",
+                  "# What a clean status looks like:",
+                  "OK nothing to commit, working tree clean",
+                  "",
+                  "# If you see any modified or untracked files:",
+                  'git stash push -m "my-wip"',
+                  "OK Stashed",
+                  "",
+                  "# If git status showed nothing to commit, skip this step.",
+                ])
+            );
+            h += S(
+              4,
+              "b",
+              "Fetch the latest from origin",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git fetch origin",
+                  "OK Fetched — this changes nothing locally, it only downloads what is new on origin",
+                ])
+            );
+            h += S(
+              5,
+              "r",
+              "Rebase onto latest " + db,
+              "Your 1 clean commit moves to the tip of the latest " +
+                db +
+                ". At most 1 conflict round.",
+              REBASE_BLOCK(db)
+            );
+            h += S(
+              6,
+              "g",
+              "Push",
+              "History was rewritten by rebase — this is why --force-with-lease is required. Never use --force without -with-lease.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git push origin " + mb + " --force-with-lease",
+                  "",
+                  "# What success looks like:",
+                  "OK To github.com:org/repo.git",
+                  "OK  + a1b2c3...j0k1l2 " +
+                    mb +
+                    " -> " +
+                    mb +
+                    " (forced update)",
+                  "",
+                  '# "forced update" is correct and expected after a rebase.',
+                ]) +
+                NOTE(
+                  "red",
+                  "Always <code>--force-with-lease</code>, never <code>--force</code>. The -with-lease flag checks that nobody else pushed to your branch before overwriting. --force has no such check."
+                )
+            );
+            h += S(
+              7,
+              "g",
+              "Restore your stash",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git stash pop",
+                  "# If a conflict appears on pop — resolve in IDE, then: git add <file>",
+                  "OK Work restored",
+                ]) +
+                NOTE(
+                  "green",
+                  "Done. Your branch is clean, rebased, and pushed. Ready for PR."
+                )
+            );
+          } else if (curA === "getlatest") {
+            h += S(
+              1,
+              "b",
+              "Make sure you are on: " + mb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout " + mb, "OK On branch " + mb])
+            );
+            h += S(
+              2,
+              "b",
+              "Fetch the latest from origin",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git fetch origin",
+                  "",
+                  "# This downloads what is new on origin but changes NOTHING locally yet.",
+                  "# Safe to run anytime. It never modifies your files.",
+                  "OK Fetched",
+                ])
+            );
+            h += S(
+              3,
+              "b",
+              "Preview what has changed on " + db + " since you branched",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Commits on develop that are NOT yet in your branch:",
+                  "git log " + mb + "..origin/" + db + " --oneline",
+                  "",
+                  "# Files that would be affected:",
+                  "git diff " + mb + " origin/" + db + " --name-only",
+                  "",
+                  "# This is preview only — nothing is changed yet.",
+                ])
+            );
+            h += S(
+              4,
+              "y",
+              "Stash any uncommitted work",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git status",
+                  "",
+                  "# If you see modified files:",
+                  'git stash push -m "my-wip"',
+                  "OK Stashed",
+                  "",
+                  "# If nothing to commit, skip this.",
+                ])
+            );
+            h += S(
+              5,
+              "r",
+              "Bring those changes into your branch via rebase",
+              "Rebase replays your commits on top of the latest " +
+                db +
+                ". Your work stays on top — new develop changes come underneath.",
+              REBASE_BLOCK(db)
+            );
+            h += S(
+              6,
+              "g",
+              "Restore your stash",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git stash pop", "OK Work restored"])
+            );
+            h += S(
+              7,
+              "g",
+              "Push if your branch is on origin",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git push origin " + mb + " --force-with-lease",
+                  "OK Up to date",
+                ]) +
+                NOTE(
+                  "blue",
+                  "After this your branch has all of " +
+                    db +
+                    "'s latest changes underneath your work. You are fully up to date."
+                )
+            );
+          } else if (curA === "stash") {
+            h += S(
+              1,
+              "b",
+              "Save your current work on: " + mb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  'git stash push -m "my-wip"',
+                  "OK Saved — your working directory is now clean",
+                ])
+            );
+            h += S(
+              2,
+              "b",
+              "Verify the stash actually saved before switching",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git stash list",
+                  "",
+                  "# What you want to see:",
+                  "OK stash@{0}: On " + mb + ": my-wip",
+                  "",
+                  "# If the list is empty something went wrong — do NOT switch branches yet.",
+                ]) +
+                NOTE(
+                  "yellow",
+                  "Always check git stash list before switching. If your stash is not listed, your work has not been saved."
+                )
+            );
+            h += S(
+              3,
+              "b",
+              "Switch to the other branch: " + tb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout " + tb, "OK On " + tb])
+            );
+            h += S(
+              4,
+              "b",
+              "Do your work on " + tb + "...",
+              "",
+              T([
+                "# Make changes, commit, whatever you need to do on this branch.",
+              ])
+            );
+            h += S(
+              5,
+              "g",
+              "Come back to " + mb + " and restore your work",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git checkout " + mb,
+                  "",
+                  "# See your saved stashes:",
+                  "git stash list",
+                  "",
+                  "# Restore the latest stash:",
+                  "git stash pop",
+                  "",
+                  "# If you have multiple stashes, restore a specific one:",
+                  "# git stash pop stash@{1}",
+                  "",
+                  "# If a conflict appears on pop — resolve in IDE, then:",
+                  "# git add <file>",
+                  "",
+                  "OK All your work is restored on " + mb,
+                ])
+            );
+          } else if (curA === "amend") {
+            h += S(
+              1,
+              "b",
+              "Make sure you are on: " +
+                mb +
+                " and check what your last commit looks like",
+              "Only amend the LAST commit. If you need to change an older commit, use rebase -i instead.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git log --oneline -3",
+                  "",
+                  "# Confirm the top commit is the one you want to fix.",
+                ])
+            );
+            h += S(
+              2,
+              "g",
+              "Option A — forgot to include a file",
+              "Stage the missing file first, then amend.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Stage only the file you forgot:",
+                  "git add path/to/forgotten-file.ts",
+                  "",
+                  "# Amend — adds the staged file into your last commit:",
+                  "git commit --amend --no-edit",
+                  "",
+                  "# --no-edit keeps your existing commit message unchanged.",
+                  "OK File added to your last commit",
+                ])
+            );
+            h += S(
+              3,
+              "g",
+              "Option B — typo in your commit message",
+              "No new files to add, just fix the message.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  'git commit --amend -m "feat: your corrected message here"',
+                  "OK Commit message updated",
+                ])
+            );
+            h += S(
+              4,
+              "y",
+              "If already pushed — force push after amend",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git push origin " + mb + " --force-with-lease"]) +
+                NOTE(
+                  "yellow",
+                  "Amend rewrites the last commit — same as squash. Always --force-with-lease, never --force."
+                )
+            );
+          } else if (curA === "wrongbranch") {
+            h += S(
+              1,
+              "r",
+              "Stop — do not push anything yet",
+              "Your code is safe. We are going to move it to the correct branch without losing a single line.",
+              NOTE("yellow", "Your code is not lost. We are just moving it.") +
+                NOTE(
+                  "blue",
+                  "Safety first: run <code>git log --oneline -3</code> and write down your commit hash before doing anything."
+                )
+            );
+            h += S(
+              2,
+              "r",
+              "How many commits are on the wrong branch?",
+              "This determines what reset command to use.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git log --oneline",
+                  "",
+                  "# Count how many of YOUR commits are on this wrong branch.",
+                  "# If 1 commit: use HEAD~1",
+                  "# If 3 commits: use HEAD~3",
+                  "# Use the number you count — do not just copy HEAD~1 blindly.",
+                ])
+            );
+            h += S(
+              3,
+              "b",
+              "Remove the commits from the wrong branch",
+              "Soft reset keeps your file changes in the working directory — only the commits are removed from history.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Replace 1 with however many commits you counted above:",
+                  "git reset --soft HEAD~1",
+                  "OK Commits removed — your files are still here, unchanged",
+                ])
+            );
+            h += S(
+              4,
+              "y",
+              "Stash the files",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  'git stash push -m "wrong-branch-rescue"',
+                  "git stash list",
+                  "OK stash@{0}: On wrong-branch: wrong-branch-rescue",
+                  "OK Files saved",
+                ])
+            );
+            h += S(
+              5,
+              "b",
+              "Get onto the correct branch: " + tb,
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# If the correct branch already exists:",
+                  "git checkout " + tb,
+                  "",
+                  "# If it does NOT exist yet:",
+                  "git checkout " + db,
+                  "git fetch origin",
+                  "git rebase origin/" + db,
+                  "git checkout -b " + tb,
+                  "git push -u origin " + tb,
+                ])
+            );
+            h += S(
+              6,
+              "g",
+              "Pop the stash and commit on the correct branch",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git stash pop",
+                  "# Your files are back in your working directory.",
+                ]) +
+                GUI(
+                  [
+                    "Open Source Control panel — Ctrl+Shift+G",
+                    "Click + next to YOUR files only",
+                    'Do NOT click "Stage All Changes" — other files may be here from the wrong branch',
+                    "Type your commit message",
+                    "Click the Commit button",
+                  ],
+                  [
+                    "Open Commit tool window — Ctrl+K",
+                    "Check the box next to YOUR files only",
+                    'Do NOT click "Select All"',
+                    "Type your commit message",
+                    "Click the Commit button",
+                  ]
+                ) +
+                NOTE(
+                  "green",
+                  "Your code is now committed on the correct branch: " + tb
+                )
+            );
+            h += S(
+              7,
+              "b",
+              "Push",
+              "",
+              WHERE("terminal", "Terminal") + T(["git push origin " + tb])
+            );
+          } else if (curA === "conflict") {
+            h += S(
+              1,
+              "b",
+              "See exactly which files have conflicts",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git status",
+                  "",
+                  '# Files under "both modified" have conflicts:',
+                  "ER both modified: " + fl,
+                  "",
+                  "# You must resolve ALL listed files before continuing.",
+                ])
+            );
+            h += S(
+              2,
+              "y",
+              "Open the conflicting file and resolve it",
+              "Conflict markers look like: <<<< HEAD (your code), ==== (divider), >>>> origin/develop (their code). You decide which to keep.",
+              GUI(
+                [
+                  "Open <code>" + fl + "</code> in VS Code",
+                  "<strong>Accept Current Change</strong> = keep YOUR version",
+                  "<strong>Accept Incoming Change</strong> = take their version from develop",
+                  "<strong>Accept Both Changes</strong> = keep both (use carefully, check the result makes sense)",
+                  "Delete any remaining markers: &lt;&lt;&lt;, ===, &gt;&gt;&gt;",
+                  "Save the file",
+                ],
+                [
+                  "Open <code>" + fl + "</code> in IntelliJ",
+                  "3-panel diff: your code left, merged result middle, incoming right",
+                  "Click arrow buttons to accept chunks, or edit the middle panel directly",
+                  "Click Apply, then save",
+                ]
+              )
+            );
+            h += S(
+              3,
+              "r",
+              "Critical — verify no conflict markers remain",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Search for any remaining markers inside the file:",
+                  "# In VS Code: Ctrl+F and search for <<<<",
+                  "# In IntelliJ: Ctrl+F and search for <<<<",
+                  "",
+                  "# If you find any <<< === >>> left in the file:",
+                  "# Fix them before continuing. Code with markers in it WILL break even if it compiles.",
+                ]) +
+                NOTE(
+                  "red",
+                  "This is the most common mistake. Always search the file for &lt;&lt;&lt; after resolving. If even one marker remains your code is broken."
+                )
+            );
+            h += S(
+              4,
+              "b",
+              "Stage the resolved file and continue",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git add " + fl,
+                  "",
+                  "# Continue the rebase:",
+                  "git rebase --continue",
+                  "",
+                  "# If more conflicts appear — repeat steps 2, 3, and 4 for each file.",
+                  "",
+                  "OK Successfully rebased and updated refs/heads/" + mb,
+                ])
+            );
+            h += S(
+              5,
+              "r",
+              "If it is too messy — abort and start over",
+              "Abort puts everything back exactly as it was before the rebase started. Zero risk.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git rebase --abort",
+                  "OK Everything is back to how it was before the rebase",
+                ])
+            );
+            h += S(
+              6,
+              "b",
+              "Push after resolving",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git push origin " + mb + " --force-with-lease"])
+            );
+          } else if (curA === "pushrejected") {
+            h += S(
+              1,
+              "b",
+              "Read the error message carefully",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# What a rejection looks like:",
+                  "ER ! [rejected] " + mb + " -> " + mb + " (non-fast-forward)",
+                  "ER error: failed to push some refs",
+                  "",
+                  "# This means origin has commits that your local does not have.",
+                ])
+            );
+            h += S(
+              2,
+              "b",
+              "Fetch and see what is different",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git fetch origin",
+                  "",
+                  "# See what commits are on origin that you do not have:",
+                  "git log " + mb + "..origin/" + mb + " --oneline",
+                  "",
+                  "# If this list shows commits from TEAMMATES — do not force push.",
+                  "# If this list shows your own commits from a previous session — you can force push.",
+                ])
+            );
+            h += S(
+              3,
+              "y",
+              "If the extra commits are yours — safe to force push",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git push origin " + mb + " --force-with-lease",
+                  "OK Pushed",
+                ]) +
+                NOTE(
+                  "yellow",
+                  "Only do this when you are certain the extra commits on origin are yours. If unsure, check with your team first."
+                )
+            );
+            h += S(
+              4,
+              "r",
+              "If the extra commits are from teammates — do NOT force push",
+              "Force pushing here would delete their commits. Follow the get latest changes flow instead.",
+              NOTE(
+                "red",
+                'If a teammate committed to your branch, do NOT force push. Instead go to the "Get latest changes" flow, rebase your branch on top of the updated remote, then push normally.'
+              ) +
+                WHERE("terminal", "Terminal") +
+                T([
+                  "# Get their commits first:",
+                  "git rebase origin/" + mb,
+                  "",
+                  "# Then push normally (no force needed if rebase went cleanly):",
+                  "git push origin " + mb,
+                ])
+            );
+          } else if (curA === "undo") {
+            h += S(
+              1,
+              "b",
+              "Check your last commit first",
+              "Note the hash — you can always recover from it if needed.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git log --oneline -5",
+                  "",
+                  "# Write down the hash of your HEAD commit before doing anything.",
+                ])
+            );
+            h += S(
+              2,
+              "g",
+              "Undo the last commit — files stay safe",
+              "Soft reset removes only the most recent commit from history. Your file changes stay in the working directory exactly as they were.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git reset --soft HEAD~1",
+                  "",
+                  "OK Commit removed — all your files are still here, unchanged",
+                ]) +
+                NOTE(
+                  "green",
+                  "Your code is not deleted. It is just un-committed. You can re-stage and recommit whenever you are ready."
+                ) +
+                NOTE(
+                  "blue",
+                  "Went too far? Run <code>git reflog</code>, find the hash from before the reset, and run <code>git reset --soft THAT_HASH</code> to restore it."
+                )
+            );
+            h += S(
+              3,
+              "y",
+              "If you already pushed — force push after",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git push origin " + mb + " --force-with-lease"]) +
+                NOTE(
+                  "yellow",
+                  "Tell your teammates before force pushing a shared branch."
+                )
+            );
+          } else if (curA === "delete") {
+            h += S(
+              1,
+              "b",
+              "Verify the PR is merged first",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Check GitHub or GitLab in your browser.",
+                  "# Confirm the PR for " + mb + ' shows "Merged" status.',
+                  '# If it shows "Open" — do NOT delete yet.',
+                ]) +
+                NOTE(
+                  "red",
+                  "Deleting a branch that has an unmerged PR loses the code permanently from origin unless someone recovers it from reflog within 90 days."
+                )
+            );
+            h += S(
+              2,
+              "b",
+              "Switch off the branch first",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git checkout " + db, "OK Switched to " + db])
+            );
+            h += S(
+              3,
+              "b",
+              "Delete locally",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git branch -d " + mb,
+                  '# If "not fully merged" warning and you are sure it is safe:',
+                  "# git branch -D " + mb,
+                  "OK Deleted locally",
+                ]) +
+                NOTE(
+                  "yellow",
+                  "<code>-D</code> (uppercase) force deletes without checking if merged. Commits stay in reflog for ~90 days if you need to recover."
+                )
+            );
+            h += S(
+              4,
+              "b",
+              "Delete on origin",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git push origin --delete " + mb,
+                  "OK Deleted from origin",
+                ]) +
+                NOTE(
+                  "red",
+                  "This removes the branch for everyone. Make sure the PR was merged first."
+                )
+            );
+          } else if (curA === "rename") {
+            h += S(
+              1,
+              "b",
+              "Make sure you are on: " + mb,
+              "",
+              WHERE("terminal", "Terminal") + T(["git checkout " + mb])
+            );
+            h += S(
+              2,
+              "b",
+              "Rename to: " + gv("nb"),
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git branch -m " + gv("nb"),
+                  "OK Renamed locally to " + gv("nb"),
+                ])
+            );
+            h += S(
+              3,
+              "y",
+              "If already on origin — update remote too",
+              "Deletes the old name from origin and pushes the new name.",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git push origin --delete " + mb,
+                  "git push -u origin " + gv("nb"),
+                  "OK Remote branch renamed",
+                ]) +
+                NOTE(
+                  "yellow",
+                  "If you have an open PR under the old branch name, check GitHub/GitLab — it may need to be updated or reopened."
+                )
+            );
+          } else if (curA === "rescue") {
+            h += S(
+              1,
+              "r",
+              "Do not run more random git commands — follow these in order",
+              "",
+              NOTE(
+                "blue",
+                "First: run <code>git reflog</code> and write down the last clean commit hash. You can always recover from it."
+              )
+            );
+            h += S(
+              2,
+              "y",
+              "Abort any operation currently in progress",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git rebase --abort",
+                  "git merge --abort",
+                  "# Errors here are fine — means that operation was not running",
+                ])
+            );
+            h += S(
+              3,
+              "y",
+              "Stash any uncommitted files",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(['git stash push -m "rescue-stash"', "OK Saved"])
+            );
+            h += S(
+              4,
+              "b",
+              "Reset your branch to remove the bad merge commit",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git fetch origin",
+                  "",
+                  "# If this branch HAS been pushed to origin:",
+                  "git reset --soft origin/" + mb,
+                  "",
+                  "# If this branch has NEVER been pushed (local only):",
+                  "git reset --soft origin/" + db,
+                  "",
+                  "OK Branch is now clean — files preserved in working directory",
+                ])
+            );
+            h += S(
+              5,
+              "b",
+              "Restore your files",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git stash pop", "OK Restored"])
+            );
+            h += S(
+              6,
+              "g",
+              "Verify the rescue worked",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git status",
+                  "# What you want to see:",
+                  "OK nothing to commit, working tree clean",
+                  "",
+                  "git log --oneline -5",
+                  "# What you want to see:",
+                  "OK Your commits only — NO merge commits in the list",
+                ]) +
+                NOTE(
+                  "green",
+                  "Rescue complete. Now follow the correct flow: squash with rebase -i if needed → stash → fetch → rebase onto develop → push."
+                )
+            );
+          } else if (curA === "recoverstash") {
+            h += S(
+              1,
+              "b",
+              "Try to find the dropped stash in reflog",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# List all stash positions including dropped ones:",
+                  "git reflog stash",
+                  "",
+                  "# Output looks like:",
+                  "# stash@{0}: WIP on feature/login: a1b2c3 wip: styling",
+                  "# stash@{1}: WIP on feature/login: d4e5f6 wip: logic",
+                  "",
+                  "# Find the stash you want and note its ref e.g. stash@{1}",
+                ])
+            );
+            h += S(
+              2,
+              "b",
+              "If reflog stash shows nothing — search deeper",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Find all unreachable commits (includes dropped stashes):",
+                  "git fsck --no-reflog | grep commit",
+                  "",
+                  "# For each hash listed, inspect it:",
+                  "git show <hash> --stat",
+                ])
+            );
+            h += S(
+              3,
+              "g",
+              "Apply the stash by its ref or hash",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Apply by stash ref (keeps it in the stash list):",
+                  "git stash apply stash@{1}",
+                  "",
+                  "# Or apply by commit hash directly:",
+                  "git stash apply <hash>",
+                  "",
+                  "OK Stash contents restored to your working directory",
+                ]) +
+                NOTE(
+                  "green",
+                  "<code>git stash apply</code> restores the files without removing the stash entry. Use <code>git stash drop stash@{1}</code> to clean it up after."
+                ) +
+                NOTE(
+                  "yellow",
+                  "Stashes exist in reflog for ~90 days. If you ran <code>git gc</code> recently they may be gone permanently."
+                )
+            );
+          } else if (curA === "recoverbranch") {
+            h += S(
+              1,
+              "b",
+              "Find the last commit that was on the deleted branch",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# See the full reflog — every position HEAD has been at:",
+                  "git reflog",
+                  "",
+                  "# Look for the last commit message you remember from that branch.",
+                  "# Example output:",
+                  "# a1b2c3d HEAD@{4}: commit: feat: add login form    <- this one",
+                  "# 9g8h7i6 HEAD@{5}: checkout: moving from " +
+                    mb +
+                    " to mvp/develop",
+                  "",
+                  "# Copy the hash of the last commit on that branch (e.g. a1b2c3d)",
+                ])
+            );
+            h += S(
+              2,
+              "g",
+              "Recreate the branch at that commit hash",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Replace HASH with the hash you found above:",
+                  "git checkout -b " + mb + " HASH",
+                  "",
+                  "OK Branch is back with all its commits",
+                ]) +
+                NOTE(
+                  "green",
+                  "Your branch is fully restored. Verify with <code>git log --oneline</code> to confirm all commits are there."
+                ) +
+                NOTE(
+                  "blue",
+                  "Reflog entries exist for ~90 days. Push the recovered branch to origin immediately so it is safe."
+                )
+            );
+            h += S(
+              3,
+              "b",
+              "Push to origin to make it safe",
+              "",
+              WHERE("terminal", "Terminal") +
+                T(["git push -u origin " + mb, "OK Branch is safe on origin"])
+            );
+          } else if (curA === "deletedfile") {
+            h += S(
+              1,
+              "b",
+              "Check if the deletion was committed or just unsaved",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "git status",
+                  "",
+                  '# If the file shows as "deleted" (not staged yet):',
+                  "# The file is recoverable with a simple checkout.",
+                  "",
+                  "# If you already committed the deletion:",
+                  "# You need to recover it from a previous commit.",
+                ])
+            );
+            h += S(
+              2,
+              "g",
+              "If the deletion is NOT committed yet — restore immediately",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Restore the single deleted file:",
+                  "git checkout HEAD -- " + fl,
+                  "",
+                  "OK File restored exactly as it was in your last commit",
+                ]) +
+                NOTE(
+                  "green",
+                  "Done. The file is back. This only works if you have not committed the deletion yet."
+                )
+            );
+            h += S(
+              3,
+              "y",
+              "If the deletion WAS committed — find which commit had it",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Find the last commit that contained the file:",
+                  "git log --all --full-history -- " + fl,
+                  "",
+                  "# The top commit in this list is the last one that had the file.",
+                  "# Copy that commit hash.",
+                ])
+            );
+            h += S(
+              4,
+              "g",
+              "Restore the file from that commit",
+              "",
+              WHERE("terminal", "Terminal") +
+                T([
+                  "# Replace HASH with the commit hash from above:",
+                  "git checkout HASH -- " + fl,
+                  "",
+                  "OK File restored from that commit",
+                  "",
+                  "# The file is now in your working directory, unstaged.",
+                  "# Stage it and commit:",
+                  "git add " + fl,
+                  'git commit -m "restore: bring back ' + fl + '"',
+                ]) +
+                NOTE(
+                  "green",
+                  "File is fully restored and committed back. Push with a normal git push."
+                )
+            );
+          }
+
+          h += "</div>";
+          document.getElementById("gbody").innerHTML = h;
+          document.getElementById("gout").style.display = "block";
+          document
+            .getElementById("gout")
+            .scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+
+        window.resetG = function () {
+          document.getElementById("gout").style.display = "none";
+          document.querySelectorAll(".pill").forEach(function (p) {
+            p.classList.remove("on");
+          });
+          document.getElementById("gfields").style.display = "none";
+          curA = null;
+          optCount = 0;
+          squashBlockCount = 0;
+        };
+      })();
+    </script>
+  </body>
 </html>
