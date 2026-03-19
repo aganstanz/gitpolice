@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -124,6 +125,10 @@
       .flow-transfer-label { font-size: 12px; font-weight: 700; line-height: 1.3; }
       .flow-transfer-sub { font-size: 10px; color: #888; margin-top: 3px; line-height: 1.4; }
       .flow-branch { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid #333; border-radius: 0; font-family: "Courier New", monospace; font-size: 12px; margin-bottom: 6px; }
+      .tricks-grid { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+      .trick-item { border: 1px solid #1a3560; background: #020810; padding: 12px 14px; }
+      .trick-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #7ec8f0; margin-bottom: 6px; }
+      .trick-why { font-size: 12px; color: #888; margin-top: 6px; line-height: 1.6; }
       @media (max-width: 600px) {
         .pill-grid { grid-template-columns: 1fr 1fr; }
         nav { gap: 4px; }
@@ -137,6 +142,7 @@
       <button class="nav-btn active" onclick="go('home')">Rules</button>
       <button class="nav-btn" onclick="go('flow')">How Git Works</button>
       <button class="nav-btn" onclick="go('guide')">Step Guide</button>
+      <button class="nav-btn" onclick="go('tricks')">Power Tricks</button>
     </nav>
 
     <!-- TAB 1 — RULES -->
@@ -365,13 +371,123 @@
       </div>
     </div>
 
+    <!-- TAB 4 — POWER TRICKS -->
+    <div class="page" id="page-tricks">
+      <h1>Power Tricks</h1>
+      <p class="page-sub">One-liners that work like magic. Each one replaces multiple error-prone manual steps.</p>
+
+      <h2>Squash &amp; Rebase</h2>
+      <div class="tricks-grid">
+        <div class="trick-item">
+          <div class="trick-label">⚡ Auto-count your commits — no manual counting ever</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git rebase -i $(git merge-base HEAD origin/mvp/develop)</span></div>
+          </div>
+          <div class="trick-why">Automatically finds the exact point where your branch split from develop and opens the rebase editor for precisely those commits. You never have to count N or run rev-list first. This is the safest way to open the squash editor — it cannot accidentally include develop commits.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">🔢 Get your commit count as a number first (then squash)</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git fetch origin && git rev-list --count origin/mvp/develop..HEAD</span></div>
+          </div>
+          <div class="trick-why">Prints a single number — your N. Use this if you want to verify the count before opening the rebase editor. Combine with git rebase -i HEAD~N after.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">👁️ Preview your commits only — nothing from develop</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git log --oneline origin/mvp/develop..HEAD</span></div>
+          </div>
+          <div class="trick-why">Shows only the commits that are on your branch and not yet in develop. Cleaner than git log --oneline which shows everything. Run this before squashing to confirm exactly what you are about to collapse.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">🔙 Instant undo after a bad rebase — no hash needed</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git reset --soft ORIG_HEAD</span></div>
+          </div>
+          <div class="trick-why">Immediately after a rebase goes wrong, ORIG_HEAD automatically points to where your branch was before the rebase started. One command puts you back exactly where you were. Only works right after the rebase — ORIG_HEAD gets overwritten by the next operation.</div>
+        </div>
+      </div>
+
+      <h2>Inspecting &amp; Diffing</h2>
+      <div class="tricks-grid">
+        <div class="trick-item">
+          <div class="trick-label">🔍 See exactly what your branch changed vs develop</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git diff origin/mvp/develop...HEAD</span></div>
+          </div>
+          <div class="trick-why">Three-dot diff shows only the changes your branch introduced — it ignores everything that happened on develop since you branched. This is exactly what a reviewer sees in your PR. Two dots (git diff origin/mvp/develop..HEAD) includes develop changes too and is almost never what you want.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">📋 See only the file names your branch changed</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git diff origin/mvp/develop...HEAD --name-only</span></div>
+          </div>
+          <div class="trick-why">Same as above but only lists file names, not the full diff. Great for a quick sanity check before a PR — confirms you only touched the files you meant to touch.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">📦 Inspect a stash before you pop it</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git stash show -p stash@{0}</span></div>
+          </div>
+          <div class="trick-why">Shows the full diff of what is inside a stash before you restore it. Prevents surprises when popping old stashes. Replace stash@{0} with stash@{1}, stash@{2} etc. to inspect older ones. Run git stash list first to see all your stashes.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">🕐 Reflog with human timestamps — find where things broke</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git reflog --relative-date</span></div>
+          </div>
+          <div class="trick-why">Same as git reflog but shows timestamps like "2 hours ago" instead of index numbers. Makes it dramatically easier to find the exact commit you were at before something went wrong. Use the hash from this output with git reset --soft HASH to travel back.</div>
+        </div>
+      </div>
+
+      <h2>Branch hygiene</h2>
+      <div class="tricks-grid">
+        <div class="trick-item">
+          <div class="trick-label">🧹 Delete all local branches already merged into develop</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git branch --merged origin/mvp/develop | grep -v "mvp/develop\|main\|master\|\*" | xargs git branch -d</span></div>
+          </div>
+          <div class="trick-why">Finds every local branch whose commits are already in develop and deletes them in one shot. The grep -v protects your main branches from being deleted. Safe — only removes branches already merged, never unmerged work.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">🔗 See which remote branch your local branch tracks</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git branch -vv</span></div>
+          </div>
+          <div class="trick-why">Lists all local branches with their tracking remote and how many commits ahead or behind they are. Immediately shows if a branch has no upstream set (missing tracking info causes push to ask "where?"). Run this before pushing a new branch to confirm -u origin worked.</div>
+        </div>
+      </div>
+
+      <h2>Recovery</h2>
+      <div class="tricks-grid">
+        <div class="trick-item">
+          <div class="trick-label">🚑 Find ANY lost commit — deleted branch, dropped stash, bad reset</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git fsck --no-reflog | grep commit | awk '{print $3}' | xargs git show --stat</span></div>
+          </div>
+          <div class="trick-why">Finds all unreachable commits — commits that exist in the object store but are no longer pointed to by any branch or ref. This catches things reflog misses, like stashes dropped after git stash drop or commits from a branch deleted with -D. Copy any hash you want and run git checkout -b rescue HASH to bring it back.</div>
+        </div>
+        <div class="trick-item">
+          <div class="trick-label">📍 Save your current position before any risky operation</div>
+          <div class="term"><button class="cp" onclick="cp(this)">Copy</button>
+            <div><span class="t-b">$ </span><span class="t-w">git tag backup-$(date +%Y%m%d-%H%M%S)</span></div>
+          </div>
+          <div class="trick-why">Creates a timestamped tag at your current HEAD before you do anything risky like a rebase or reset. Tags survive rebase rewrites — branches sometimes do not. If everything breaks you can always run git checkout backup-20240315-143022 to get back. Delete with git tag -d tagname when done.</div>
+        </div>
+      </div>
+
+      <div class="note blue" style="margin-top:24px">
+        <strong>The one trick to add to your daily muscle memory:</strong> use <code>git rebase -i $(git merge-base HEAD origin/mvp/develop)</code> instead of counting commits manually. It eliminates the most error-prone step in the entire squash flow.
+      </div>
+    </div>
+
     <script>
       (function () {
         window.go = function (id) {
           document.querySelectorAll(".page").forEach(function (p) { p.classList.remove("on"); });
           document.querySelectorAll(".nav-btn").forEach(function (b) { b.classList.remove("active"); });
           document.getElementById("page-" + id).classList.add("on");
-          var idx = ["home", "flow", "guide"].indexOf(id);
+          var idx = ["home", "flow", "guide", "tricks"].indexOf(id);
           if (idx >= 0) document.querySelectorAll(".nav-btn")[idx].classList.add("active");
           window.scrollTo(0, 0);
         };
@@ -496,18 +612,27 @@
           var previewId = "sq-preview-" + uid, nId = "sq-n-" + uid, ohId = "sq-oh-" + uid, omId = "sq-om-" + uid, nhId = "sq-nh-" + uid, nmId = "sq-nm-" + uid;
           var html = "";
           html += NOTE("blue", "<strong>Why squash before rebasing?</strong> Rebase replays each commit one by one. 6 WIP commits = 6 replays = up to 6 conflict rounds on the same file. Squash to 1 commit first = 1 replay = at most 1 conflict round. Always squash first.");
+
           html += WHERE("terminal", "Terminal") + T([
-            "# Step 1 -- Get your exact commit count automatically:",
-            "git fetch origin && git rev-list --count origin/" + db + "..HEAD", "",
+            "# --- RECOMMENDED: Auto-open editor for exactly your commits ---",
+            "# No counting needed. Finds the split point from " + db + " automatically:",
+            "git rebase -i $(git merge-base HEAD origin/" + db + ")",
+            "",
+            "# --- ALTERNATIVE: Count first, then squash manually ---",
+            "# Step 1 -- Get your exact commit count:",
+            "git fetch origin && git rev-list --count origin/" + db + "..HEAD",
+            "",
             "# This prints a single number -- that is your N.",
             "# Example output:", "WN 4",
             "# That means you have 4 commits to squash.", "",
             "# Step 2 -- Also run this to see the commits visually:",
-            "git log --oneline", "",
+            "git log --oneline origin/" + db + "..HEAD",
+            "",
+            "# Shows ONLY your commits -- nothing from develop.",
             "# Newest at top, oldest at bottom.",
-            "# Count only YOUR commits from the top. Stop at the first commit not yours.",
             "# That count should match the number above."
           ]);
+
           html += NOTE("blue", "<strong>git log shows newest at top, oldest at bottom.</strong> The rebase editor shows them OLDEST at top -- the opposite. Keep the TOP line in the editor as <code>pick</code>. Change all lines below it to <code>s</code>. This collapses everything into the oldest commit.");
           html += '<div class="squash-input-block">' +
             '<div class="squash-input-block-title">Fill in your details -- the command and editor preview will generate automatically</div>' +
@@ -549,7 +674,7 @@
               ["The editor opens automatically in IntelliJ", "Leave the TOP/FIRST line as <code>pick</code> -- that is your oldest commit", "Change every line below it from <code>pick</code> to <code>s</code>", "Save the file and close it", "A second editor opens -- DELETE all pre-filled text, write your clean message, save and close"]
             ) +
             WHERE("verify", "Verify") +
-            T(["git log --oneline", "OK You should now see exactly 1 clean commit at the top", "", "# What success looks like:", "OK a1b2c3d feat: implement login form with validation", "OK 99zz88x chore: update dependencies   <- not yours, this is correct", "", "# Something went wrong? Abort and try again:", "git rebase --abort"]) +
+            T(["git log --oneline", "OK You should now see exactly 1 clean commit at the top", "", "# What success looks like:", "OK a1b2c3d feat: implement login form with validation", "OK 99zz88x chore: update dependencies   <- not yours, this is correct", "", "# Something went wrong? Two recovery options:", "# Option 1 -- immediately after rebase, undo with one command:", "git reset --soft ORIG_HEAD", "# Option 2 -- abort if rebase is still in progress:", "git rebase --abort"]) +
             NOTE("green", "Done. 1 clean commit. No develop involved. No other files touched. Your teammates code is untouched.") +
             "</div>";
           return html;
@@ -607,17 +732,17 @@
           } else if (curA === "getlatest") {
             h += S(1,"b","Make sure you are on: "+mb,"",WHERE("terminal","Terminal")+T(["git checkout "+mb,"OK On branch "+mb]));
             h += S(2,"b","Fetch the latest from origin","",WHERE("terminal","Terminal")+T(["git fetch origin","","# This downloads what is new on origin but changes NOTHING locally yet.","# Safe to run anytime. It never modifies your files.","OK Fetched"]));
-            h += S(3,"b","Preview what has changed on "+db+" since you branched","",WHERE("terminal","Terminal")+T(["# Commits on develop that are NOT yet in your branch:","git log "+mb+"..origin/"+db+" --oneline","","# Files that would be affected:","git diff "+mb+" origin/"+db+" --name-only","","# This is preview only -- nothing is changed yet."]));
+            h += S(3,"b","Preview what has changed on "+db+" since you branched","",WHERE("terminal","Terminal")+T(["# Commits on develop that are NOT yet in your branch:","git log "+mb+"..origin/"+db+" --oneline","","# Files that would be affected (three-dot = only develop changes, not yours):","git diff "+mb+"...origin/"+db+" --name-only","","# This is preview only -- nothing is changed yet."]));
             h += S(4,"y","Stash any uncommitted work","",WHERE("terminal","Terminal")+T(["git status","","# If you see modified files:",'git stash push -m "my-wip"',"OK Stashed","","# If nothing to commit, skip this."]));
             h += S(5,"r","Bring those changes into your branch via rebase","Rebase replays your commits on top of the latest "+db+". Your work stays on top -- new develop changes come underneath.",REBASE_BLOCK(db));
             h += S(6,"g","Restore your stash","",WHERE("terminal","Terminal")+T(["git stash pop","OK Work restored"]));
             h += S(7,"g","Push if your branch is on origin","",WHERE("terminal","Terminal")+T(["git push origin "+mb+" --force-with-lease","OK Up to date"])+NOTE("blue","After this your branch has all of "+db+"'s latest changes underneath your work. You are fully up to date."));
           } else if (curA === "stash") {
             h += S(1,"b","Save your current work on: "+mb,"",WHERE("terminal","Terminal")+T(['git stash push -m "my-wip"',"OK Saved -- your working directory is now clean"]));
-            h += S(2,"b","Verify the stash actually saved before switching","",WHERE("terminal","Terminal")+T(["git stash list","","# What you want to see:","OK stash@{0}: On "+mb+": my-wip","","# If the list is empty something went wrong -- do NOT switch branches yet."])+NOTE("yellow","Always check git stash list before switching. If your stash is not listed, your work has not been saved."));
+            h += S(2,"b","Verify the stash actually saved before switching","",WHERE("terminal","Terminal")+T(["git stash list","","# What you want to see:","OK stash@{0}: On "+mb+": my-wip","","# If the list is empty something went wrong -- do NOT switch branches yet."])+NOTE("yellow","Always check git stash list before switching. If your stash is not listed, your work has not been saved.")+NOTE("blue","Want to peek inside the stash before switching? Run: <code>git stash show -p stash@{0}</code>"));
             h += S(3,"b","Switch to the other branch: "+tb,"",WHERE("terminal","Terminal")+T(["git checkout "+tb,"OK On "+tb]));
             h += S(4,"b","Do your work on "+tb+"...","",T(["# Make changes, commit, whatever you need to do on this branch."]));
-            h += S(5,"g","Come back to "+mb+" and restore your work","",WHERE("terminal","Terminal")+T(["git checkout "+mb,"","# See your saved stashes:","git stash list","","# Restore the latest stash:","git stash pop","","# If you have multiple stashes, restore a specific one:","# git stash pop stash@{1}","","# If a conflict appears on pop -- resolve in IDE, then:","# git add <file>","","OK All your work is restored on "+mb]));
+            h += S(5,"g","Come back to "+mb+" and restore your work","",WHERE("terminal","Terminal")+T(["git checkout "+mb,"","# See your saved stashes:","git stash list","","# Peek at what is inside before popping (optional but safe):","git stash show -p stash@{0}","","# Restore the latest stash:","git stash pop","","# If you have multiple stashes, restore a specific one:","# git stash pop stash@{1}","","# If a conflict appears on pop -- resolve in IDE, then:","# git add <file>","","OK All your work is restored on "+mb]));
           } else if (curA === "amend") {
             h += S(1,"b","Make sure you are on: "+mb+" and check what your last commit looks like","Only amend the LAST commit. If you need to change an older commit, use rebase -i instead.",WHERE("terminal","Terminal")+T(["git log --oneline -3","","# Confirm the top commit is the one you want to fix."]));
             h += S(2,"g","Option A -- forgot to include a file","Stage the missing file first, then amend.",WHERE("terminal","Terminal")+T(["# Stage only the file you forgot:","git add path/to/forgotten-file.ts","","# Amend -- adds the staged file into your last commit:","git commit --amend --no-edit","","# --no-edit keeps your existing commit message unchanged.","OK File added to your last commit"]));
@@ -645,7 +770,7 @@
             h += S(4,"r","If the extra commits are from teammates -- do NOT force push","Force pushing here would delete their commits. Follow the get latest changes flow instead.",NOTE("red",'If a teammate committed to your branch, do NOT force push. Instead go to the "Get latest changes" flow, rebase your branch on top of the updated remote, then push normally.')+WHERE("terminal","Terminal")+T(["# Get their commits first:","git rebase origin/"+mb,"","# Then push normally (no force needed if rebase went cleanly):","git push origin "+mb]));
           } else if (curA === "undo") {
             h += S(1,"b","Check your last commit first","Note the hash -- you can always recover from it if needed.",WHERE("terminal","Terminal")+T(["git log --oneline -5","","# Write down the hash of your HEAD commit before doing anything."]));
-            h += S(2,"g","Undo the last commit -- files stay safe","Soft reset removes only the most recent commit from history. Your file changes stay in the working directory exactly as they were.",WHERE("terminal","Terminal")+T(["git reset --soft HEAD~1","","OK Commit removed -- all your files are still here, unchanged"])+NOTE("green","Your code is not deleted. It is just un-committed. You can re-stage and recommit whenever you are ready.")+NOTE("blue","Went too far? Run <code>git reflog</code>, find the hash from before the reset, and run <code>git reset --soft THAT_HASH</code> to restore it."));
+            h += S(2,"g","Undo the last commit -- files stay safe","Soft reset removes only the most recent commit from history. Your file changes stay in the working directory exactly as they were.",WHERE("terminal","Terminal")+T(["git reset --soft HEAD~1","","OK Commit removed -- all your files are still here, unchanged"])+NOTE("green","Your code is not deleted. It is just un-committed. You can re-stage and recommit whenever you are ready.")+NOTE("blue","Went too far? Two options: (1) <code>git reset --soft ORIG_HEAD</code> if you just did this reset, or (2) run <code>git reflog --relative-date</code>, find the hash from before the reset, and run <code>git reset --soft THAT_HASH</code>."));
             h += S(3,"y","If you already pushed -- force push after","",WHERE("terminal","Terminal")+T(["git push origin "+mb+" --force-with-lease"])+NOTE("yellow","Tell your teammates before force pushing a shared branch."));
           } else if (curA === "delete") {
             h += S(1,"b","Verify the PR is merged first","",WHERE("terminal","Terminal")+T(["# Check GitHub or GitLab in your browser.","# Confirm the PR for "+mb+' shows "Merged" status.',"# If it shows \"Open\" -- do NOT delete yet."])+NOTE("red","Deleting a branch that has an unmerged PR loses the code permanently from origin unless someone recovers it from reflog within 90 days."));
@@ -657,7 +782,7 @@
             h += S(2,"b","Rename to: "+gv("nb"),"",WHERE("terminal","Terminal")+T(["git branch -m "+gv("nb"),"OK Renamed locally to "+gv("nb")]));
             h += S(3,"y","If already on origin -- update remote too","Deletes the old name from origin and pushes the new name.",WHERE("terminal","Terminal")+T(["git push origin --delete "+mb,"git push -u origin "+gv("nb"),"OK Remote branch renamed"])+NOTE("yellow","If you have an open PR under the old branch name, check GitHub/GitLab -- it may need to be updated or reopened."));
           } else if (curA === "rescue") {
-            h += S(1,"r","Do not run more random git commands -- follow these in order","",NOTE("blue","First: run <code>git reflog</code> and write down the last clean commit hash. You can always recover from it."));
+            h += S(1,"r","Do not run more random git commands -- follow these in order","",NOTE("blue","First: run <code>git reflog --relative-date</code> and write down the last clean commit hash. The timestamps make it easy to find. You can always recover from it."));
             h += S(2,"y","Abort any operation currently in progress","",WHERE("terminal","Terminal")+T(["git rebase --abort","git merge --abort","# Errors here are fine -- means that operation was not running"]));
             h += S(3,"y","Stash any uncommitted files","",WHERE("terminal","Terminal")+T(['git stash push -m "rescue-stash"',"OK Saved"]));
             h += S(4,"b","Reset your branch to remove the bad merge commit","",WHERE("terminal","Terminal")+T(["git fetch origin","","# If this branch HAS been pushed to origin:","git reset --soft origin/"+mb,"","# If this branch has NEVER been pushed (local only):","git reset --soft origin/"+db,"","OK Branch is now clean -- files preserved in working directory"]));
@@ -668,7 +793,7 @@
             h += S(2,"b","If reflog stash shows nothing -- search deeper","",WHERE("terminal","Terminal")+T(["# Find all unreachable commits (includes dropped stashes):","git fsck --no-reflog | grep commit","","# For each hash listed, inspect it:","git show <hash> --stat"]));
             h += S(3,"g","Apply the stash by its ref or hash","",WHERE("terminal","Terminal")+T(["# Apply by stash ref (keeps it in the stash list):","git stash apply stash@{1}","","# Or apply by commit hash directly:","git stash apply <hash>","","OK Stash contents restored to your working directory"])+NOTE("green","<code>git stash apply</code> restores the files without removing the stash entry. Use <code>git stash drop stash@{1}</code> to clean it up after.")+NOTE("yellow","Stashes exist in reflog for ~90 days. If you ran <code>git gc</code> recently they may be gone permanently."));
           } else if (curA === "recoverbranch") {
-            h += S(1,"b","Find the last commit that was on the deleted branch","",WHERE("terminal","Terminal")+T(["# See the full reflog -- every position HEAD has been at:","git reflog","","# Look for the last commit message you remember from that branch.","# Example output:","# a1b2c3d HEAD@{4}: commit: feat: add login form    <- this one","# 9g8h7i6 HEAD@{5}: checkout: moving from "+mb+" to mvp/develop","","# Copy the hash of the last commit on that branch (e.g. a1b2c3d)"]));
+            h += S(1,"b","Find the last commit that was on the deleted branch","",WHERE("terminal","Terminal")+T(["# See the full reflog with timestamps -- easier to find the right commit:","git reflog --relative-date","","# Look for the last commit message you remember from that branch.","# Example output:","# a1b2c3d HEAD@{4} (2 hours ago): commit: feat: add login form    <- this one","# 9g8h7i6 HEAD@{5} (2 hours ago): checkout: moving from "+mb+" to mvp/develop","","# Copy the hash of the last commit on that branch (e.g. a1b2c3d)"]));
             h += S(2,"g","Recreate the branch at that commit hash","",WHERE("terminal","Terminal")+T(["# Replace HASH with the hash you found above:","git checkout -b "+mb+" HASH","","OK Branch is back with all its commits"])+NOTE("green","Your branch is fully restored. Verify with <code>git log --oneline</code> to confirm all commits are there.")+NOTE("blue","Reflog entries exist for ~90 days. Push the recovered branch to origin immediately so it is safe."));
             h += S(3,"b","Push to origin to make it safe","",WHERE("terminal","Terminal")+T(["git push -u origin "+mb,"OK Branch is safe on origin"]));
           } else if (curA === "deletedfile") {
@@ -694,3 +819,4 @@
     </script>
   </body>
 </html>
+
